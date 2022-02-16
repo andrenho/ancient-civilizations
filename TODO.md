@@ -2,13 +2,13 @@
 
 ### Map
 
-- [X] Player movement
+- [ ] Basic setup
+- [ ] Player movement
 - [ ] Terrain
 - [ ] Smooth movement
 - [ ] Step expiration
 - [ ] Rounds + years
 - [ ] Units, next unit
-- [ ] Combat
 - [ ] Build city
 
 ### City
@@ -30,3 +30,18 @@
 ### Other nations
 ### Egypt
 ### Commerce
+### Ships
+
+## version 0.3
+
+### Advancements
+### Combat
+
+## version 0.4
+
+### Endgame
+
+## version 0.5
+
+### Diplomacy
+### Smaller civs
