@@ -95,6 +95,12 @@ export default class UI {
 
     async animateUnitMovement(game: Game, unit: Unit, dir: Position) : Promise<void> {
 
+        const draw_tiles = (game: Game, pos: Position) => {
+            for (let x = pos.x - 1; x <= pos.x + 1; ++x)
+                for (let y = pos.y - 1; y <= pos.y + 1; ++y)
+                    this.drawTile(game, { x, y });
+        };
+
         return new Promise(resolve => {
 
             let handleId = 0;
@@ -102,15 +108,13 @@ export default class UI {
             this.blocked = true;
             const rel: Position = { x: -dir.x, y: -dir.y };
             const orig: Position = { x: unit.pos.x - dir.x, y: unit.pos.y - dir.y };
-            let i = 0;
+            let i = 1;
 
             let step : () => void;
             step = () => {
                 [rel.x, rel.y] = [rel.x + (dir.x / MOVE_STEPS), rel.y + (dir.y / MOVE_STEPS)];
 
-                for (let x = orig.x - 1; x <= orig.x + 1; ++x)
-                    for (let y = orig.y - 1; y <= orig.y + 1; ++y)
-                        this.drawTile(game, { x, y });
+                draw_tiles(game, orig);
                 this.drawUnit(game, unit, rel);
 
                 if (i < MOVE_STEPS) {
@@ -118,6 +122,7 @@ export default class UI {
                 } else {
                     this.blocked = false;    // animation completed, return
                     window.cancelAnimationFrame(handleId);
+                    draw_tiles(game, orig);
                     resolve();
                 }
                 ++i;

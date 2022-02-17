@@ -20,12 +20,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     ui.draw(game);
 });
 
+
 document.addEventListener('keydown', async (event) => {
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
     if (dir && !ui.blocked) {
         const unit = game.moveActiveUnit(dir);
         if (unit)
             await ui.animateUnitMovement(game, unit, dir);
+        ui.drawUnit(game, unit);
     }
 });
 
