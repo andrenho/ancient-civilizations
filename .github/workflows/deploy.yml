@@ -10,7 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      # Build typescript
-      - uses: alexthemaster/action-build-typescript@v1.2.1
+      - name: Build typescript
+        uses: alexthemaster/action-build-typescript@v1.2.1
+       
+      - name: Deploy webpage
+        with:
+          target_branch: webpage
+          build_dir: output
 
       
