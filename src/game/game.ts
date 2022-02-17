@@ -15,11 +15,10 @@ export default class Game {
         return { terrain: Terrain.GRASSLAND };
     }
 
-    moveActiveUnit(rel: Position, callbackIfPossible: (unit: Unit) => void) {
+    moveActiveUnit(rel: Position) : Unit {
         const unit = this.units[this.activeUnit];
-        if (unit) {
-            callbackIfPossible(unit);
+        if (unit)
             [unit.pos.x, unit.pos.y] = [unit.pos.x + rel.x, unit.pos.y + rel.y];
-        }
+        return unit;
     }
 }

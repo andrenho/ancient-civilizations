@@ -70,12 +70,9 @@ export default class UI {
     }
 
     drawTerrain(game: Game, bounds: Rectangle) {
-        for (let x = bounds.x; x < (bounds.x + bounds.w); ++x) {
-            for (let y = bounds.y; y < (bounds.y + bounds.h); ++y) {
-                this.ctx.fillStyle = "#50a050";
-                this.ctx.fillRect((x - this.rel.x) * TILE.W, (y - this.rel.y) * TILE.H, TILE.W, TILE.H);
-            }
-        }
+        for (let x = bounds.x; x < (bounds.x + bounds.w); ++x)
+            for (let y = bounds.y; y < (bounds.y + bounds.h); ++y)
+                this.drawTile(game, { x, y });
     }
 
     drawUnits(game: Game, bounds: Rectangle) {
@@ -84,22 +81,48 @@ export default class UI {
                 this.drawUnit(game, unit);
     }
 
+    drawTile(game: Game, pos: Position) {
+        this.ctx.fillStyle = "#50a050";
+        this.ctx.fillRect((pos.x - this.rel.x) * TILE.W, (pos.y - this.rel.y) * TILE.H, TILE.W, TILE.H);
+    }
+
     drawUnit(game: Game, unit: Unit, rel: Position = { x: 0, y: 0 }) {
         const image = this.images.get('warrior');
-        const x = (unit.pos.x - this.rel.x) * TILE.W;
-        const y = (unit.pos.y - this.rel.y) * TILE.H;
+        const x = (unit.pos.x - this.rel.x + rel.x) * TILE.W;
+        const y = (unit.pos.y - this.rel.y + rel.y) * TILE.H;
         this.ctx.drawImage(image, x, y, TILE.W, TILE.H);
     }
 
-    animateUnitMovement(unit: Unit, dir: Position) {
-        this.blocked = true;
+    async animateUnitMovement(game: Game, unit: Unit, dir: Position) : Promise<void> {
 
-        const rel: Position = { x: 0, y: 0 };
-        function step() {
-            [rel.x, rel.y] = [rel.x + (dir.x / MOVE_STEPS), rel.y + (dir.y / MOVE_STEPS)];
-            // ...
-        }
+        return new Promise(resolve => {
 
-        this.blocked = false;
+            let handleId = 0;
+
+            this.blocked = true;
+            const rel: Position = { x: -dir.x, y: -dir.y };
+            const orig: Position = { x: unit.pos.x - dir.x, y: unit.pos.y - dir.y };
+            let i = 0;
+
+            let step : () => void;
+            step = () => {
+                [rel.x, rel.y] = [rel.x + (dir.x / MOVE_STEPS), rel.y + (dir.y / MOVE_STEPS)];
+
+                for (let x = orig.x - 1; x <= orig.x + 1; ++x)
+                    for (let y = orig.y - 1; y <= orig.y + 1; ++y)
+                        this.drawTile(game, { x, y });
+                this.drawUnit(game, unit, rel);
+
+                if (i < MOVE_STEPS) {
+                    handleId = window.requestAnimationFrame(step);   // next animation frame
+                } else {
+                    this.blocked = false;    // animation completed, return
+                    window.cancelAnimationFrame(handleId);
+                    resolve();
+                }
+                ++i;
+            };
+            window.requestAnimationFrame(step);
+        });
     }
 }
