@@ -1,10 +1,10 @@
 import UI from "./ui/ui";
 import Game from "./game/game";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const game = new Game();
+const game = new Game();
 
-    const ui = new UI();
+document.addEventListener('DOMContentLoaded', async () => {
+    const ui = new UI(game);
     await ui.load_images();
-    ui.draw();
+    ui.drawMap();
 });

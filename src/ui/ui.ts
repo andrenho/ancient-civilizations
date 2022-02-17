@@ -1,3 +1,5 @@
+import Game from "../game/game";
+
 const IMAGE_LIST = {
     warrior: 'img/warrior.png',
 };
@@ -6,10 +8,20 @@ export default class UI {
     canvas = <HTMLCanvasElement> document.getElementById("canvas");
     ctx = this.canvas.getContext("2d");
     images = new Map<string, HTMLImageElement>();
+    game: Game;
 
-    constructor() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+    constructor(game: Game) {
+        this.game = game;
+        window.addEventListener('resize', () => { this.resize(); this.drawMap(); });
+        this.resize();
+    }
+
+    resize() {
+        this.canvas.width = window.innerWidth / 2;
+        this.canvas.height = window.innerHeight / 2;
+        this.canvas.style.width = `${window.innerWidth}px`
+        this.canvas.style.height = `${window.innerHeight}px`
+        console.log('resize!');
     }
 
     async load_images() : Promise<void> {
@@ -36,7 +48,7 @@ export default class UI {
         }));
     }
 
-    draw() {
+    drawMap() {
         this.ctx.font = "30px Arial";
         this.ctx.fillText("Hello world!", 10, 50);
 
