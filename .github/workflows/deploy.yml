@@ -14,6 +14,7 @@ jobs:
         uses: alexthemaster/action-build-typescript@v1.2.1
        
       - name: Deploy webpage
+        uses: crazy-max/ghaction-github-pages@v2.6.0
         with:
           target_branch: webpage
           build_dir: output
