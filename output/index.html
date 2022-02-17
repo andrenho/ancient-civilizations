@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Ancient Civilizations</title>
-    <script src="ancciv.js"></script>
     <style>
         html, body {
             width: 100%;
@@ -16,5 +15,13 @@
     <canvas id="canvas">
         Sorry, you need javascript in order to display this game properly.
     </canvas>
+
+    <script src="https://unpkg.com/systemjs@6.11.0/dist/system.js"></script>
+    <script src="https://unpkg.com/systemjs@6.11.0/dist/extras/named-register.js"></script>
+
+    <script src="js/ancciv.js"></script>
+    <script type="module">
+        System.import('index');
+    </script>
 </body>
 </html>
