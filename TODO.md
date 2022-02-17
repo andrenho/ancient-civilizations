@@ -2,11 +2,17 @@
 
 ### Map
 
-- [ ] Basic setup
-- [ ] Player movement
-- [ ] Terrain
-- [ ] Smooth movement
+- [X] Basic setup
+- [X] Player movement
+- [X] Basic terrain
+- [X] Smooth movement
 - [ ] Step expiration
+  - [ ] Blink selected unit
+  - [ ] Create unit type
+  - [ ] Write number of steps
+  - [ ] Expire steps
+  - [ ] Create a second unit, alternate between them
+  - [ ] Detect end-of-round
 - [ ] Rounds + years
 - [ ] Units, next unit
 - [ ] Build city

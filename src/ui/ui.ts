@@ -90,6 +90,7 @@ export default class UI {
         const image = this.images.get('warrior');
         const x = (unit.pos.x - this.rel.x + rel.x) * TILE.W;
         const y = (unit.pos.y - this.rel.y + rel.y) * TILE.H;
+
         this.ctx.drawImage(image, x, y, TILE.W, TILE.H);
     }
 
