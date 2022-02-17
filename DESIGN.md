@@ -5,6 +5,7 @@
 - Babylonians: better at combat / more slaves (?)
 - Hebrews: 
 - Persians: 
+- ???
 
 ## Goods
 
@@ -63,7 +64,22 @@
 ## Buildings
 
 - Banks
-
+- Spinner's house (wool / linen)
+- Olive oil press
+- Weaver's house (clothes / robes / royal robes)
+- Armoury
+- Goldsmith
+- Winery
+- Chariot maker's house
+- Furnace (bronze)
+- Brickyard
+- Scriptorium (?)
+- Temple
+- Palace
+- Docks
+- Warehouse
+- Stable (?)
+- Wall
 
 ## Advancements
 
