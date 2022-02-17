@@ -1,4 +1,4 @@
-name: Publish page
+name: Deploy webpage
 on:
   push:
     branches: [ master ]
@@ -11,6 +11,6 @@ jobs:
       - uses: actions/checkout@v2
       
       # Build typescript
-      - uses: iCrawl/action-tsc@v1
+      - uses: alexthemaster/action-build-typescript@v1.2.1
 
       
