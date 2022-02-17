@@ -4,7 +4,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outFile": "ancciv.js"
+    "outFile": "output/ancciv.js"
   },
   "include": [ "src/**/*" ]
 }
