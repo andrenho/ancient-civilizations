@@ -1,18 +1,19 @@
-export default class UI {
-    canvas = <HTMLCanvasElement> document.getElementById("canvas");
-    ctx = this.canvas.getContext("2d");
+import Canvas from "./canvas";
+import Game from "../game/game";
 
+export default class UI extends Canvas {
     constructor() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        super("ui", 1);
     }
 
-    draw() {
-        this.ctx.font = "30px Arial";
-        this.ctx.fillText("Hello world!", 10, 50);
-
-        const img = new Image();
-        img.onload = () => this.ctx.drawImage(img, 5, 100);
-        img.src = 'img/warrior.png';
+    draw(game: Game) {
+        this.ctx.font = '32px Adonais';
+        this.ctx.fillStyle = 'black';
+        const x = this.canvas.width - 280;   // TODO - don't use magic numbers
+        let y = this.canvas.height - 120;
+        this.ctx.clearRect(x, y, 280, 120);
+        if (game.activeUnit)
+            this.ctx.fillText(`Steps: ${game.activeUnit.moves}`, x, y += 40);
+        this.ctx.fillText(`Year: ${game.year} B.C.`, x, y += 40);
     }
 }

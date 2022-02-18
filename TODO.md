@@ -2,14 +2,20 @@
 
 ### Map
 
-- [ ] Basic setup
-- [ ] Player movement
-- [ ] Terrain
-- [ ] Smooth movement
+- [X] Basic setup
+- [X] Player movement
+- [X] Basic terrain
+- [X] Smooth movement
 - [ ] Step expiration
-- [ ] Rounds + years
-- [ ] Units, next unit
-- [ ] Build city
+  - [X] Blink selected unit
+  - [X] Create unit type
+  - [X] Write number of steps
+  - [X] Expire steps
+  - [X] Create a second unit, alternate between them
+  - [X] New round
+  - [X] Detect end-of-round
+- [X] Rounds + years
+- [ ] Improve movement by moving screen
 
 ### City
 
