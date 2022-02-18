@@ -11,7 +11,7 @@ export enum Terrain {
 //
 
 interface UnitTypeConfig {
-    steps: number;
+    moves: number;
 }
 
 export enum UnitType {
@@ -19,4 +19,4 @@ export enum UnitType {
 }
 
 export const UnitTypes: UnitTypeConfig[] = [];
-UnitTypes[UnitType.UNIT] = { steps: 2 };
+UnitTypes[UnitType.UNIT] = { moves: 2 };

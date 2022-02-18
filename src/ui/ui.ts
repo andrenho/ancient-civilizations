@@ -13,7 +13,7 @@ export default class UI extends Canvas {
         let y = this.canvas.height - 120;
         this.ctx.clearRect(x, y, 280, 120);
         if (game.activeUnit)
-            this.ctx.fillText(`Steps: ${game.activeUnit.steps}`, x, y += 40);
+            this.ctx.fillText(`Steps: ${game.activeUnit.moves}`, x, y += 40);
         this.ctx.fillText(`Year: ${game.year} B.C.`, x, y += 40);
     }
 }

@@ -10,13 +10,12 @@
   - [X] Blink selected unit
   - [X] Create unit type
   - [X] Write number of steps
-  - [ ] Expire steps
-  - [ ] Create a second unit, alternate between them
-  - [ ] Detect end-of-round
-- [ ] Rounds + years
-- [ ] Improve movement by 
-- [ ] Units, next unit
-- [ ] Build city
+  - [X] Expire steps
+  - [X] Create a second unit, alternate between them
+  - [X] New round
+  - [X] Detect end-of-round
+- [X] Rounds + years
+- [ ] Improve movement by moving screen
 
 ### City
 

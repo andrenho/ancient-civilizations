@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 document.addEventListener('keydown', async (event) => {
+    let redraw = false;
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
     if (dir && !graphics.blocked) {
         const unit = game.moveActiveUnit(dir);
@@ -35,6 +36,16 @@ document.addEventListener('keydown', async (event) => {
             graphics.drawUnit(game, unit);
             ui.draw(game);
         }
+    }
+    switch (event.code) {
+        case 'KeyW':
+            game.wait_for_next_unit();
+            ui.draw(game);
+            break;
+        case 'Space':
+            game.newTurn();
+            ui.draw(game);
+            break;
     }
 });
 
