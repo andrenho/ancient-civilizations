@@ -1,4 +1,4 @@
-import UI from "./ui/ui";
+import Graphics from "./ui/graphics";
 import Game from "./game/game";
 
 const BLINK_SPEED = 500;
@@ -15,23 +15,23 @@ const DIRECTIONS = {
 };
 
 const game = new Game();
-const ui = new UI();
+const graphics = new Graphics();
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await ui.load_images();
-    ui.draw(game);
-    setInterval(() => ui.swapBlinkState(game), BLINK_SPEED);
+    await graphics.load_images();
+    graphics.draw(game);
+    setInterval(() => graphics.swapBlinkState(game), BLINK_SPEED);
 });
 
 document.addEventListener('keydown', async (event) => {
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
-    if (dir && !ui.blocked) {
+    if (dir && !graphics.blocked) {
         const unit = game.moveActiveUnit(dir);
         if (unit) {
-            await ui.animateUnitMovement(game, unit, dir);
-            ui.drawUnit(game, unit);
+            await graphics.animateUnitMovement(game, unit, dir);
+            graphics.drawUnit(game, unit);
         }
     }
 });
 
-window.addEventListener('resize', () => { ui.resize(); ui.draw(game); });
+window.addEventListener('resize', () => { graphics.resize(); graphics.draw(game); });

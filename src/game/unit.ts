@@ -3,13 +3,9 @@ import {UnitType, UnitTypes} from "./static";
 
 export default class Unit {
 
-    pos: Position;
-    type: UnitType;
     steps: number;
 
-    constructor(pos: Position, type: UnitType) {
-        this.pos = pos;
-        this.type = type;
+    constructor(public pos: Position, public readonly type: UnitType) {
         this.steps = UnitTypes[type]!.steps;
     }
 
