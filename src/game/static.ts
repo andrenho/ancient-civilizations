@@ -18,5 +18,5 @@ export enum UnitType {
     UNIT
 }
 
-const unitTypes : UnitTypeConfig[] = [];
-unitTypes[UnitType.UNIT] = { steps: 2 };
+export const UnitTypes: UnitTypeConfig[] = [];
+UnitTypes[UnitType.UNIT] = { steps: 2 };

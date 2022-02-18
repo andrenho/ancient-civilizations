@@ -7,13 +7,14 @@
 - [X] Basic terrain
 - [X] Smooth movement
 - [ ] Step expiration
-  - [ ] Blink selected unit
-  - [ ] Create unit type
+  - [X] Blink selected unit
+  - [X] Create unit type
   - [ ] Write number of steps
   - [ ] Expire steps
   - [ ] Create a second unit, alternate between them
   - [ ] Detect end-of-round
 - [ ] Rounds + years
+- [ ] Improve movement by 
 - [ ] Units, next unit
 - [ ] Build city
 

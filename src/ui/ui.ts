@@ -12,11 +12,12 @@ const MOVE_STEPS = 16;
 
 export default class UI {
 
-    canvas  = <HTMLCanvasElement> document.getElementById("canvas");
-    ctx     = this.canvas.getContext("2d");
-    images  = new Map<string, HTMLImageElement>();
-    rel     = <Position> { x: -5, y: -5 };
-    blocked = false;
+    canvas     = <HTMLCanvasElement> document.getElementById("canvas");
+    ctx        = this.canvas.getContext("2d")!!;
+    images     = new Map<string, HTMLImageElement>();
+    rel        = <Position> { x: -5, y: -5 };
+    blocked    = false;
+    blinkState = true;
 
     constructor() {
         this.resize();
@@ -91,7 +92,15 @@ export default class UI {
         const x = (unit.pos.x - this.rel.x + rel.x) * TILE.W;
         const y = (unit.pos.y - this.rel.y + rel.y) * TILE.H;
 
-        this.ctx.drawImage(image, x, y, TILE.W, TILE.H);
+        this.ctx.drawImage(image!, x, y, TILE.W, TILE.H);
+    }
+
+    swapBlinkState(game: Game) {
+        if (this.blinkState)
+            this.draw(game);
+        else if (game.activeUnit)
+            this.drawTile(game, game.activeUnit.pos);
+        this.blinkState = !this.blinkState;
     }
 
     async animateUnitMovement(game: Game, unit: Unit, dir: Position) : Promise<void> {

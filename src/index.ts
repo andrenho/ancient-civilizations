@@ -1,6 +1,8 @@
 import UI from "./ui/ui";
 import Game from "./game/game";
 
+const BLINK_SPEED = 500;
+
 const DIRECTIONS = {
     Numpad1: { x: -1, y: 1 },
     Numpad2: { x: 0, y: 1 },
@@ -18,16 +20,17 @@ const ui = new UI();
 document.addEventListener('DOMContentLoaded', async () => {
     await ui.load_images();
     ui.draw(game);
+    setInterval(() => ui.swapBlinkState(game), BLINK_SPEED);
 });
-
 
 document.addEventListener('keydown', async (event) => {
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
     if (dir && !ui.blocked) {
         const unit = game.moveActiveUnit(dir);
-        if (unit)
+        if (unit) {
             await ui.animateUnitMovement(game, unit, dir);
-        ui.drawUnit(game, unit);
+            ui.drawUnit(game, unit);
+        }
     }
 });
 
