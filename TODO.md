@@ -15,7 +15,13 @@
   - [X] New round
   - [X] Detect end-of-round
 - [X] Rounds + years
-- [ ] Improve movement by moving screen
+- [ ] Prepare for mobile
+  - [ ] Default zoom
+  - [ ] Movement buttons
+- [ ] Screen movement
+  - [ ] When unit moves
+  - [ ] When is dragged
+- [ ] Zoom in/out
 
 ### City
 

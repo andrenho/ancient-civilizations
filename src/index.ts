@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 document.addEventListener('keydown', async (event) => {
-    let redraw = false;
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
     if (dir && !graphics.blocked) {
         const unit = game.moveActiveUnit(dir);
