@@ -30,6 +30,7 @@
 - [ ] Menu/dialogs
 - [ ] Save/load
 - [ ] Some basic graphics
+- [ ] Minify, improve production performance
 
 ## version 0.2
 
