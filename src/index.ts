@@ -48,6 +48,19 @@ document.addEventListener('keydown', async (event) => {
     }
 });
 
+window.addEventListener('contextmenu', (event) => {
+    event.preventDefault()
+    return false;
+});
+
+window.addEventListener('mousedown', (event) => {
+    graphics.start_dragging();
+});
+
+window.addEventListener('mouseup', (event) => {
+    graphics.stop_dragging();
+});
+
 window.addEventListener('resize', () => {
     graphics.resize();
     ui.resize();

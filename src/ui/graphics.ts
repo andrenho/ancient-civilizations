@@ -115,4 +115,10 @@ export default class Graphics extends Canvas {
             window.requestAnimationFrame(step);
         });
     }
+
+    startDragging() {
+    }
+
+    stopDragging() {
+    }
 }

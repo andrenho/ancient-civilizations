@@ -13,8 +13,8 @@ export default abstract class Canvas {
     }
 
     resize() {
-        this.canvas.width = window.innerWidth / this.zoom;
-        this.canvas.height = window.innerHeight / this.zoom;
+        this.canvas.width = window.innerWidth / this.zoom / window.devicePixelRatio;
+        this.canvas.height = window.innerHeight / this.zoom / window.devicePixelRatio;
         this.canvas.style.width = `${window.innerWidth}px`
         this.canvas.style.height = `${window.innerHeight}px`
     }
