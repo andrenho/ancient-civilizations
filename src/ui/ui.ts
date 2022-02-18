@@ -2,6 +2,7 @@ import Canvas from "./canvas";
 import Game from "../game/game";
 
 export default class UI extends Canvas {
+
     constructor() {
         super("ui", 1);
     }
@@ -16,4 +17,5 @@ export default class UI extends Canvas {
             this.ctx.fillText(`Steps: ${game.activeUnit.moves}`, x, y += 40);
         this.ctx.fillText(`Year: ${game.year} B.C.`, x, y += 40);
     }
+
 }
