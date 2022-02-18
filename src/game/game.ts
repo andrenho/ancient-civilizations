@@ -22,8 +22,11 @@ export default class Game {
 
     moveActiveUnit(rel: Position) : Unit | undefined {
         const unit = this.#activeUnit;
-        if (unit)
+        if (unit) {
+            // TODO - move this to unit
             [unit.pos.x, unit.pos.y] = [unit.pos.x + rel.x, unit.pos.y + rel.y];
+            unit.steps -= 1;
+        }
         return unit;
     }
 }

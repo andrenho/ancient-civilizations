@@ -16,16 +16,21 @@
             overflow: hidden;
         }
         canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             image-rendering: -moz-crisp-edges;
             image-rendering: -webkit-crisp-edges;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
         }
     </style>
+    <link rel="preload" href="font/Adonais.ttf" as="font">
     <script type="text/javascript" src="https://livejs.com/live.js"></script>
 </head>
 <body>
-    <canvas id="canvas">
+    <canvas id="graphics"></canvas>
+    <canvas id="ui">
         Sorry, you need javascript in order to display this game properly.
     </canvas>
 

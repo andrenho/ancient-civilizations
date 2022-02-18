@@ -1,76 +1,47 @@
 import Game from "../game/game";
 import {include_point, Position, Rectangle} from "../common/geometry";
 import Unit from "../game/unit";
+import Canvas from "./canvas";
+import {StringMap} from "../common/types";
 
-const IMAGE_LIST = {
+const IMAGE_LIST: StringMap = {
     warrior: 'img/warrior.png',
 };
 
 const TILE = { W: 32, H: 32 };
-const ZOOM = 2;
 const MOVE_STEPS = 16;
+const ZOOM = 2;
 
-export default class Graphics {
+export default class Graphics extends Canvas {
 
-    #canvas     = <HTMLCanvasElement> document.getElementById("canvas");
-    #ctx        = this.#canvas.getContext("2d")!!;
-    #images     = new Map<string, HTMLImageElement>();
     #rel        = <Position> { x: -5, y: -5 };
     #blocked    = false;
     #blinkState = true;
 
     constructor() {
-        this.resize();
+        super("graphics", ZOOM);
     }
 
     get blocked(): boolean { return this.#blocked; }
 
-    resize() {
-        this.#canvas.width = window.innerWidth / ZOOM;
-        this.#canvas.height = window.innerHeight / ZOOM;
-        this.#canvas.style.width = `${window.innerWidth}px`
-        this.#canvas.style.height = `${window.innerHeight}px`
-    }
-
     async load_images() : Promise<void> {
-        const image_load = (name: string, url: string) : Promise<[string, HTMLImageElement]> => {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.addEventListener('load', () => resolve([name, img]));
-                img.addEventListener('error', () => reject(new Error(`Failed to load ${url}.`)));
-                img.src = url;
-            });
-        };
-
-        const imagePromises : Promise<[string, HTMLImageElement]>[] = [];
-        for (const imageName in IMAGE_LIST) {
-            imagePromises.push(image_load(imageName, IMAGE_LIST[imageName as keyof typeof IMAGE_LIST]));
-        }
-
-        return new Promise(((resolve, reject) => {
-            Promise.all(imagePromises).then(values => {
-                for (const [imageName, url] of values)
-                    this.#images.set(imageName, url);
-                resolve();
-            }).catch(err => reject(err));
-        }));
+        return this.load_images_(IMAGE_LIST);
     }
 
     private bounds() : Rectangle {
         return {
             x: Math.round(this.#rel.x - 1),
             y: Math.round(this.#rel.y - 1),
-            w: Math.round((this.#canvas.width / TILE.W) + 3),
-            h: Math.round((this.#canvas.height / TILE.H) + 3)
+            w: Math.round((this.canvas.width / TILE.W) + 3),
+            h: Math.round((this.canvas.height / TILE.H) + 3)
         };
     }
 
     draw(game: Game) {
         const bounds = this.bounds();
-        this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawTerrain(game, bounds);
         this.drawUnits(game, bounds);
-        this.drawUI(game);
     }
 
     private drawTerrain(game: Game, bounds: Rectangle) {
@@ -86,16 +57,16 @@ export default class Graphics {
     }
 
     private drawTile(game: Game, pos: Position) {
-        this.#ctx.fillStyle = "#50a050";
-        this.#ctx.fillRect((pos.x - this.#rel.x) * TILE.W, (pos.y - this.#rel.y) * TILE.H, TILE.W, TILE.H);
+        this.ctx.fillStyle = "#50a050";
+        this.ctx.fillRect((pos.x - this.#rel.x) * TILE.W, (pos.y - this.#rel.y) * TILE.H, TILE.W, TILE.H);
     }
 
     drawUnit(game: Game, unit: Unit, rel: Position = { x: 0, y: 0 }) {
-        const image = this.#images.get('warrior');
+        const image = this.images.get('warrior');
         const x = (unit.pos.x - this.#rel.x + rel.x) * TILE.W;
         const y = (unit.pos.y - this.#rel.y + rel.y) * TILE.H;
 
-        this.#ctx.drawImage(image!, x, y, TILE.W, TILE.H);
+        this.ctx.drawImage(image!, x, y, TILE.W, TILE.H);
     }
 
     swapBlinkState(game: Game) {
@@ -143,15 +114,5 @@ export default class Graphics {
             };
             window.requestAnimationFrame(step);
         });
-    }
-
-    private drawUI(game: Game) {
-        this.#ctx.font = '16px Adonais';
-        this.#ctx.fillStyle = 'black';
-        const x = this.#canvas.width - 140;
-        let y = this.#canvas.height - 60;
-        if (game.activeUnit)
-            this.#ctx.fillText(`Steps: ${game.activeUnit.steps}`, x, y += 20);
-        this.#ctx.fillText(`Year: ${game.year} B.C.`, x, y += 20);
     }
 }

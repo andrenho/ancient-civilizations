@@ -1,5 +1,6 @@
 import Graphics from "./ui/graphics";
 import Game from "./game/game";
+import UI from "./ui/ui";
 
 const BLINK_SPEED = 500;
 
@@ -16,10 +17,12 @@ const DIRECTIONS = {
 
 const game = new Game();
 const graphics = new Graphics();
+const ui = new UI();
 
 document.addEventListener('DOMContentLoaded', async () => {
     await graphics.load_images();
     graphics.draw(game);
+    ui.draw(game);
     setInterval(() => graphics.swapBlinkState(game), BLINK_SPEED);
 });
 
@@ -30,8 +33,14 @@ document.addEventListener('keydown', async (event) => {
         if (unit) {
             await graphics.animateUnitMovement(game, unit, dir);
             graphics.drawUnit(game, unit);
+            ui.draw(game);
         }
     }
 });
 
-window.addEventListener('resize', () => { graphics.resize(); graphics.draw(game); });
+window.addEventListener('resize', () => {
+    graphics.resize();
+    ui.resize();
+    graphics.draw(game);
+    ui.draw(game);
+});
