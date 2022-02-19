@@ -1,12 +1,12 @@
 import {Position} from "../common/geometry";
-import {UnitType, UnitTypes} from "./static";
+import {Nation, UnitType, UnitTypes} from "./static";
 
 export default class Unit {
 
     #pos: Position;
     #moves: number = 0;
 
-    constructor(pos: Position, public readonly type: UnitType) {
+    constructor(public readonly nation: Nation, pos: Position, public readonly type: UnitType) {
         this.#pos = pos;
         this.newTurn();
     }
@@ -26,7 +26,7 @@ export default class Unit {
     }
 
     isFromPlayerNation() : boolean {
-        return true;  // TODO
+        return this.nation.isPlayerNation;
     }
 
     hasMovesLeft() : boolean {

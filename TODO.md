@@ -6,7 +6,7 @@
 - [X] Player movement
 - [X] Basic terrain
 - [X] Smooth movement
-- [ ] Step expiration
+- [X] Step expiration
   - [X] Blink selected unit
   - [X] Create unit type
   - [X] Write number of steps
@@ -15,7 +15,15 @@
   - [X] New round
   - [X] Detect end-of-round
 - [X] Rounds + years
-- [ ] Improve movement by moving screen
+- [X] Prepare for mobile
+  - [X] Default zoom
+- [X] Screen movement
+  - [X] When is dragged
+    - [X] Mouse
+    - [X] Touch
+  - [X] When unit moves
+- [X] Nations
+- [ ] Debug menu
 
 ### City
 
@@ -27,9 +35,14 @@
 
 ### Others
 
+- [ ] Zoom in/out
+- [ ] Wait for font loading
+- [ ] Joystick for mobile
+- [ ] Gamepad support
 - [ ] Menu/dialogs
 - [ ] Save/load
 - [ ] Some basic graphics
+- [ ] Minify, improve production performance
 
 ## version 0.2
 
