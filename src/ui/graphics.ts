@@ -18,6 +18,8 @@ export default class Graphics extends Canvas {
     #blocked    = false;
     #blinkState = true;
 
+    readonly #SCALE = { x: TILE.W / this.zoom, y: TILE.H / this.zoom };
+
     constructor() {
         super("graphics", ZOOM);
     }
@@ -57,14 +59,16 @@ export default class Graphics extends Canvas {
     }
 
     private drawTile(game: Game, pos: Position) {
+        const rRel = this.roundRel();
         this.ctx.fillStyle = "#50a050";
-        this.ctx.fillRect((pos.x - this.#rel.x) * TILE.W, (pos.y - this.#rel.y) * TILE.H, TILE.W, TILE.H);
+        this.ctx.fillRect((pos.x - rRel.x) * TILE.W, (pos.y - rRel.y) * TILE.H, TILE.W, TILE.H);
     }
 
     drawUnit(game: Game, unit: Unit, rel: Position = { x: 0, y: 0 }) {
+        const rRel = this.roundRel();
         const image = this.images.get('warrior');
-        const x = (unit.pos.x - this.#rel.x + rel.x) * TILE.W;
-        const y = (unit.pos.y - this.#rel.y + rel.y) * TILE.H;
+        const x = (unit.pos.x - rRel.x + rel.x) * TILE.W;
+        const y = (unit.pos.y - rRel.y + rel.y) * TILE.H;
 
         this.ctx.drawImage(image!, x, y, TILE.W, TILE.H);
     }
@@ -116,9 +120,15 @@ export default class Graphics extends Canvas {
         });
     }
 
-    startDragging() {
+    drag(rel: Position) {
+        this.#rel.x -= (rel.x / (TILE.W * this.zoom * window.devicePixelRatio));
+        this.#rel.y -= (rel.y / (TILE.H * this.zoom * window.devicePixelRatio));
     }
 
-    stopDragging() {
+    private roundRel() : Position {
+        return {
+            x: Math.round(this.#rel.x * this.#SCALE.x) / this.#SCALE.x,
+            y: Math.round(this.#rel.y * this.#SCALE.y) / this.#SCALE.y,
+        }
     }
 }

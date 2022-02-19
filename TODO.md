@@ -15,15 +15,13 @@
   - [X] New round
   - [X] Detect end-of-round
 - [X] Rounds + years
-- [ ] Prepare for mobile
+- [X] Prepare for mobile
   - [X] Default zoom
 - [ ] Screen movement
-  - [ ] When is dragged
-    - [ ] Mouse
-    - [ ] Touch
+  - [X] When is dragged
+    - [X] Mouse
+    - [X] Touch
   - [ ] When unit moves
-- [ ] Zoom in/out
-- [ ] Wait for font loading
 - [ ] Nations
 - [ ] Debug menu
 
@@ -37,6 +35,8 @@
 
 ### Others
 
+- [ ] Zoom in/out
+- [ ] Wait for font loading
 - [ ] Joystick for mobile
 - [ ] Gamepad support
 - [ ] Menu/dialogs

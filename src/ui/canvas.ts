@@ -6,7 +6,7 @@ export default abstract class Canvas {
     protected ctx: CanvasRenderingContext2D;
     protected images = new Map<string, HTMLImageElement>();
 
-    constructor(canvasName: string, private zoom: number) {
+    constructor(canvasName: string, protected zoom: number) {
         this.canvas = document.getElementById(canvasName)! as HTMLCanvasElement;
         this.ctx = this.canvas.getContext("2d")!;
         this.resize();

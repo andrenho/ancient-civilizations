@@ -1,6 +1,7 @@
 import Graphics from "./ui/graphics";
 import Game from "./game/game";
 import UI from "./ui/ui";
+import {Position} from "./common/geometry";
 
 const BLINK_SPEED = 500;
 
@@ -19,6 +20,9 @@ const game = new Game();
 const graphics = new Graphics();
 const ui = new UI();
 
+let mouseDragging = false;
+let touchDragging : Position | null = null;
+
 document.addEventListener('DOMContentLoaded', async () => {
     await graphics.load_images();
     graphics.draw(game);
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setInterval(() => graphics.swapBlinkState(game), BLINK_SPEED);
 });
 
-document.addEventListener('keydown', async (event) => {
+document.addEventListener('keydown', async event => {
     const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
     if (dir && !graphics.blocked) {
         const unit = game.moveActiveUnit(dir);
@@ -48,17 +52,52 @@ document.addEventListener('keydown', async (event) => {
     }
 });
 
-window.addEventListener('contextmenu', (event) => {
+window.addEventListener('contextmenu', event => {
     event.preventDefault()
     return false;
 });
 
-window.addEventListener('mousedown', (event) => {
-    graphics.start_dragging();
+window.addEventListener('mousedown', event => {
+    if (event.button == 2) {
+        mouseDragging = true;
+    }
 });
 
-window.addEventListener('mouseup', (event) => {
-    graphics.stop_dragging();
+window.addEventListener('mouseup', event => {
+    if (event.button == 2) {
+        mouseDragging = false;
+    }
+})
+
+window.addEventListener('mousemove', event => {
+    if (mouseDragging) {
+        graphics.drag({ x: event.movementX, y: event.movementY } as Position);
+        graphics.draw(game);
+    }
+});
+
+window.addEventListener('touchstart', event => {
+    if (event.touches[0])
+        touchDragging = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+});
+
+window.addEventListener('touchend', event => {
+    touchDragging = null;
+});
+
+window.addEventListener('touchmove', event => {
+    if (touchDragging && event.changedTouches[0]) {
+        const rel = {
+            x: event.changedTouches[0].clientX - touchDragging.x,
+            y: event.changedTouches[0].clientY - touchDragging.y,
+        };
+        touchDragging = {
+            x: event.changedTouches[0].clientX,
+            y: event.changedTouches[0].clientY,
+        };
+        graphics.drag(rel);
+        graphics.draw(game);
+    }
 });
 
 window.addEventListener('resize', () => {
