@@ -2,6 +2,7 @@ import Graphics from "./ui/graphics";
 import Game from "./game/game";
 import UI from "./ui/ui";
 import {Position} from "./common/geometry";
+import {debug_open} from "./ui/debug";
 
 const BLINK_SPEED = 500;
 
@@ -50,6 +51,12 @@ document.addEventListener('keydown', async event => {
             game.newTurn();
             graphics.scrollIfActiveUnitOutOfScreen(game);
             ui.draw(game);
+            break;
+        case 'KeyM':
+            if (event.ctrlKey && new URLSearchParams(window.location.search).get('debug') != null) {
+                graphics.blocked = true;
+                debug_open(game, () => graphics.blocked = false);
+            }
             break;
     }
 });

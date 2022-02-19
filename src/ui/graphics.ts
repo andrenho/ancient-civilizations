@@ -17,16 +17,15 @@ const MOVE_STEPS = 16;
 export default class Graphics extends Canvas {
 
     #rel        = <Position> { x: 0, y: 0 };
-    #blocked    = false;
     #blinkState = true;
 
     readonly #SCALE = { x: TILE.W / this.zoom, y: TILE.H / this.zoom };
 
+    blocked     = false;
+
     constructor() {
         super("graphics", ZOOM);
     }
-
-    get blocked(): boolean { return this.#blocked; }
 
     async load_images() : Promise<void> {
         return this.load_images_(IMAGE_LIST);
@@ -149,7 +148,7 @@ export default class Graphics extends Canvas {
                 .forEach(unit => this.drawUnit(game, unit));
         };
 
-        this.#blocked = true;
+        this.blocked = true;
         const pos = this.tileToPx({ x: unit.pos.x - 1, y: unit.pos.y - 1});
 
         // take a screenshot without the unit
@@ -175,7 +174,7 @@ export default class Graphics extends Canvas {
                     handleId = window.requestAnimationFrame(step);   // next animation frame
                 } else {
                     window.cancelAnimationFrame(handleId);    // done, let's return
-                    this.#blocked = false;
+                    this.blocked = false;
                     resolve();
                 }
                 ++i;
