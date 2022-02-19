@@ -35,10 +35,9 @@ document.addEventListener('keydown', async event => {
     if (dir && !graphics.blocked) {
         const unit = game.moveActiveUnit(dir);
         if (unit) {
-            await graphics.animateUnitMovement(game, unit, dir);
             graphics.scrollIfActiveUnitOutOfScreen(game);
             graphics.drawUnit(game, unit);
-            ui.draw(game);
+            await graphics.animateUnitMovement(game, unit, dir);
         }
     }
     switch (event.code) {
