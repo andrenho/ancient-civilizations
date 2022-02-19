@@ -12,7 +12,7 @@ export default class Game {
     constructor() {
         this.#playerNation.isPlayerNation = true;
         this.units.push(new Unit(this.#playerNation, { x: 0, y : 0 }, UnitType.UNIT));
-        this.units.push(new Unit(this.#playerNation, { x: 3, y : 2 }, UnitType.UNIT));
+        this.units.push(new Unit(this.#playerNation, { x: 1, y : 1 }, UnitType.UNIT));
         this.#activeUnit = this.units[0]!;
     }
 
