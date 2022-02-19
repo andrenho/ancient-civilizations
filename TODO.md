@@ -17,12 +17,12 @@
 - [X] Rounds + years
 - [X] Prepare for mobile
   - [X] Default zoom
-- [ ] Screen movement
+- [X] Screen movement
   - [X] When is dragged
     - [X] Mouse
     - [X] Touch
-  - [ ] When unit moves
-- [ ] Nations
+  - [X] When unit moves
+- [X] Nations
 - [ ] Debug menu
 
 ### City

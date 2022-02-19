@@ -25,7 +25,7 @@ let touchDragging : Position | null = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     await graphics.load_images();
-    graphics.draw(game);
+    graphics.centerOnUnit(game.activeUnit!);
     ui.draw(game);
     setInterval(() => graphics.swapBlinkState(game), BLINK_SPEED);
 });
@@ -36,6 +36,7 @@ document.addEventListener('keydown', async event => {
         const unit = game.moveActiveUnit(dir);
         if (unit) {
             await graphics.animateUnitMovement(game, unit, dir);
+            graphics.scrollIfActiveUnitOutOfScreen(game);
             graphics.drawUnit(game, unit);
             ui.draw(game);
         }
@@ -43,10 +44,12 @@ document.addEventListener('keydown', async event => {
     switch (event.code) {
         case 'KeyW':
             game.wait_for_next_unit();
+            graphics.scrollIfActiveUnitOutOfScreen(game);
             ui.draw(game);
             break;
         case 'Space':
             game.newTurn();
+            graphics.scrollIfActiveUnitOutOfScreen(game);
             ui.draw(game);
             break;
     }
@@ -81,7 +84,7 @@ window.addEventListener('touchstart', event => {
         touchDragging = { x: event.touches[0].clientX, y: event.touches[0].clientY };
 });
 
-window.addEventListener('touchend', event => {
+window.addEventListener('touchend', () => {
     touchDragging = null;
 });
 

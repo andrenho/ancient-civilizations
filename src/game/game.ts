@@ -1,21 +1,24 @@
 import Unit from "./unit";
 import Tile from "./tile";
-import {Terrain, UnitType} from "./static";
+import {Nation, NationDef, Nations, Terrain, UnitType} from "./static";
 import {Position} from "../common/geometry";
 
 export default class Game {
     readonly units: Unit[] = [];
     #activeUnit: Unit | null;
     #year: number = 2000;
+    #playerNation: Nation = Nations[NationDef.PHOENICIA]!;
 
     constructor() {
-        this.units.push(new Unit({ x: 0, y : 0 }, UnitType.UNIT));
-        this.units.push(new Unit({ x: 3, y : 2 }, UnitType.UNIT));
+        this.#playerNation.isPlayerNation = true;
+        this.units.push(new Unit(this.#playerNation, { x: 0, y : 0 }, UnitType.UNIT));
+        this.units.push(new Unit(this.#playerNation, { x: 3, y : 2 }, UnitType.UNIT));
         this.#activeUnit = this.units[0]!;
     }
 
     get activeUnit() { return this.#activeUnit; }
     get year() { return this.#year; }
+    get playerNation() { return this.#playerNation; }
 
     tile(pos: Position) : Tile {
         return { terrain: Terrain.GRASSLAND };

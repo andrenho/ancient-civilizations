@@ -11,10 +11,12 @@ const IMAGE_LIST: StringMap = {
 const TILE = { W: 32, H: 32 };
 const MOVE_STEPS = 16;
 const ZOOM = 2;
+const BOUNDS_INLET = 3;
+const SCROLL_BY = 2;
 
 export default class Graphics extends Canvas {
 
-    #rel        = <Position> { x: -5, y: -5 };
+    #rel        = <Position> { x: 0, y: 0 };
     #blocked    = false;
     #blinkState = true;
 
@@ -30,12 +32,12 @@ export default class Graphics extends Canvas {
         return this.load_images_(IMAGE_LIST);
     }
 
-    private bounds() : Rectangle {
+    private bounds(inlet: number = 0) : Rectangle {
         return {
-            x: Math.round(this.#rel.x - 1),
-            y: Math.round(this.#rel.y - 1),
-            w: Math.round((this.canvas.width / TILE.W) + 3),
-            h: Math.round((this.canvas.height / TILE.H) + 3)
+            x: Math.round(this.#rel.x - 1) + inlet,
+            y: Math.round(this.#rel.y - 1) + inlet ,
+            w: Math.round((this.canvas.width / TILE.W) + 2) - (2 * inlet),
+            h: Math.round((this.canvas.height / TILE.H) + 2) - (2 * inlet)
         };
     }
 
@@ -67,10 +69,22 @@ export default class Graphics extends Canvas {
     drawUnit(game: Game, unit: Unit, rel: Position = { x: 0, y: 0 }) {
         const rRel = this.roundRel();
         const image = this.images.get('warrior');
-        const x = (unit.pos.x - rRel.x + rel.x) * TILE.W;
-        const y = (unit.pos.y - rRel.y + rel.y) * TILE.H;
+        let x = (unit.pos.x - rRel.x + rel.x) * TILE.W;
+        let y = (unit.pos.y - rRel.y + rel.y) * TILE.H;
 
         this.ctx.drawImage(image!, x, y, TILE.W, TILE.H);
+
+        x += Math.round(TILE.W * 2 / 3) - 0.5;
+        y += 0.5;
+        const w = Math.round(TILE.W / 3);
+        const h = Math.round(TILE.H / 3);
+        this.ctx.strokeStyle = 'black';
+        this.ctx.fillStyle = unit.nation.color;
+        this.ctx.beginPath();
+        this.ctx.rect(x, y, w, h);
+        this.ctx.fill();
+        this.ctx.stroke();
+        this.ctx.closePath();
     }
 
     swapBlinkState(game: Game) {
@@ -131,4 +145,30 @@ export default class Graphics extends Canvas {
             y: Math.round(this.#rel.y * this.#SCALE.y) / this.#SCALE.y,
         }
     }
+
+    scrollIfActiveUnitOutOfScreen(game: Game) {
+        if (game.activeUnit) {
+            const rect = this.bounds(BOUNDS_INLET);
+            if (game.activeUnit.pos.x < rect.x) {
+                this.#rel.x -= SCROLL_BY;
+                this.draw(game);
+            } else if (game.activeUnit.pos.x > (rect.x + rect.w - 1)) {
+                this.#rel.x += SCROLL_BY;
+                this.draw(game);
+            }
+            if (game.activeUnit.pos.y < rect.y) {
+                this.#rel.y -= SCROLL_BY;
+                this.draw(game);
+            } else if (game.activeUnit.pos.y > (rect.y + rect.h - 1)) {
+                this.#rel.y += SCROLL_BY;
+                this.draw(game);
+            }
+        }
+    }
+
+    centerOnUnit(unit: Unit) {
+        this.#rel.x = unit.pos.x - (window.innerWidth / TILE.W / this.zoom / window.devicePixelRatio / 2) + 0.5;
+        this.#rel.y = unit.pos.y - (window.innerHeight / TILE.H / this.zoom / window.devicePixelRatio / 2) + 0.5;
+    }
+
 }
