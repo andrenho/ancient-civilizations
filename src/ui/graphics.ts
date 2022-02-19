@@ -139,6 +139,13 @@ export default class Graphics extends Canvas {
         };
     }
 
+    pxToTile(pxPos: Position) : Position {
+        return {
+            x: Math.floor((pxPos.x / this.zoom / TILE.W / window.devicePixelRatio) + this.#rel.x),
+            y: Math.floor((pxPos.y / this.zoom / TILE.H / window.devicePixelRatio) + this.#rel.y)
+        };
+    }
+
     async animateUnitMovement(game: Game, unit: Unit, dir: Position) {
 
         const drawTileInPos = (pos: Position, exceptUnit: Unit) => {

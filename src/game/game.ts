@@ -1,6 +1,6 @@
 import Unit from "./unit";
 import Tile from "./tile";
-import {Nation, NationDef, Nations, Terrain, UnitType} from "./static";
+import {Nation, NationDef, Nations, Terrain, UnitType, UnitTypeConfig} from "./static";
 import {Position} from "../common/geometry";
 
 export default class Game {
@@ -67,5 +67,9 @@ export default class Game {
         this.#year -= 0.5;
         this.units.forEach((unit) => unit.newTurn());
         this.wait_for_next_unit();
+    }
+
+    createUnit(nation: Nation, position: Position, unitType: UnitType) {
+        this.units.push(new Unit(nation, position, unitType));
     }
 }

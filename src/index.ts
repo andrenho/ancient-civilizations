@@ -23,6 +23,7 @@ const ui = new UI();
 
 let mouseDragging = false;
 let touchDragging : Position | null = null;
+let lastMousePosition = <Position> { x: 0, y: 0 };
 
 document.addEventListener('DOMContentLoaded', async () => {
     await graphics.load_images();
@@ -39,6 +40,7 @@ document.addEventListener('keydown', async event => {
             graphics.scrollIfActiveUnitOutOfScreen(game);
             graphics.drawUnit(game, unit);
             await graphics.animateUnitMovement(game, unit, dir);
+            ui.draw(game);
         }
     }
     switch (event.code) {
@@ -55,7 +57,7 @@ document.addEventListener('keydown', async event => {
         case 'KeyM':
             if (event.ctrlKey && new URLSearchParams(window.location.search).get('debug') != null) {
                 graphics.blocked = true;
-                debug_open(game, () => graphics.blocked = false);
+                debug_open(game, graphics.pxToTile(lastMousePosition), () => graphics.blocked = false);
             }
             break;
     }
@@ -79,6 +81,7 @@ window.addEventListener('mouseup', event => {
 })
 
 window.addEventListener('mousemove', event => {
+    lastMousePosition = { x: event.x, y: event.y };
     if (mouseDragging) {
         graphics.drag({ x: event.movementX, y: event.movementY } as Position);
         graphics.draw(game);

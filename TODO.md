@@ -24,7 +24,7 @@
   - [X] When unit moves
 - [X] Nations
 - [X] Improve movement when units are overlapping each other
-- [ ] Debug menu
+- [X] Debug menu
 
 ### City
 

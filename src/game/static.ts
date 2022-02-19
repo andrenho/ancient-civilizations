@@ -10,7 +10,7 @@ export enum Terrain {
 // UNIT TYPE
 //
 
-interface UnitTypeConfig {
+export interface UnitTypeConfig {
     moves: number;
 }
 
