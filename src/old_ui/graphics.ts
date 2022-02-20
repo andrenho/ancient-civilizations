@@ -2,9 +2,8 @@ import Game from "../game/game";
 import {include_point, Position, Rectangle} from "../common/geometry";
 import Unit from "../game/unit";
 import Canvas from "./canvas";
-import {StringMap} from "../common/types";
 
-const IMAGE_LIST: StringMap = {
+const IMAGE_LIST= {
     warrior: 'img/warrior.png',
 };
 

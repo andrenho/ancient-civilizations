@@ -1,7 +1,7 @@
 import Unit from "./unit";
 import Tile from "./tile";
 import {Nation, NationDef, Nations, Terrain, UnitType, UnitTypeConfig} from "./static";
-import {Position} from "../common/geometry";
+import {include_point, Position, Rectangle} from "../common/geometry";
 
 export default class Game {
     readonly units: Unit[] = [];
@@ -71,5 +71,9 @@ export default class Game {
 
     createUnit(nation: Nation, position: Position, unitType: UnitType) {
         this.units.push(new Unit(nation, position, unitType));
+    }
+
+    units_in(bounds: Rectangle) {
+        return this.units.filter(unit => include_point(bounds, unit.pos));
     }
 }
