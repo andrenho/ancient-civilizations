@@ -25,9 +25,20 @@
 - [X] Nations
 - [X] Improve movement when units are overlapping each other
 - [X] Debug menu
+  - [ ] Find a better font
+- [ ] Multiple canvases:
+  - [ ] Terrain
+  - [ ] Cities/labels
+  - [ ] Units
+  - [ ] Moving units
+  - [ ] UI
 
 ### City
 
+- [ ] City
+  - [ ] Create city in map
+  - [ ] Create city object
+  - [ ] Edit city
 - [ ] Buildings
 - [ ] Goods, factory tree
 - [ ] Move units to buildings
