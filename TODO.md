@@ -26,12 +26,7 @@
 - [X] Improve movement when units are overlapping each other
 - [X] Debug menu
   - [ ] Find a better font
-- [ ] Multiple canvases:
-  - [ ] Terrain
-  - [ ] Cities/labels
-  - [ ] Units
-  - [ ] Moving units
-  - [ ] HudCanvas
+  - [ ] Improve debug menu
 
 ### City
 
