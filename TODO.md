@@ -31,7 +31,7 @@
   - [ ] Cities/labels
   - [ ] Units
   - [ ] Moving units
-  - [ ] UI
+  - [ ] HudCanvas
 
 ### City
 

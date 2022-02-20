@@ -1,10 +1,9 @@
-import Game from "../game/game";
-import {include_point, Position, Rectangle} from "../common/geometry";
-import Unit from "../game/unit";
+import Game from "../../game/game";
+import {include_point, Position, Rectangle} from "../../common/geometry";
+import Unit from "../../game/unit";
 import Canvas from "./canvas";
-import {StringMap} from "../common/types";
 
-const IMAGE_LIST: StringMap = {
+const IMAGE_LIST = {
     warrior: 'img/warrior.png',
 };
 
@@ -14,7 +13,7 @@ const BOUNDS_INLET = 3;
 const SCROLL_BY = 2;
 const MOVE_STEPS = 16;
 
-export default class Graphics extends Canvas {
+export default class MapCanvas extends Canvas {
 
     #rel        = <Position> { x: 0, y: 0 };
     #blinkState = true;

@@ -1,5 +1,3 @@
-import {StringMap} from "../common/types";
-
 export default abstract class Canvas {
 
     protected canvas: HTMLCanvasElement;
@@ -19,7 +17,7 @@ export default abstract class Canvas {
         this.canvas.style.height = `${window.innerHeight}px`
     }
 
-    async load_images_(images: StringMap) : Promise<void> {
+    async load_images_(images: { [key: string]: string }) : Promise<void> {
         const image_load = (name: string, url: string) : Promise<[string, HTMLImageElement]> => {
             return new Promise((resolve, reject) => {
                 const img = new Image();
