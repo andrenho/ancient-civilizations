@@ -31,6 +31,7 @@ export default class UI {
 
     captureEvents() {
         document.addEventListener('keydown', event => this.onKeyDown(event));
+        document.addEventListener('keyup', event => this.onKeyUp(event));
         window.addEventListener('mousedown', event => this.onMouseDown(event));
         window.addEventListener('mouseup', event => this.onMouseUp(event));
         window.addEventListener('mousemove', event => this.onMouseMove(event));
@@ -45,14 +46,19 @@ export default class UI {
     async start() : Promise<void> {
         await this.#mapCanvas.load_images();
         this.#mapCanvas.centerOnUnit(this.game.activeUnit!);
+        this.#mapCanvas.draw(this.game);
         this.#hudCanvas.draw(this.game);
         setInterval(() => this.#mapCanvas.swapBlinkState(this.game), BLINK_SPEED);
     }
 
-    onWindowResize() {
+    private onWindowResize() {
+        this.#mapCanvas.resize();
+        this.#mapCanvas.draw(this.game);
+        this.#hudCanvas.resize();
+        this.#hudCanvas.draw(this.game);
     }
 
-    async onKeyDown(event: KeyboardEvent) {
+    private async onKeyDown(event: KeyboardEvent) {
         const dir = DIRECTIONS[event.code as keyof typeof DIRECTIONS];
         if (dir && !this.#mapCanvas.blocked) {
             const unit = this.game.moveActiveUnit(dir);
@@ -63,6 +69,7 @@ export default class UI {
                 this.#hudCanvas.draw(this.game);
             }
         }
+
         switch (event.code) {
             case 'KeyW':
                 this.game.wait_for_next_unit();
@@ -81,38 +88,51 @@ export default class UI {
                 }
                 break;
         }
+
+        if (event.key == 'Control') {
+            this.#mapCanvas.showTileMarker(this.game, this.#mapCanvas.pxToTile({ x: this.#lastMousePosition.x, y: this.#lastMousePosition.y }));
+        }
     }
 
-    onMouseDown(event: MouseEvent) {
+    private onKeyUp(event: KeyboardEvent) {
+        if (event.key == 'Control') {
+            this.#mapCanvas.showTileMarker(this.game, null);
+        }
+    }
+
+    private onMouseDown(event: MouseEvent) {
         if (event.button == 2) {
             this.#mouseDragging = true;
         }
     }
 
-    onMouseUp(event: MouseEvent) {
+    private onMouseUp(event: MouseEvent) {
         if (event.button == 2) {
             this.#mouseDragging = false;
         }
     }
 
-    onMouseMove(event: MouseEvent) {
+    private onMouseMove(event: MouseEvent) {
         this.#lastMousePosition = { x: event.x, y: event.y };
         if (this.#mouseDragging) {
             this.#mapCanvas.drag({ x: event.movementX, y: event.movementY } as Position);
             this.#mapCanvas.draw(this.game);
         }
+        if (event.ctrlKey) {
+            this.#mapCanvas.showTileMarker(this.game, this.#mapCanvas.pxToTile({ x: event.x, y: event.y }));
+        }
     }
 
-    onTouchStart(event: TouchEvent) {
+    private onTouchStart(event: TouchEvent) {
         if (event.touches[0])
             this.#touchDragging = { x: event.touches[0].clientX, y: event.touches[0].clientY };
     }
 
-    onTouchEnd() {
+    private onTouchEnd() {
         this.#touchDragging = null;
     }
 
-    onTouchMove(event: TouchEvent) {
+    private onTouchMove(event: TouchEvent) {
         if (this.#touchDragging && event.changedTouches[0]) {
             const rel = {
                 x: event.changedTouches[0].clientX - this.#touchDragging.x,

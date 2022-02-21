@@ -4,6 +4,7 @@ import Unit from "../../game/unit";
 import Canvas from "./canvas";
 
 const IMAGE_LIST = {
+    grass: 'img/grass.png',
     warrior: 'img/warrior.png',
 };
 
@@ -15,8 +16,9 @@ const MOVE_STEPS = 16;
 
 export default class MapCanvas extends Canvas {
 
-    #rel        = <Position> { x: 0, y: 0 };
-    #blinkState = true;
+    #rel            = <Position> { x: 0, y: 0 };
+    #blinkState     = true;
+    #lastTileMarker: Position | null = null;
 
     readonly #SCALE = { x: TILE.W / this.zoom, y: TILE.H / this.zoom };
 
@@ -33,7 +35,7 @@ export default class MapCanvas extends Canvas {
     private bounds(inlet: number = 0) : Rectangle {
         return {
             x: Math.round(this.#rel.x - 1) + inlet,
-            y: Math.round(this.#rel.y - 1) + inlet ,
+            y: Math.round(this.#rel.y - 1) + inlet,
             w: Math.round((this.canvas.width / TILE.W) + 2) - (2 * inlet),
             h: Math.round((this.canvas.height / TILE.H) + 2) - (2 * inlet)
         };
@@ -58,10 +60,23 @@ export default class MapCanvas extends Canvas {
                 this.drawUnit(game, unit);
     }
 
-    private drawTile(game: Game, pos: Position) {
-        const rRel = this.roundRel();
-        this.ctx.fillStyle = "#50a050";
-        this.ctx.fillRect((pos.x - rRel.x) * TILE.W, (pos.y - rRel.y) * TILE.H, TILE.W, TILE.H);
+    private drawTile(game: Game, pos: Position, drawUnits: boolean = false) {
+        const image = this.images.get('grass');
+        const tile = this.tileToPx(pos);
+        this.ctx.drawImage(image!, tile.x, tile.y, TILE.W, TILE.H);
+
+        if (drawUnits) {
+            const unit = game.topmostUnit(pos);
+            if (unit)
+                this.drawUnit(game, unit);
+        }
+
+        if (this.#lastTileMarker && this.#lastTileMarker.x === pos.x && this.#lastTileMarker.y === pos.y) {
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = 'white';
+            this.ctx.strokeRect(tile.x + 0.5, tile.y + 0.5, TILE.W - 1, TILE.H - 1)
+            this.ctx.closePath();
+        }
     }
 
     drawUnit(game: Game, unit: Unit, rel: Position = { x: 0, y: 0 }) {
@@ -133,8 +148,8 @@ export default class MapCanvas extends Canvas {
     private tileToPx(pos: Position, rel: Position = { x: 0, y: 0 }) : Position {
         const rRel = this.roundRel();
         return {
-            x: (pos.x - rRel.x + rel.x) * TILE.W,
-            y: (pos.y - rRel.y + rel.y) * TILE.H
+            x: Math.floor((pos.x - rRel.x + rel.x) * TILE.W),
+            y: Math.floor((pos.y - rRel.y + rel.y) * TILE.H)
         };
     }
 
@@ -189,4 +204,19 @@ export default class MapCanvas extends Canvas {
         });
     }
 
+    showTileMarker(game: Game, position: Position | null) {
+        if (this.#lastTileMarker === null && position !== null) {
+            this.#lastTileMarker = position;
+            this.drawTile(game, position, true);
+        } else if (this.#lastTileMarker !== null && position === null) {
+            const pos = this.#lastTileMarker;
+            this.#lastTileMarker = null;
+            this.drawTile(game, pos, true);
+        } else if (this.#lastTileMarker !== null && position !== null && this.#lastTileMarker!.x !== position!.x || this.#lastTileMarker!.y !== position!.y) {
+            const pos = this.#lastTileMarker!;
+            this.#lastTileMarker = position;
+            this.drawTile(game, pos, true);
+            this.drawTile(game, this.#lastTileMarker!, true);
+        }
+    }
 }

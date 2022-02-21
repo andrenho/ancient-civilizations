@@ -72,4 +72,10 @@ export default class Game {
     createUnit(nation: Nation, position: Position, unitType: UnitType) {
         this.units.push(new Unit(nation, position, unitType));
     }
+
+    topmostUnit(pos: Position) : Unit | null {
+        const unitsInTile = this.units.filter(unit => unit.pos.x == pos.x && unit.pos.y == pos.y);
+        // TODO - add some sort of order
+        return unitsInTile.length > 0 ? unitsInTile[0]! : null;
+    }
 }

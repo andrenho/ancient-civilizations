@@ -15,7 +15,7 @@ export default class HudCanvas extends Canvas {
         this.ctx.clearRect(x, y, 280, 120);
         if (game.activeUnit)
             this.ctx.fillText(`Steps: ${game.activeUnit.moves}`, x, y += 40);
-        this.ctx.fillText(`Year: ${game.year} B.C.`, x, y);
+        this.ctx.fillText(`Year: ${game.year} B.C.`, x, y += 40);
     }
 
 }
