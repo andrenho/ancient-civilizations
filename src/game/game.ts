@@ -2,9 +2,11 @@ import Unit from "./unit";
 import Tile from "./tile";
 import {Nation, NationDef, Nations, Terrain, UnitType, UnitTypeConfig} from "./static";
 import {Position} from "../common/geometry";
+import City from "./city";
 
 export default class Game {
     readonly units: Unit[] = [];
+    readonly cities: City[] = [];
     #activeUnit: Unit | null;
     #year: number = 2000;
     #playerNation: Nation = Nations[NationDef.PHOENICIA]!;
@@ -12,7 +14,7 @@ export default class Game {
     constructor() {
         this.#playerNation.isPlayerNation = true;
         this.units.push(new Unit(this.#playerNation, { x: 0, y : 0 }, UnitType.UNIT));
-        this.units.push(new Unit(this.#playerNation, { x: 1, y : 1 }, UnitType.UNIT));
+        this.cities.push(new City(this.#playerNation, { x: 3, y: 3 }, "My City"));
         this.#activeUnit = this.units[0]!;
     }
 
@@ -26,7 +28,6 @@ export default class Game {
 
     moveActiveUnit(rel: Position) : Unit | null {
         const unit = this.#activeUnit;
-        // TODO - check if can move, calculate steps
         if (unit && unit.moveBy(rel.x, rel.y, 1)) {
             if (!unit.hasMovesLeft()) {
                 this.wait_for_next_unit();
@@ -77,5 +78,12 @@ export default class Game {
         const unitsInTile = this.units.filter(unit => unit.pos.x == pos.x && unit.pos.y == pos.y);
         // TODO - add some sort of order
         return unitsInTile.length > 0 ? unitsInTile[0]! : null;
+    }
+
+    cityInPos(pos: Position, nation?: Nation) : City | null {
+        const city = this.cities.find(city => city.pos.x == pos.x && city.pos.y == pos.y);
+        if (city && nation && city.nation != nation)
+            return null;
+        return city ? city : null;
     }
 }

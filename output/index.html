@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Ancient Civilizations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="index.css">
-    <link rel="preload" href="font/Adonais.ttf" as="font" crossOrigin="anonymous">
     <script type="text/javascript" src="https://livejs.com/live.js"></script>
 </head>
 <body>
+    <div style="font-family: Acme,fantasy;">&nbsp;</div>
+
     <!-- Canvases -->
 
-    <canvas id="graphics"></canvas>
-    <canvas id="ui">
+    <canvas id="map-canvas" style="z-index: 1;"></canvas>
+    <canvas id="city-canvas" style="display: none; z-index: 2;"></canvas>
+    <canvas id="ui" style="z-index: 3;">
         Sorry, you need canvas support in order to display this game properly.
     </canvas>
 
     <!-- Screens -->
 
-    <div class="screen" id="debug">
+    <div class="screen" id="debug" style="display:none;">
         <div class="content debug">
             <h1>Debug</h1>
             <button id="print-game">Print game</button>

@@ -1,10 +1,7 @@
-@font-face {
-    font-family: 'Adonais';
-    src: url('font/Adonais.ttf');
-}
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
 
 * {
-    font-family: Adonais, fantasy;
+    font-family: Acme, fantasy;
     font-weight: normal;
 }
 

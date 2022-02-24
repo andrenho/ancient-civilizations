@@ -25,15 +25,15 @@
 - [X] Nations
 - [X] Improve movement when units are overlapping each other
 - [X] Debug menu
-  - [ ] Find a better font
-  - [ ] Improve debug menu
+  - [X] Find a better font
 
 ### City
 
 - [ ] City
-  - [ ] Create city in map
-  - [ ] Create city object
+  - [X] Create city in map
+  - [X] Create city object
   - [ ] Edit city
+- [ ] Improve debug menu
 - [ ] Buildings
 - [ ] Goods, factory tree
 - [ ] Move units to buildings

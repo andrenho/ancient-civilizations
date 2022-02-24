@@ -3,6 +3,7 @@ import Game from "../game/game";
 import {debug_open} from "./debug";
 import MapCanvas from "./canvas/map-canvas";
 import HudCanvas from "./canvas/hud-canvas";
+import CityCanvas from "./canvas/city-canvas";
 
 const BLINK_SPEED = 500;
 
@@ -24,13 +25,14 @@ export default class UI {
     #touchDragging : Position | null = null;
 
     #mapCanvas = new MapCanvas();
+    #cityCanvas = new CityCanvas();
     #hudCanvas = new HudCanvas();
 
     constructor(private game: Game) {
     }
 
     captureEvents() {
-        document.addEventListener('keydown', event => this.onKeyDown(event));
+        // document.addEventListener('keydown', event => this.onKeyDown(event));
         document.addEventListener('keyup', event => this.onKeyUp(event));
         window.addEventListener('mousedown', event => this.onMouseDown(event));
         window.addEventListener('mouseup', event => this.onMouseUp(event));
@@ -44,7 +46,10 @@ export default class UI {
     }
 
     async start() : Promise<void> {
-        await this.#mapCanvas.load_images();
+        await Promise.all([
+            this.#mapCanvas.load_images(),
+            this.#hudCanvas.load_font()
+        ]);
         this.#mapCanvas.centerOnUnit(this.game.activeUnit!);
         this.#mapCanvas.draw(this.game);
         this.#hudCanvas.draw(this.game);
@@ -64,7 +69,6 @@ export default class UI {
             const unit = this.game.moveActiveUnit(dir);
             if (unit) {
                 this.#mapCanvas.scrollIfActiveUnitOutOfScreen(this.game);
-                this.#mapCanvas.drawUnit(this.game, unit);
                 await this.#mapCanvas.animateUnitMovement(this.game, unit, dir);
                 this.#hudCanvas.draw(this.game);
             }
@@ -90,18 +94,23 @@ export default class UI {
         }
 
         if (event.key == 'Control') {
-            this.#mapCanvas.showTileMarker(this.game, this.#mapCanvas.pxToTile({ x: this.#lastMousePosition.x, y: this.#lastMousePosition.y }));
+            this.#mapCanvas.drawTileMarker(this.game, this.#mapCanvas.pxToTile({ x: this.#lastMousePosition.x, y: this.#lastMousePosition.y }));
         }
     }
 
     private onKeyUp(event: KeyboardEvent) {
         if (event.key == 'Control') {
-            this.#mapCanvas.showTileMarker(this.game, null);
+            this.#mapCanvas.drawTileMarker(this.game, null);
         }
     }
 
     private onMouseDown(event: MouseEvent) {
-        if (event.button == 2) {
+        if (event.button == 1) {
+            const tile = this.#mapCanvas.pxToTile({ x: event.x, y: event.y });
+            const city = this.game.cityInPos(tile, this.game.playerNation)
+            if (city)
+                this.#cityCanvas.show(city);
+        } else if (event.button == 2) {
             this.#mouseDragging = true;
         }
     }
@@ -119,7 +128,7 @@ export default class UI {
             this.#mapCanvas.draw(this.game);
         }
         if (event.ctrlKey) {
-            this.#mapCanvas.showTileMarker(this.game, this.#mapCanvas.pxToTile({ x: event.x, y: event.y }));
+            this.#mapCanvas.drawTileMarker(this.game, this.#mapCanvas.pxToTile({ x: event.x, y: event.y }));
         }
     }
 

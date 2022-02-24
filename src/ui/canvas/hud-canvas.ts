@@ -7,8 +7,12 @@ export default class HudCanvas extends Canvas {
         super("ui", 1);
     }
 
+    async load_font() {
+        await document.fonts.ready;
+    }
+
     draw(game: Game) {
-        this.ctx.font = '32px Adonais';
+        this.ctx.font = '32px Acme';
         this.ctx.fillStyle = 'black';
         const x = this.canvas.width - 280;   // TODO - don't use magic numbers
         let y = this.canvas.height - 120;
