@@ -1,15 +1,12 @@
-export interface Position {
-    x: number;
-    y: number;
+export class Point {
+    constructor(readonly x: number, readonly y: number) {}
+
+    toString = () => `${this.x},${this.y}`
 }
 
-export interface Rectangle {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
+export class Rectangle {
+    constructor(readonly p: Point, readonly w: number, readonly h: number) {}
 }
 
-export function include_point(rectangle: Rectangle, point: Position) : boolean {
-    return point.x >= rectangle.x && point.x < (rectangle.x + rectangle.w) && point.y >= rectangle.y && point.y < (rectangle.y + rectangle.h);
-}
+export function P(x: number, y: number) { return new Point(x, y); }
+export function R(p: Point, w: number, h: number) { return new Rectangle(p, w, h); }

@@ -1,89 +1,23 @@
-import Unit from "./unit";
+import GameInterface, {GameConfig, GameObject} from "../interfaces/game-interface";
+import {P, Point, Rectangle} from "../common/geometry";
 import Tile from "./tile";
-import {Nation, NationDef, Nations, Terrain, UnitType, UnitTypeConfig} from "./static";
-import {Position} from "../common/geometry";
-import City from "./city";
+import Terrain from "./terrain";
+import Unit from "./unit";
 
-export default class Game {
-    readonly units: Unit[] = [];
-    readonly cities: City[] = [];
-    #activeUnit: Unit | null;
-    #year: number = 2000;
-    #playerNation: Nation = Nations[NationDef.PHOENICIA]!;
+export default class Game implements GameInterface {
 
-    constructor() {
-        this.#playerNation.isPlayerNation = true;
-        this.units.push(new Unit(this.#playerNation, { x: 0, y : 0 }, UnitType.UNIT));
-        this.cities.push(new City(this.#playerNation, { x: 3, y: 3 }, "My City"));
-        this.#activeUnit = this.units[0]!;
+    newGame(config: GameConfig): void {
+        // TODO
     }
 
-    get activeUnit() { return this.#activeUnit; }
-    get year() { return this.#year; }
-    get playerNation() { return this.#playerNation; }
-
-    tile(pos: Position) : Tile {
-        return { terrain: Terrain.GRASSLAND };
+    objects(bounds: Rectangle): Map<Point, GameObject[]> {
+        const map = new Map<Point, GameObject[]>();
+        for (let x = 0; x < 30; x++)
+            for (let y = 0; y < 30; y++)
+                map.set(P(x, y), [new Tile(Terrain.Grassland)]);
+        console.log(P(1,1).toString());
+        map.get(P(1, 1))!.push(new Unit());
+        return map;
     }
 
-    moveActiveUnit(rel: Position) : Unit | null {
-        const unit = this.#activeUnit;
-        if (unit && unit.moveBy(rel.x, rel.y, 1)) {
-            if (!unit.hasMovesLeft()) {
-                this.wait_for_next_unit();
-                if (!this.#activeUnit)
-                    this.newTurn();
-            }
-            return unit;
-        }
-        return null;
-    }
-
-    private availableUnits() : Unit[] {
-        return this.units.filter(unit => unit.isFromPlayerNation() && unit.hasMovesLeft());
-    }
-
-    private next_unit() : Unit | null {
-        const units = this.availableUnits();
-        if (units.length == 0)
-            return null;
-        else if (units.length == 1)
-            return units[0]!;
-
-        // find current unit
-        let current = -1;
-        if (this.#activeUnit)
-            current = units.findIndex((unit) => unit == this.#activeUnit);
-
-        // find next unit
-        let next = (current + 1) % this.units.length;
-        return units[next]!;
-    }
-
-    wait_for_next_unit() {
-        this.#activeUnit = this.next_unit();
-    }
-
-    newTurn() {
-        this.#year -= 0.5;
-        this.units.forEach((unit) => unit.newTurn());
-        this.wait_for_next_unit();
-    }
-
-    createUnit(nation: Nation, position: Position, unitType: UnitType) {
-        this.units.push(new Unit(nation, position, unitType));
-    }
-
-    topmostUnit(pos: Position) : Unit | null {
-        const unitsInTile = this.units.filter(unit => unit.pos.x == pos.x && unit.pos.y == pos.y);
-        // TODO - add some sort of order
-        return unitsInTile.length > 0 ? unitsInTile[0]! : null;
-    }
-
-    cityInPos(pos: Position, nation?: Nation) : City | null {
-        const city = this.cities.find(city => city.pos.x == pos.x && city.pos.y == pos.y);
-        if (city && nation && city.nation != nation)
-            return null;
-        return city ? city : null;
-    }
 }

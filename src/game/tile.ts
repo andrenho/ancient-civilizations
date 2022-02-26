@@ -1,5 +1,9 @@
-import {Terrain} from "./static";
+import {GameObjectType, TileInterface} from "../interfaces/game-interface";
+import Terrain from "./terrain";
 
-export default interface Tile {
-    terrain: Terrain;
+export default class Tile implements TileInterface {
+
+    constructor(readonly terrain: Terrain) {}
+
+    kind: GameObjectType.Tile = GameObjectType.Tile
 }

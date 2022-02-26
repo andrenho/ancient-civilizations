@@ -5,7 +5,7 @@
     <title>Ancient Civilizations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="css/index.css">
     <script type="text/javascript" src="https://livejs.com/live.js"></script>
 </head>
 <body>
@@ -19,21 +19,12 @@
         Sorry, you need canvas support in order to display this game properly.
     </canvas>
 
-    <!-- Screens -->
-
-    <div class="screen" id="debug" style="display:none;">
-        <div class="content debug">
-            <h1>Debug</h1>
-            <button id="print-game">Print game</button>
-            <button id="create-unit">Create unit in (X, Y)</button>
-            <button id="exit-debug">Exit debug</button>
-        </div>
-    </div>
-
-    <!-- Scripts -->
+    <!-- External scripts -->
 
     <script src="https://unpkg.com/systemjs@6.11.0/dist/system.js"></script>
     <script src="https://unpkg.com/systemjs@6.11.0/dist/extras/named-register.js"></script>
+
+    <!-- Main game script -->
 
     <script src="js/ancciv.js"></script>
     <script type="module">

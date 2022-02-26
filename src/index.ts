@@ -1,9 +1,8 @@
 import Game from "./game/game";
-import UI from "./ui/ui";
+import UiEngineText from "./ui-engine-text/ui-engine-text";
+import UiInterface from "./interfaces/ui-interface";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const game = new Game();
-    const ui = new UI(game);
-    ui.captureEvents();
-    await ui.start();
-});
+const ui : UiInterface = new UiEngineText(new Game());
+ui.redraw();
+
+document.addEventListener('keydown', event => ui.onKeyDown(event));
