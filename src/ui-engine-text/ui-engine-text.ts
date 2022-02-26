@@ -3,6 +3,7 @@ import GameInterface, {GameObject, GameObjectType} from "../interfaces/game-inte
 import {P, Point, R} from "../common/geometry";
 import Terrain from "../game/terrain";
 import Tile from "../game/tile";
+import Unit from "../game/unit";
 
 export default class UiEngineText implements UiInterface {
 
@@ -49,7 +50,11 @@ export default class UiEngineText implements UiInterface {
                 this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
                 this.#mapCtx.fillStyle = 'black';
                 this.#mapCtx.textBaseline = 'top';
-                this.#mapCtx.fillText('W', pt.x, pt.y);
+                this.#mapCtx.fillText('W', pt.x + 5, pt.y + 2);
+                if ((object as Unit).isEqual(this.game.selectedUnit())) {
+                    this.#mapCtx.strokeStyle = 'red';
+                    this.#mapCtx.strokeRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
+                }
                 break;
         }
     }

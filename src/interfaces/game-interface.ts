@@ -26,4 +26,5 @@ export default interface GameInterface {
 
     objects(bounds: Rectangle) : [Point, GameObject][];
 
+    selectedUnit() : UnitInterface | null;
 }
