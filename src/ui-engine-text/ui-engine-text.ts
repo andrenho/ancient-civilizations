@@ -34,9 +34,8 @@ export default class UiEngineText implements UiInterface {
     redraw(): void {
         const w = this.#mapCanvas.width / UiEngineText.TILE_SZ;
         const h = this.#mapCanvas.height / UiEngineText.TILE_SZ;
-        for (let [p, objects] of this.game.objects(R(P(0, 0), w, h)))
-            for (let object of objects)
-                this.draw(p, object);
+        for (let [p, object] of this.game.objects(R(P(0, 0), w, h)))
+            this.draw(p, object);
     }
 
     private draw(p: Point, object: GameObject) {
@@ -47,8 +46,9 @@ export default class UiEngineText implements UiInterface {
                 this.#mapCtx.fillRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
                 break;
             case GameObjectType.Unit:
-                this.#mapCtx.font = `${UiEngineText.TILE_SZ}px Acme`;
+                this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
                 this.#mapCtx.fillStyle = 'black';
+                this.#mapCtx.textBaseline = 'top';
                 this.#mapCtx.fillText('W', pt.x, pt.y);
                 break;
         }

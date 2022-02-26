@@ -24,5 +24,6 @@ export default interface GameInterface {
 
     newGame(config: GameConfig) : void;
 
-    objects(bounds: Rectangle) : Map<Point, GameObject[]>;
+    objects(bounds: Rectangle) : [Point, GameObject][];
+
 }
