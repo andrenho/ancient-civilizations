@@ -66,7 +66,36 @@ export default class Game implements GameInterface {
     }
 
     selectNextUnit(): Unit | null {
-        return null;  // TODO
+        let nextSelected : Unit | undefined
+
+        const findNextAbleUnit = (i : number) : Unit | undefined => {
+            for (let j = i; j < this.#units.length; ++j) {
+                if (this.#units[j]!.canMove())
+                    return this.#units[j];
+            }
+            return undefined;
+        };
+
+        if (this.#selectedUnit === null) {
+            nextSelected = findNextAbleUnit(0);
+        } else {
+            const i = this.#units.findIndex(unit => unit.isEqual(this.#selectedUnit))!;
+            nextSelected = findNextAbleUnit(i + 1);
+            if (nextSelected === null)
+                nextSelected = findNextAbleUnit(0);
+        }
+
+        if (nextSelected === null)
+            this.newRound();
+        else
+            this.#selectedUnit = nextSelected!;
+
+        return this.#selectedUnit;
+    }
+
+    newRound() : void {
+        this.#units.forEach(unit => unit.newRound());
+        this.#year -= 0.5;
     }
 
 }

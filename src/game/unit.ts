@@ -24,18 +24,22 @@ export default class Unit implements UnitInterface {
     get position() { return this.#position; }
     get movesLeft() { return this.#movesLeft; }
 
-    move(dir: Direction) {
+    move(dir: Direction) : void {
         this.#position = this.#position.plus(Directions[dir]);
     }
 
-    reduceMovesBy(moveCost: number) {
+    reduceMovesBy(moveCost: number) : void {
         this.#movesLeft -= moveCost;
         if (this.#movesLeft < 0)
             this.#movesLeft = 0;
     }
 
-    newRound() {
+    newRound() : void {
         this.#movesLeft = UnitTypeConfig[this.unitType].moves;
+    }
+
+    canMove() : boolean {
+        return this.#movesLeft > 0;
     }
 
     isEqual(object: any) : boolean {

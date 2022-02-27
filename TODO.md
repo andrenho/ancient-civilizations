@@ -5,11 +5,11 @@
 - [X] Basic setup
 - [X] Basic terrain
 - [X] Nations
-- [ ] Player movement
+- [X] Player movement
 - [ ] Step expiration
-  - [ ] Blink selected unit
-  - [ ] Create unit type
-  - [ ] Write number of steps
+  - [X] Blink selected unit
+  - [X] Create unit type
+  - [X] Write number of steps
   - [ ] Expire steps
   - [ ] Create a second unit, alternate between them
   - [ ] New round
