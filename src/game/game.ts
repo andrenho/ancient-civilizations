@@ -3,16 +3,23 @@ import {P, Point, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Terrain from "./terrain";
 import Unit from "./unit";
+import Nation, {NationType} from "./nation";
 
 export default class Game implements GameInterface {
 
+    #playerNation?: Nation;
     #selectedUnit : Unit | null = null;
+    #nations: Nation[] = [];
     #units: Unit[] = [];
+    #year: number = -2000;
 
-    selectedUnit() : Unit | null { return this.#selectedUnit; }
+    get selectedUnit() : Unit | null { return this.#selectedUnit; }
+    get year() { return this.#year; }
 
     newGame(config: GameConfig): void {
-        this.#units.push(new Unit());
+        this.#nations = [new Nation(NationType.PHOENICIA)];
+        this.#playerNation = this.#nations[0]!;
+        this.#units.push(new Unit(this.#playerNation));
         this.#selectedUnit = this.#units[0]!;
     }
 
@@ -23,6 +30,10 @@ export default class Game implements GameInterface {
                 objects.push([P(x, y), new Tile(Terrain.Grassland)]);
         objects.push([P(1, 1), this.#units[0]!]);
         return objects;
+    }
+
+    get selectedUnitMovesLeft(): number | null {
+        return 0;
     }
 
 }

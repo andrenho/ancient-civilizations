@@ -2,13 +2,19 @@ import {Point, Rectangle} from "../common/geometry";
 
 export enum GameObjectType { Tile, Unit, City }
 
+export interface NationInterface {
+    readonly nationType: string;
+}
+
 export interface TileInterface {
     kind: GameObjectType.Tile
-    terrain: string;
+    readonly terrain: string;
 }
 
 export interface UnitInterface {
     kind: GameObjectType.Unit
+    readonly nation: NationInterface;
+    isEqual(object: any) : boolean;
 }
 
 export interface CityInterface {
@@ -26,5 +32,7 @@ export default interface GameInterface {
 
     objects(bounds: Rectangle) : [Point, GameObject][];
 
-    selectedUnit() : UnitInterface | null;
+    get selectedUnit() : UnitInterface | null;
+    get selectedUnitMovesLeft() : number | null;
+    get year() : number;
 }

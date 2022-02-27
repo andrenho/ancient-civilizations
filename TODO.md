@@ -3,29 +3,18 @@
 ### Map
 
 - [X] Basic setup
-- [X] Player movement
 - [X] Basic terrain
-- [X] Smooth movement
-- [X] Step expiration
-  - [X] Blink selected unit
-  - [X] Create unit type
-  - [X] Write number of steps
-  - [X] Expire steps
-  - [X] Create a second unit, alternate between them
-  - [X] New round
-  - [X] Detect end-of-round
-- [X] Rounds + years
-- [X] Prepare for mobile
-  - [X] Default zoom
-- [X] Screen movement
-  - [X] When is dragged
-    - [X] Mouse
-    - [X] Touch
-  - [X] When unit moves
 - [X] Nations
-- [X] Improve movement when units are overlapping each other
-- [X] Debug menu
-  - [X] Find a better font
+- [ ] Player movement
+- [ ] Step expiration
+  - [ ] Blink selected unit
+  - [ ] Create unit type
+  - [ ] Write number of steps
+  - [ ] Expire steps
+  - [ ] Create a second unit, alternate between them
+  - [ ] New round
+  - [ ] Detect end-of-round
+- [ ] Rounds + years
 
 ### City
 

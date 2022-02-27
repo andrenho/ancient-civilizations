@@ -1,4 +1,5 @@
 import {GameObjectType, UnitInterface} from "../interfaces/game-interface";
+import Nation from "./nation";
 
 export default class Unit implements UnitInterface {
     static idCounter : number = 0;
@@ -7,7 +8,7 @@ export default class Unit implements UnitInterface {
 
     readonly #id : number;
 
-    constructor() {
+    constructor(readonly nation: Nation) {
         this.#id = Unit.idCounter++;
     }
 

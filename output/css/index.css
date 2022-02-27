@@ -52,3 +52,10 @@ canvas {
     gap: 8px;
     align-items: flex-start;
 }
+
+.debug-info {
+    margin-top: 600px;
+    margin-left: 16px;
+    font-family: monospace;
+    font-size: 15px;
+}
