@@ -3,7 +3,7 @@ import {P, Point, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
 import Nation from "./nation";
-import {Direction, NationType, Terrain, UnitType} from "../interfaces/game-enum";
+import {Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
 
 export default class Game implements GameInterface {
 
@@ -46,7 +46,12 @@ export default class Game implements GameInterface {
         if (this.#selectedUnit === null)
             return false;
 
-        // TODO - can it spend the number of moves?
+        // TODO - check map bounds
+
+        const futurePos = this.#selectedUnit.position.plus(Directions[dir]);
+        const moveCost = this.tile(futurePos).moveCost;
+        if (moveCost > this.#selectedUnit.movesLeft)
+            return false;
 
         return true;
     }
