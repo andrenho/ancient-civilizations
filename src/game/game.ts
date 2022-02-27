@@ -3,7 +3,8 @@ import {P, Point, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Terrain from "./terrain";
 import Unit from "./unit";
-import Nation, {NationType} from "./nation";
+import Nation from "./nation";
+import {NationType, UnitType} from "./static";
 
 export default class Game implements GameInterface {
 
@@ -19,7 +20,7 @@ export default class Game implements GameInterface {
     newGame(config: GameConfig): void {
         this.#nations = [new Nation(NationType.PHOENICIA)];
         this.#playerNation = this.#nations[0]!;
-        this.#units.push(new Unit(this.#playerNation));
+        this.#units.push(new Unit(this.#playerNation, UnitType.WARRIOR));
         this.#selectedUnit = this.#units[0]!;
     }
 

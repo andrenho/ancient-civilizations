@@ -1,9 +1,5 @@
 import {NationInterface} from "../interfaces/game-interface";
-
-export enum NationType {
-    PHOENICIA = 'phoenicia',
-    EGYPT = 'egypt',
-}
+import {NationType} from "./static";
 
 export default class Nation implements NationInterface {
 

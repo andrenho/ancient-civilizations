@@ -52,7 +52,7 @@ export default class UiEngineText implements UiInterface {
                 const unit : UnitInterface = object;
                 this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
                 this.#mapCtx.textBaseline = 'top';
-                this.#mapCtx.fillStyle = this.nationColor(unit.nation.nationType);
+                this.#mapCtx.fillStyle = UiEngineText.nationColor(unit.nation.nationType);
                 this.#mapCtx.fillText('W', pt.x + 6, pt.y + 2);
                 if (unit.isEqual(this.game.selectedUnit)) {
                     this.#mapCtx.strokeStyle = 'red';
@@ -62,7 +62,7 @@ export default class UiEngineText implements UiInterface {
         }
     }
 
-    private nationColor(nationType: string) : string {
+    private static nationColor(nationType: string) : string {
         switch (nationType) {
             case 'phoenicia': return '#2222cc';
             case 'egypt': return '#ff0000';

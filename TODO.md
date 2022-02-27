@@ -19,8 +19,8 @@
 ### City
 
 - [ ] City
-  - [X] Create city in map
-  - [X] Create city object
+  - [ ] Create city in map
+  - [ ] Create city object
   - [ ] Edit city
 - [ ] Improve debug menu
 - [ ] Buildings
