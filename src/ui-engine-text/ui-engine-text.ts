@@ -29,6 +29,11 @@ export default class UiEngineText implements UiInterface {
             this.game.moveSelectedUnit(dir!);
             this.redraw();
         }
+        switch (event.key) {
+            case 'w':
+                this.game.selectNextUnit();
+                break;
+        }
     }
 
     //

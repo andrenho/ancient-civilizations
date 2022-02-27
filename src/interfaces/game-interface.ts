@@ -39,4 +39,6 @@ export default interface GameInterface {
     get selectedUnit() : UnitInterface | null;
     get selectedUnitMovesLeft() : number | null;
     get year() : number;
+
+    selectNextUnit(): UnitInterface | null;
 }

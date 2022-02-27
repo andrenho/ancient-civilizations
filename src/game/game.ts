@@ -20,6 +20,7 @@ export default class Game implements GameInterface {
         this.#nations = [new Nation(NationType.Phoenicia)];
         this.#playerNation = this.#nations[0]!;
         this.#units.push(new Unit(P(1, 1), this.#playerNation, UnitType.Warrior));
+        this.#units.push(new Unit(P(3, 3), this.#playerNation, UnitType.Warrior));
         this.#selectedUnit = this.#units[0]!;
     }
 
@@ -28,7 +29,8 @@ export default class Game implements GameInterface {
         for (let x = 0; x < 30; x++)
             for (let y = 0; y < 30; y++)
                 objects.push([P(x, y), this.tile(P(x, y))])
-        objects.push([this.#units[0]!.position, this.#units[0]!]);
+        for (const unit of this.#units)
+            objects.push([unit.position, unit]);
         return objects;
     }
 
@@ -61,6 +63,10 @@ export default class Game implements GameInterface {
             this.#selectedUnit!.move(dir);
             this.#selectedUnit!.reduceMovesBy(this.tile(this.#selectedUnit!.position).moveCost);
         }
+    }
+
+    selectNextUnit(): Unit | null {
+        return null;  // TODO
     }
 
 }
