@@ -1,7 +1,10 @@
 export class Point {
+
     constructor(readonly x: number, readonly y: number) {}
 
-    toString = () => `${this.x},${this.y}`
+    plus(diff: Point) {
+        return new Point(this.x + diff.x, this.y + diff.y);
+    }
 }
 
 export class Rectangle {

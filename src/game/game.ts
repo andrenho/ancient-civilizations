@@ -1,10 +1,9 @@
 import GameInterface, {GameConfig, GameObject} from "../interfaces/game-interface";
 import {P, Point, Rectangle} from "../common/geometry";
 import Tile from "./tile";
-import Terrain from "./terrain";
 import Unit from "./unit";
 import Nation from "./nation";
-import {NationType, UnitType} from "./static";
+import {Direction, NationType, Terrain, UnitType} from "../interfaces/game-enum";
 
 export default class Game implements GameInterface {
 
@@ -18,9 +17,9 @@ export default class Game implements GameInterface {
     get year() { return this.#year; }
 
     newGame(config: GameConfig): void {
-        this.#nations = [new Nation(NationType.PHOENICIA)];
+        this.#nations = [new Nation(NationType.Phoenicia)];
         this.#playerNation = this.#nations[0]!;
-        this.#units.push(new Unit(this.#playerNation, UnitType.WARRIOR));
+        this.#units.push(new Unit(P(1, 1), this.#playerNation, UnitType.Warrior));
         this.#selectedUnit = this.#units[0]!;
     }
 
@@ -28,13 +27,35 @@ export default class Game implements GameInterface {
         const objects : [Point, GameObject][] = [];
         for (let x = 0; x < 30; x++)
             for (let y = 0; y < 30; y++)
-                objects.push([P(x, y), new Tile(Terrain.Grassland)]);
-        objects.push([P(1, 1), this.#units[0]!]);
+                objects.push([P(x, y), this.tile(P(x, y))])
+        objects.push([this.#units[0]!.position, this.#units[0]!]);
         return objects;
     }
 
     get selectedUnitMovesLeft(): number | null {
-        return 0;
+        if (this.#selectedUnit)
+            return this.#selectedUnit!.movesLeft;
+        return null;
+    }
+
+    private tile(p: Point) : Tile {
+        return new Tile(Terrain.Grassland);  // TODO
+    }
+
+    canMoveSelectedUnit(dir: Direction): boolean {
+        if (this.#selectedUnit === null)
+            return false;
+
+        // TODO - can it spend the number of moves?
+
+        return true;
+    }
+
+    moveSelectedUnit(dir: Direction): void {
+        if (this.#selectedUnit) {
+            this.#selectedUnit!.move(dir);
+            this.#selectedUnit!.reduceMovesBy(this.tile(this.#selectedUnit!.position).moveCost);
+        }
     }
 
 }

@@ -1,14 +1,15 @@
 import {Point, Rectangle} from "../common/geometry";
+import {Direction, NationType, Terrain} from "./game-enum";
 
 export enum GameObjectType { Tile, Unit, City }
 
 export interface NationInterface {
-    readonly nationType: string;
+    readonly nationType: NationType;
 }
 
 export interface TileInterface {
     kind: GameObjectType.Tile
-    readonly terrain: string;
+    readonly terrain: Terrain;
 }
 
 export interface UnitInterface {
@@ -31,6 +32,9 @@ export default interface GameInterface {
     newGame(config: GameConfig) : void;
 
     objects(bounds: Rectangle) : [Point, GameObject][];
+
+    canMoveSelectedUnit(dir: Direction) : boolean;
+    moveSelectedUnit(dir: Direction) : void;
 
     get selectedUnit() : UnitInterface | null;
     get selectedUnitMovesLeft() : number | null;

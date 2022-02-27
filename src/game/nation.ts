@@ -1,5 +1,5 @@
 import {NationInterface} from "../interfaces/game-interface";
-import {NationType} from "./static";
+import {NationType} from "../interfaces/game-enum";
 
 export default class Nation implements NationInterface {
 

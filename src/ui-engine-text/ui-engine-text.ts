@@ -1,12 +1,13 @@
-import UiInterface from "../interfaces/ui-interface";
+import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import GameInterface, {GameObject, GameObjectType, TileInterface, UnitInterface} from "../interfaces/game-interface";
 import {P, Point, R} from "../common/geometry";
+import {Direction, NationType, Terrain} from "../interfaces/game-enum";
 
 export default class UiEngineText implements UiInterface {
 
     static readonly TILE_SZ = 24;
-    static readonly #terrainColors = new Map<string, string>([
-        [ 'grassland', '#aaddaa' ],
+    static readonly #terrainColors = new Map<Terrain, string>([
+        [ Terrain.Grassland, '#aaddaa' ],
     ]);
 
     #mapCanvas: HTMLCanvasElement;
@@ -23,6 +24,11 @@ export default class UiEngineText implements UiInterface {
     //
 
     onKeyDown(event: KeyboardEvent): void {
+        const dir = KeyDirections[event.code];
+        if (dir !== undefined && this.game.canMoveSelectedUnit(dir!)) {
+            this.game.moveSelectedUnit(dir!);
+            this.redraw();
+        }
     }
 
     //
@@ -62,10 +68,10 @@ export default class UiEngineText implements UiInterface {
         }
     }
 
-    private static nationColor(nationType: string) : string {
+    private static nationColor(nationType: NationType) : string {
         switch (nationType) {
-            case 'phoenicia': return '#2222cc';
-            case 'egypt': return '#ff0000';
+            case NationType.Phoenicia: return '#2222cc';
+            case NationType.Egypt: return '#ff0000';
         }
         return 'gray';
     }
