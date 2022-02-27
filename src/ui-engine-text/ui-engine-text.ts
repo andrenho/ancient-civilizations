@@ -27,13 +27,13 @@ export default class UiEngineText implements UiInterface {
         const dir = KeyDirections[event.code];
         if (dir !== undefined && this.game.canMoveSelectedUnit(dir!)) {
             this.game.moveSelectedUnit(dir!);
-            this.redraw();
         }
         switch (event.key) {
             case 'w':
                 this.game.selectNextUnit();
                 break;
         }
+        this.redraw();
     }
 
     //

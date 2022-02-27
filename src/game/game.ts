@@ -81,7 +81,7 @@ export default class Game implements GameInterface {
         } else {
             const i = this.#units.findIndex(unit => unit.isEqual(this.#selectedUnit))!;
             nextSelected = findNextAbleUnit(i + 1);
-            if (nextSelected === null)
+            if (nextSelected === undefined)
                 nextSelected = findNextAbleUnit(0);
         }
 
