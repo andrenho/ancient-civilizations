@@ -1,7 +1,6 @@
-import {NationInterface} from "../interfaces/game-interface";
 import {NationType} from "../interfaces/game-enum";
 
-export default class Nation implements NationInterface {
+export default class Nation {
 
     constructor(readonly nationType: NationType) {
     }

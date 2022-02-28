@@ -1,14 +1,7 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
-import GameInterface, {
-    CityInterface,
-    GameObject,
-    GameObjectType, NationInterface,
-    TileInterface,
-    UnitInterface
-} from "../interfaces/game-interface";
-import {P, Point, R} from "../common/geometry";
+import {P, R} from "../common/geometry";
 import {NationType, Terrain} from "../interfaces/game-enum";
-import Nation from "../game/nation";
+import GameInterface, {MapTile} from "../interfaces/game-interface";
 
 export default class UiEngineText implements UiInterface {
 
@@ -53,33 +46,30 @@ export default class UiEngineText implements UiInterface {
     redraw(): void {
         const w = this.#mapCanvas.width / UiEngineText.TILE_SZ;
         const h = this.#mapCanvas.height / UiEngineText.TILE_SZ;
-        for (let [p, object] of this.game.objects(R(P(0, 0), w, h)))
-            this.draw(p, object);
+        const state = this.game.gameState(R(P(0, 0), w, h));
 
-        let text = `Year: ${-this.game.year} B.C.\n`;
-        if (this.game.selectedUnit)
-            text += `Moves left: ${this.game.selectedUnitMovesLeft!}`;
+        state.tiles.forEach(t => this.draw(t));
+
+        let text = `Year: ${-state.year} B.C.\n`;
+        if (state.selectedUnitMovesLeft)
+            text += `Moves left: ${state.selectedUnitMovesLeft!}`;
         document.getElementById('debug-info')!.innerText = text;
     }
 
-    private draw(p: Point, object: GameObject) {
-        const pt = P(p.x * UiEngineText.TILE_SZ, p.y * UiEngineText.TILE_SZ);
-        switch (object.kind) {
-            case GameObjectType.Tile:
-                this.#mapCtx.fillStyle = UiEngineText.#terrainColors.get((object as TileInterface).terrain)!;
-                this.#mapCtx.fillRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
-                break;
-            case GameObjectType.Unit:
-                const unit : UnitInterface = object;
-                this.writeText('W', pt.x, pt.y, UiEngineText.nationColor(unit.nation.nationType));
-                if (unit.isEqual(this.game.selectedUnit)) {
-                    this.#mapCtx.strokeStyle = 'red';
-                    this.#mapCtx.strokeRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
-                }
-                break;
-            case GameObjectType.City:
-                this.writeText('C', pt.x, pt.y, UiEngineText.nationColor((object as CityInterface).nation.nationType), true);
-                break;
+    private draw(tile: MapTile) {
+        const [x, y] = tile.position;
+        const pt = P(x * UiEngineText.TILE_SZ, y * UiEngineText.TILE_SZ);
+        if (tile.tile) {
+            this.#mapCtx.fillStyle = UiEngineText.#terrainColors.get(tile.tile.terrain)!;
+            this.#mapCtx.fillRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
+        } else if (tile.unit) {
+            this.writeText('W', pt.x, pt.y, UiEngineText.nationColor(tile.unit.nation));
+            if (tile.unit.selected) {
+                this.#mapCtx.strokeStyle = 'red';
+                this.#mapCtx.strokeRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
+            }
+        } else if (tile.city) {
+            this.writeText('C', pt.x, pt.y, UiEngineText.nationColor(tile.city.nation), true);
         }
     }
 

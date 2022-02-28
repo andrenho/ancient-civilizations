@@ -1,8 +1,8 @@
-import {GameObjectType, TileInterface} from "../interfaces/game-interface";
+import {GameObjectType, TileObject} from "../interfaces/game-interface";
 import {Terrain} from "../interfaces/game-enum";
 import {TerrainConfig} from "./config";
 
-export default class Tile implements TileInterface {
+export default class Tile {
 
     constructor(readonly terrain: Terrain) {}
 
@@ -10,5 +10,7 @@ export default class Tile implements TileInterface {
         return TerrainConfig[this.terrain].moveCost;
     }
 
-    kind: GameObjectType.Tile = GameObjectType.Tile
+    toTileObject() : TileObject {
+        return { terrain: this.terrain };
+    }
 }

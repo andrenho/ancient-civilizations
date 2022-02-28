@@ -9,6 +9,10 @@ export class Point {
 
 export class Rectangle {
     constructor(readonly p: Point, readonly w: number, readonly h: number) {}
+
+    contains(p: Point) : boolean {
+        return p.x >= this.p.x && (p.x < this.p.x + this.w) && p.y >= this.p.y && (p.y < this.p.y + this.h);
+    }
 }
 
 export function P(x: number, y: number) { return new Point(x, y); }

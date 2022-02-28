@@ -1,5 +1,5 @@
-import GameInterface, {GameConfig, GameObject} from "../interfaces/game-interface";
-import {P, Point, Rectangle} from "../common/geometry";
+import GameInterface, {GameConfig, GameObjectType, GameState, MapTile} from "../interfaces/game-interface";
+import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
 import Nation from "./nation";
@@ -27,17 +27,24 @@ export default class Game implements GameInterface {
         this.#selectedUnit = this.#units[0]!;
     }
 
-    objects(bounds: Rectangle): [Point, GameObject][] {
-        // TODO - rewrite this function
-        const objects : [Point, GameObject][] = [];
-        for (let x = 0; x < 30; x++)
-            for (let y = 0; y < 30; y++)
-                objects.push([P(x, y), this.tile(P(x, y))])
-        for (const unit of this.#units)
-            objects.push([unit.position, unit]);
-        for (const city of this.#cities)
-            objects.push([city.position, city]);
-        return objects;
+    gameState(bounds: Rectangle): GameState {
+        const state: GameState = {
+            tiles: [],
+            year: this.#year,
+            selectedUnitMovesLeft: this.#selectedUnit ? this.#selectedUnit.movesLeft : null,
+        };
+        for (let x = bounds.p.x; x < (bounds.p.x + bounds.w); x++)   // TODO - limit by map size
+            for (let y = bounds.p.y; y < (bounds.p.y + bounds.h); y++)
+                state.tiles.push({ position: [x, y], tile: this.tile(x, y).toTileObject() });
+        state.tiles.push(...this.#units.filter(u => bounds.contains(u.position)).map(u => <MapTile> {
+            position: [u.position.x, u.position.y],
+            unit: u.toUnitObject(u.isEqual(this.#selectedUnit))
+        }));
+        state.tiles.push(...this.#cities.filter(c => bounds.contains(c.position)).map(c => <MapTile> {
+            position: [c.position.x, c.position.y],
+            city: c.toCityObject()
+        }));
+        return state;
     }
 
     get selectedUnitMovesLeft(): number | null {
@@ -46,7 +53,7 @@ export default class Game implements GameInterface {
         return null;
     }
 
-    private tile(p: Point) : Tile {
+    private tile(x: number, y: number) : Tile {
         return new Tile(Terrain.Grassland);  // TODO
     }
 
@@ -57,7 +64,7 @@ export default class Game implements GameInterface {
         // TODO - check map bounds
 
         const futurePos = this.#selectedUnit.position.plus(Directions[dir]);
-        const moveCost = this.tile(futurePos).moveCost;
+        const moveCost = this.tile(futurePos.x, futurePos.y).moveCost;
         if (moveCost > this.#selectedUnit.movesLeft)
             return false;
 
@@ -68,7 +75,7 @@ export default class Game implements GameInterface {
         if (this.#selectedUnit) {
             const unit = this.selectedUnit!;
             unit.move(dir);
-            unit.reduceMovesBy(this.tile(this.#selectedUnit!.position).moveCost);
+            unit.reduceMovesBy(this.tile(unit.position.x, unit.position.y).moveCost);
             if (!unit.canMove())
                 this.selectNextUnit(true);
         }

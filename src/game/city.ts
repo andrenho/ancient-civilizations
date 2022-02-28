@@ -1,9 +1,8 @@
-import {CityInterface, GameObjectType} from "../interfaces/game-interface";
+import {CityObject, GameObjectType, MapTile} from "../interfaces/game-interface";
 import {Point} from "../common/geometry";
 import Nation from "./nation";
 
-export default class City implements CityInterface {
-    kind: GameObjectType.City = GameObjectType.City;
+export default class City {
 
     #name: string;
 
@@ -12,4 +11,11 @@ export default class City implements CityInterface {
     }
 
     get name() { return this.#name; }
+
+    toCityObject() : CityObject {
+        return {
+            name: this.#name,
+            nation: this.nation.nationType,
+        };
+    }
 }

@@ -1,14 +1,12 @@
-import {GameObjectType, UnitInterface} from "../interfaces/game-interface";
+import {UnitObject} from "../interfaces/game-interface";
 import Nation from "./nation";
 import {Direction, Directions, UnitType} from "../interfaces/game-enum";
 import {Point} from "../common/geometry";
 import {UnitTypeConfig} from "./config";
 
-export default class Unit implements UnitInterface {
+export default class Unit {
 
     static idCounter : number = 0;
-
-    kind: GameObjectType.Unit = GameObjectType.Unit;
 
     readonly #id : number;
     #position: Point;
@@ -47,4 +45,15 @@ export default class Unit implements UnitInterface {
             return false;
         return (object as Unit).#id === this.#id;
     }
+
+    toUnitObject(selected?: boolean) {
+        const unitObject = <UnitObject> {
+            nation: this.nation.nationType,
+            type: this.unitType,
+        };
+        if (selected)
+            unitObject.selected = true;
+        return unitObject;
+    }
+
 }

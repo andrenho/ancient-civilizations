@@ -1,29 +1,35 @@
 import {Point, Rectangle} from "../common/geometry";
-import {Direction, NationType, Terrain} from "./game-enum";
+import {Direction, NationType, Terrain, UnitType} from "./game-enum";
 
-export enum GameObjectType { Tile, Unit, City }
+export const enum GameObjectType { Tile = 'tile', Unit = 'unit', City = 'city' }
 
-export interface NationInterface {
-    readonly nationType: NationType;
+export type TileObject = {
+    terrain: Terrain,
 }
 
-export interface TileInterface {
-    kind: GameObjectType.Tile
-    readonly terrain: Terrain;
+export type UnitObject = {
+    nation: NationType,
+    type: UnitType,
+    selected?: boolean,
 }
 
-export interface UnitInterface {
-    kind: GameObjectType.Unit
-    readonly nation: NationInterface;
-    isEqual(object: any) : boolean;
+export type CityObject = {
+    name: string,
+    nation: NationType,
 }
 
-export interface CityInterface {
-    kind: GameObjectType.City
-    readonly nation: NationInterface;
+export type MapTile = {
+    position: [number, number],
+    tile?: TileObject,
+    unit?: UnitObject,
+    city?: CityObject,
 }
 
-export type GameObject = TileInterface | UnitInterface | CityInterface;
+export type GameState = {
+    tiles: MapTile[],
+    year: number;
+    selectedUnitMovesLeft: number | null;
+}
 
 export type GameConfig = {
 }
@@ -32,15 +38,11 @@ export default interface GameInterface {
 
     newGame(config: GameConfig) : void;
 
-    objects(bounds: Rectangle) : [Point, GameObject][];
+    gameState(bounds: Rectangle) : GameState;
 
     canMoveSelectedUnit(dir: Direction) : boolean;
     moveSelectedUnit(dir: Direction) : void;
 
-    get selectedUnit() : UnitInterface | null;
-    get selectedUnitMovesLeft() : number | null;
-    get year() : number;
-
-    selectNextUnit(autoEndRound: boolean): UnitInterface | null;
+    selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;
 }
