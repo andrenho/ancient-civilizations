@@ -1,4 +1,4 @@
-import {GameObjectType, TileObject} from "../interfaces/game-interface";
+import {TileObject} from "../interfaces/game-interface";
 import {Terrain} from "../interfaces/game-enum";
 import {TerrainConfig} from "./config";
 

@@ -1,4 +1,4 @@
-import {Terrain, UnitType} from "../interfaces/game-enum";
+import {Building, Terrain, UnitType} from "../interfaces/game-enum";
 
 type UnitTypeConfigType = {
     moves: number,
@@ -15,3 +15,7 @@ export const UnitTypeConfig : { [key in UnitType]: UnitTypeConfigType } = {
 export const TerrainConfig : { [key in Terrain]: TerrainConfigType } = {
     [Terrain.Grassland]: { moveCost: 1 },
 }
+
+export const CityStartingBuildings : Building[] = [
+    Building.SpinnersHouse, Building.OliveOilPress,
+];

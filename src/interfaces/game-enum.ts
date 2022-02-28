@@ -1,12 +1,24 @@
 import {P, Point} from "../common/geometry";
 
-export enum NationType { Phoenicia = "phoenicia", Egypt = "egypt" }
+export const enum NationType {
+    Phoenicia = "phoenicia",
+    Egypt = "egypt"
+}
 
-export enum UnitType { Warrior = "warrior" }
+export const enum UnitType {
+    Warrior = "warrior"
+}
 
-export enum Terrain { Grassland = "grassland" }
+export const enum Terrain {
+    Grassland = "grassland"
+}
 
-export enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }
+export enum Building {
+    SpinnersHouse = 'spinners-house',
+    OliveOilPress = 'olive-oil-press',
+}
+
+export const enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }
 
 export const Directions : { [key in Direction]: Point } = {
     [Direction.NW]: P(-1, -1),

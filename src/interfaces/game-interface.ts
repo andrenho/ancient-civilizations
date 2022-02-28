@@ -1,7 +1,25 @@
-import {Point, Rectangle} from "../common/geometry";
-import {Direction, NationType, Terrain, UnitType} from "./game-enum";
+import {Rectangle} from "../common/geometry";
+import {Building, Direction, NationType, Terrain, UnitType} from "./game-enum";
 
-export const enum GameObjectType { Tile = 'tile', Unit = 'unit', City = 'city' }
+//
+// CITY INTERFACE
+//
+
+export type CityDetails = {
+    name: string,
+    nation: NationType,
+    buildings: {
+        type: Building,
+        units: {
+            id: UnitId,
+            type: UnitType,
+        }[],
+    }[],
+}
+
+//
+// GAME OBJECTS
+//
 
 export type UnitId = string;
 
@@ -33,6 +51,10 @@ export type GameState = {
     year: number;
     selectedUnitMovesLeft: number | null;
 }
+
+//
+// GAME INTERFACE
+//
 
 export type GameConfig = {
 }

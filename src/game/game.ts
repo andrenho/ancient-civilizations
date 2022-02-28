@@ -1,6 +1,5 @@
 import GameInterface, {
     GameConfig,
-    GameObjectType,
     GameState,
     MapTile,
     UnitId,
