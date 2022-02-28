@@ -4,7 +4,7 @@ export enum NationType { Phoenicia = "phoenicia", Egypt = "egypt" }
 
 export enum UnitType { Warrior = "warrior" }
 
-export enum Terrain { Grassland}
+export enum Terrain { Grassland = "grassland" }
 
 export enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }
 

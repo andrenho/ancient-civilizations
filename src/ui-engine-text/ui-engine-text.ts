@@ -5,17 +5,12 @@ import GameInterface, {MapTile} from "../interfaces/game-interface";
 
 export default class UiEngineText implements UiInterface {
 
-    static readonly TILE_SZ = 24;
-    static readonly #terrainColors = new Map<Terrain, string>([
-        [ Terrain.Grassland, '#aaddaa' ],
-    ]);
-
-    #mapCanvas: HTMLCanvasElement;
-    #mapCtx: CanvasRenderingContext2D;
+    #debugInfo: HTMLPreElement;
 
     constructor(private game: GameInterface) {
-        this.#mapCanvas = document.getElementById('map-canvas')! as HTMLCanvasElement;
-        this.#mapCtx = this.#mapCanvas.getContext('2d')!;
+        this.#debugInfo = document.createElement("pre");
+        this.buildUserInterface();
+
         game.newGame({});
     }
 
@@ -29,10 +24,10 @@ export default class UiEngineText implements UiInterface {
             this.game.moveSelectedUnit(dir!);
         }
         switch (event.key) {
-            case 'w':
+            case "w":
                 this.game.selectNextUnit(false);
                 break;
-            case ' ':
+            case " ":
                 this.game.newRound();
                 break;
         }
@@ -40,57 +35,71 @@ export default class UiEngineText implements UiInterface {
     }
 
     //
+    // USER INTERFACE
+    //
+
+    buildUserInterface() : void {
+        const link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("href", "css/text-engine.css");
+        document.head.appendChild(link);
+
+        const gameDiv = document.getElementById("game")!;
+
+        const mapTable: HTMLTableElement = document.createElement("table");
+        for (let y = 0; y < 30; ++y) {
+            const tr : HTMLTableRowElement = document.createElement("tr");
+            for (let x = 0; x < 30; ++x) {
+                const td : HTMLTableCellElement = document.createElement("td");
+                td.id = `tile_${x}_${y}`;
+                td.className = "tile";
+                tr.appendChild(td);
+            }
+            mapTable.appendChild(tr);
+        }
+        gameDiv.appendChild(mapTable);
+
+        this.#debugInfo.className = "debug-info";
+        gameDiv.appendChild(this.#debugInfo);
+    }
+
+    //
     // DRAW
     //
 
     redraw(): void {
-        const w = this.#mapCanvas.width / UiEngineText.TILE_SZ;
-        const h = this.#mapCanvas.height / UiEngineText.TILE_SZ;
-        const state = this.game.gameState(R(P(0, 0), w, h));
+        const state = this.game.gameState(R(P(0, 0), 30, 30));   // TODO - map limits?
 
+        for (const td of document.getElementsByClassName("tile")) {
+            td.innerHTML = "";
+            td.className = "tile";
+        }
         state.tiles.forEach(t => this.draw(t));
 
         let text = `Year: ${-state.year} B.C.\n`;
         if (state.selectedUnitMovesLeft)
             text += `Moves left: ${state.selectedUnitMovesLeft!}`;
-        document.getElementById('debug-info')!.innerText = text;
+        this.#debugInfo.textContent = text;
     }
 
     private draw(tile: MapTile) {
         const [x, y] = tile.position;
-        const pt = P(x * UiEngineText.TILE_SZ, y * UiEngineText.TILE_SZ);
         if (tile.tile) {
-            this.#mapCtx.fillStyle = UiEngineText.#terrainColors.get(tile.tile.terrain)!;
-            this.#mapCtx.fillRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
+            this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
         } else if (tile.unit) {
-            this.writeText('W', pt.x, pt.y, UiEngineText.nationColor(tile.unit.nation));
-            if (tile.unit.selected) {
-                this.#mapCtx.strokeStyle = 'red';
-                this.#mapCtx.strokeRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
-            }
+            const t = this.tile(x, y);
+            t.innerText = "W";  // TODO
+            t.classList.add(`nation-${tile.unit.nation}`);
+            if (tile.unit.selected)
+                t.classList.add("unit-selected");
         } else if (tile.city) {
-            this.writeText('C', pt.x, pt.y, UiEngineText.nationColor(tile.city.nation), true);
+            const t = this.tile(x, y);
+            t.innerText = "C";
+            t.classList.add("city");
         }
     }
 
-    private writeText(text: string, x: number, y: number, color: string, invert: boolean = false) {
-        this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
-        this.#mapCtx.textBaseline = 'top';
-        if (invert) {
-            this.#mapCtx.fillStyle = color;
-            this.#mapCtx.fillRect(x, y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
-            this.#mapCtx.fillStyle = 'white';
-        } else {
-            this.#mapCtx.fillStyle = color;
-        }
-        this.#mapCtx.fillText(text, x + 6, y + 2);
-    }
-
-    private static nationColor(nationType: NationType) : string {
-        switch (nationType) {
-            case NationType.Phoenicia: return '#2222cc';
-            case NationType.Egypt: return '#ff0000';
-        }
-        return 'gray';
+    private tile(x: number, y: number) : HTMLTableCellElement {
+        return document.getElementById(`tile_${x}_${y}`)! as HTMLTableCellElement;
     }
 }

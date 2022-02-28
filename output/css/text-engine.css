@@ -1,0 +1,35 @@
+.debug-info {
+    margin-left: 16px;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tile {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    font-size: 18px;
+    padding: 2px;
+}
+
+.terrain-grassland {
+    background-color: #aaddaa;
+}
+
+.nation-phoenicia {
+    color: #2222cc;
+}
+
+.city {
+    background-color: aqua;
+}
+
+.unit-selected {
+    border: red solid 2px;
+    padding: 0;
+}
