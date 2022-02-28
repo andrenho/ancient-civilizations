@@ -1,9 +1,10 @@
 import GameInterface, {
+    CityObject,
     GameConfig,
     GameState,
     MapTile,
-    UnitId,
-    UnitObject
+    Id,
+    UnitObject, CityDetails
 } from "../interfaces/game-interface";
 import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
@@ -111,7 +112,7 @@ export default class Game implements GameInterface {
         return this.#selectedUnit;
     }
 
-    selectUnit(unitId: UnitId): void {
+    selectUnit(unitId: Id): void {
         const unit = this.#units.find(unit => unit.id === unitId);
         if (unit && unit.canMove()) {
             this.#selectedUnit = unit;
@@ -127,6 +128,11 @@ export default class Game implements GameInterface {
         this.#year += 0.5;
         this.#selectedUnit = null;
         this.selectNextUnit(false);
+    }
+
+    cityInTileDetails(x: number, y: number): CityDetails | null {
+        const city = this.#cities.find(city => city.position.x === x && city.position.y === y);
+        return city ? city.cityDetails() : null;
     }
 
 }

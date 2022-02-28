@@ -1,40 +1,43 @@
 import {Rectangle} from "../common/geometry";
-import {Building, Direction, NationType, Terrain, UnitType} from "./game-enum";
+import {Buildings, Direction, Goods, NationType, Terrain, UnitType} from "./game-enum";
 
 //
 // CITY INTERFACE
 //
 
 export type CityDetails = {
+    id: Id,
     name: string,
     nation: NationType,
     buildings: {
-        type: Building,
+        type: Buildings,
         units: {
-            id: UnitId,
+            id: Id,
             type: UnitType,
         }[],
     }[],
+    goods: { [key in Goods]: number },
 }
 
 //
 // GAME OBJECTS
 //
 
-export type UnitId = string;
+export type Id = string;
 
 export type TileObject = {
     terrain: Terrain,
 }
 
 export type UnitObject = {
-    id: UnitId,
+    id: Id,
     nation: NationType,
     type: UnitType,
     selected?: boolean,
 }
 
 export type CityObject = {
+    id: Id,
     name: string,
     nation: NationType,
 }
@@ -69,7 +72,9 @@ export default interface GameInterface {
     moveSelectedUnit(dir: Direction) : void;
 
     unitsInTile(x: number, y: number) : UnitObject[];
-    selectUnit(unitId: UnitId) : void;
+    selectUnit(unitId: Id) : void;
+
+    cityInTileDetails(x: number, y: number) : CityDetails | null;
 
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;

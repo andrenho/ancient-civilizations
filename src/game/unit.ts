@@ -1,4 +1,4 @@
-import {UnitId, UnitObject} from "../interfaces/game-interface";
+import {Id, UnitObject} from "../interfaces/game-interface";
 import Nation from "./nation";
 import {Direction, Directions, UnitType} from "../interfaces/game-enum";
 import {Point} from "../common/geometry";
@@ -8,12 +8,11 @@ declare function uuidv4(): string;
 
 export default class Unit {
 
-    readonly id : UnitId;
+    readonly id : Id = uuidv4();
     #position: Point;
     #movesLeft: number;
 
     constructor(position: Point, readonly nation: Nation, readonly unitType: UnitType) {
-        this.id = uuidv4();
         this.#position = position;
         this.#movesLeft = 0;
         this.newRound();

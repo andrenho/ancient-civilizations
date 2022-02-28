@@ -13,9 +13,14 @@ export const enum Terrain {
     Grassland = "grassland"
 }
 
-export enum Building {
-    SpinnersHouse = 'spinners-house',
-    OliveOilPress = 'olive-oil-press',
+export enum Buildings {
+    SpinnersHouse = "spinners-house",
+    OliveOilPress = "olive-oil-press",
+}
+
+export enum Goods {
+    Wool = "wool",
+    OliveOil = "olive-oil",
 }
 
 export const enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }

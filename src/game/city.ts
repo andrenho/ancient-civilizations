@@ -1,9 +1,11 @@
-import {CityDetails, CityObject} from "../interfaces/game-interface";
+import {CityDetails, CityObject, Id} from "../interfaces/game-interface";
 import {Point} from "../common/geometry";
 import Nation from "./nation";
 import Unit from "./unit";
-import {Building} from "../interfaces/game-enum";
+import {Buildings, Goods} from "../interfaces/game-enum";
 import {CityStartingBuildings} from "./config";
+
+declare function uuidv4(): string;
 
 type CityBuilding = {
     available: boolean,
@@ -12,20 +14,25 @@ type CityBuilding = {
 
 export default class City {
 
+    readonly id : Id = uuidv4();
     #name: string;
-    #buildings = new Map<Building, CityBuilding>()
+    #buildings = new Map<Buildings, CityBuilding>()
+    #goods = new Map<Goods, number>();
 
     constructor(name: string, readonly nation: Nation, readonly position: Point) {
         this.#name = name;
-        for (const building in Building) {
-            this.#buildings.set(building as Building, { available: building in CityStartingBuildings, units: [] });
+        for (const building in Buildings) {
+            this.#buildings.set(building as Buildings, { available: building in CityStartingBuildings, units: [] });
+        }
+        for (const good in Goods) {
+            this.#goods.set(good as Goods, 0);
         }
     }
 
     get name() { return this.#name; }
-    get buildings() : Building[] { return Array.from(this.#buildings).map((kv) => kv[0]); }
+    get buildings() : Buildings[] { return Array.from(this.#buildings).map((kv) => kv[0]); }
 
-    units_in_building(b: Building) : Unit[] {
+    units_in_building(b: Buildings) : Unit[] {
         const building = this.#buildings.get(b);
         if (!building || !building.available)
             return [];
@@ -34,6 +41,7 @@ export default class City {
 
     toCityObject() : CityObject {
         return {
+            id: this.id,
             name: this.#name,
             nation: this.nation.nationType,
         };
@@ -41,12 +49,14 @@ export default class City {
 
     cityDetails() : CityDetails {
         return <CityDetails> {
+            id: this.id,
             name: this.name,
             nation: this.nation.nationType,
             buildings: this.buildings.map(building => ({
                 type: building,
                 units: this.#buildings.get(building)!.units.map(unit => ({ id: unit.id, type: unit.unitType }))
             })),
+            goods: Array.from(this.#goods.entries()).reduce((main, [k, v]) => ({...main, [k]: v}), {})
         };
     }
 }

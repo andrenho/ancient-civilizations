@@ -4,7 +4,7 @@
     font-size: 15px;
 }
 
-table {
+table.map {
     border-collapse: collapse;
     table-layout: fixed;
 }
@@ -34,3 +34,38 @@ table {
     border: red solid 2px;
     padding: 0;
 }
+
+.city-div {
+    top: 64px;
+    left: 64px;
+    width: 640px;
+    height: 700px;
+    position: fixed;
+    border: 5px black solid;
+    background-color: white;
+    display: none;
+    flex-direction: column;
+    padding: 24px;
+    font-size: larger;
+}
+
+table.building {
+    border: 1px solid black;
+    margin: 8px;
+}
+
+.building-unit {
+    border: 1px solid black;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    font-size: 18px;
+    padding: 2px;
+    cursor: default;
+}
+
+table.tiles {
+    border: 1px solid black;
+    margin: 8px;
+}
+
