@@ -1,6 +1,6 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
-import {NationType, Terrain} from "../interfaces/game-enum";
+import {UnitType} from "../interfaces/game-enum";
 import GameInterface, {MapTile} from "../interfaces/game-interface";
 
 export default class UiEngineText implements UiInterface {
@@ -88,7 +88,7 @@ export default class UiEngineText implements UiInterface {
             this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
         } else if (tile.unit) {
             const t = this.tile(x, y);
-            t.innerText = "W";  // TODO
+            t.innerText = UiEngineText.charForUnitType(tile.unit.type);
             t.classList.add(`nation-${tile.unit.nation}`);
             if (tile.unit.selected)
                 t.classList.add("unit-selected");
@@ -101,5 +101,12 @@ export default class UiEngineText implements UiInterface {
 
     private tile(x: number, y: number) : HTMLTableCellElement {
         return document.getElementById(`tile_${x}_${y}`)! as HTMLTableCellElement;
+    }
+
+    private static charForUnitType(unitType: UnitType) {
+        switch (unitType) {
+            case UnitType.Warrior: return "W";
+        }
+        return '';
     }
 }
