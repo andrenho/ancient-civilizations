@@ -47,12 +47,6 @@ export default class Game implements GameInterface {
         return state;
     }
 
-    get selectedUnitMovesLeft(): number | null {
-        if (this.#selectedUnit)
-            return this.#selectedUnit!.movesLeft;
-        return null;
-    }
-
     private tile(x: number, y: number) : Tile {
         return new Tile(Terrain.Grassland);  // TODO
     }
