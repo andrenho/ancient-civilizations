@@ -15,6 +15,37 @@ export default class UiEngineText implements UiInterface {
     }
 
     //
+    // USER INTERFACE
+    //
+
+    buildUserInterface() : void {
+        const link = document.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("href", "css/text-engine.css");
+        document.head.appendChild(link);
+
+        const gameDiv = document.getElementById("game")!;
+
+        const mapTable: HTMLTableElement = document.createElement("table");
+        for (let y = 0; y < 30; ++y) {
+            const tr : HTMLTableRowElement = document.createElement("tr");
+            for (let x = 0; x < 30; ++x) {
+                const td : HTMLTableCellElement = document.createElement("td");
+                td.id = `tile_${x}_${y}`;
+                td.className = "tile";
+                td.addEventListener('mousedown', ev => this.onTileClick(x, y, ev));
+                tr.appendChild(td);
+            }
+            mapTable.appendChild(tr);
+        }
+        gameDiv.appendChild(mapTable);
+
+        this.#debugInfo.className = "debug-info";
+        gameDiv.appendChild(this.#debugInfo);
+    }
+
+
+    //
     // EVENTS
     //
 
@@ -34,33 +65,8 @@ export default class UiEngineText implements UiInterface {
         this.redraw();
     }
 
-    //
-    // USER INTERFACE
-    //
-
-    buildUserInterface() : void {
-        const link = document.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        link.setAttribute("href", "css/text-engine.css");
-        document.head.appendChild(link);
-
-        const gameDiv = document.getElementById("game")!;
-
-        const mapTable: HTMLTableElement = document.createElement("table");
-        for (let y = 0; y < 30; ++y) {
-            const tr : HTMLTableRowElement = document.createElement("tr");
-            for (let x = 0; x < 30; ++x) {
-                const td : HTMLTableCellElement = document.createElement("td");
-                td.id = `tile_${x}_${y}`;
-                td.className = "tile";
-                tr.appendChild(td);
-            }
-            mapTable.appendChild(tr);
-        }
-        gameDiv.appendChild(mapTable);
-
-        this.#debugInfo.className = "debug-info";
-        gameDiv.appendChild(this.#debugInfo);
+    private onTileClick(x: number, y: number, ev: MouseEvent) {
+        // TODO
     }
 
     //
@@ -109,4 +115,5 @@ export default class UiEngineText implements UiInterface {
         }
         return '';
     }
+
 }

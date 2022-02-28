@@ -1,4 +1,11 @@
-import GameInterface, {GameConfig, GameObjectType, GameState, MapTile} from "../interfaces/game-interface";
+import GameInterface, {
+    GameConfig,
+    GameObjectType,
+    GameState,
+    MapTile,
+    UnitId,
+    UnitObject
+} from "../interfaces/game-interface";
 import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
@@ -110,6 +117,14 @@ export default class Game implements GameInterface {
         this.#year += 0.5;
         this.#selectedUnit = null;
         this.selectNextUnit(false);
+    }
+
+    selectUnit(unitId: UnitId): void {
+        throw new Error('not implemented');
+    }
+
+    unitsInTile(x: number, y: number): UnitObject[] {
+        throw new Error('not implemented');
     }
 
 }

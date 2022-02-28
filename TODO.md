@@ -15,6 +15,7 @@
   - [X] New round
   - [X] Detect end-of-round
 - [X] Rounds + years
+- [ ] Select specific unit
 
 ### City
 

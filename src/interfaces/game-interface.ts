@@ -3,11 +3,14 @@ import {Direction, NationType, Terrain, UnitType} from "./game-enum";
 
 export const enum GameObjectType { Tile = 'tile', Unit = 'unit', City = 'city' }
 
+export type UnitId = number;
+
 export type TileObject = {
     terrain: Terrain,
 }
 
 export type UnitObject = {
+    id: UnitId,
     nation: NationType,
     type: UnitType,
     selected?: boolean,
@@ -42,6 +45,9 @@ export default interface GameInterface {
 
     canMoveSelectedUnit(dir: Direction) : boolean;
     moveSelectedUnit(dir: Direction) : void;
+
+    unitsInTile(x: number, y: number) : UnitObject[];
+    selectUnit(unitId: UnitId) : void;
 
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;
