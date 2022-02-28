@@ -20,6 +20,7 @@ export interface UnitInterface {
 
 export interface CityInterface {
     kind: GameObjectType.City
+    readonly nation: NationInterface;
 }
 
 export type GameObject = TileInterface | UnitInterface | CityInterface;

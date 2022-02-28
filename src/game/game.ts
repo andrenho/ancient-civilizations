@@ -4,6 +4,7 @@ import Tile from "./tile";
 import Unit from "./unit";
 import Nation from "./nation";
 import {Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
+import City from "./city";
 
 export default class Game implements GameInterface {
 
@@ -11,6 +12,7 @@ export default class Game implements GameInterface {
     #selectedUnit : Unit | null = null;
     #nations: Nation[] = [];
     #units: Unit[] = [];
+    #cities: City[] = [];
     #year: number = -2000;
 
     get selectedUnit() : Unit | null { return this.#selectedUnit; }
@@ -21,16 +23,20 @@ export default class Game implements GameInterface {
         this.#playerNation = this.#nations[0]!;
         this.#units.push(new Unit(P(1, 1), this.#playerNation, UnitType.Warrior));
         this.#units.push(new Unit(P(3, 3), this.#playerNation, UnitType.Warrior));
+        this.#cities.push(new City("My city", this.#playerNation, P(3, 2)));
         this.#selectedUnit = this.#units[0]!;
     }
 
     objects(bounds: Rectangle): [Point, GameObject][] {
+        // TODO - rewrite this function
         const objects : [Point, GameObject][] = [];
         for (let x = 0; x < 30; x++)
             for (let y = 0; y < 30; y++)
                 objects.push([P(x, y), this.tile(P(x, y))])
         for (const unit of this.#units)
             objects.push([unit.position, unit]);
+        for (const city of this.#cities)
+            objects.push([city.position, city]);
         return objects;
     }
 

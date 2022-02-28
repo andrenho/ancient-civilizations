@@ -1,7 +1,14 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
-import GameInterface, {GameObject, GameObjectType, TileInterface, UnitInterface} from "../interfaces/game-interface";
+import GameInterface, {
+    CityInterface,
+    GameObject,
+    GameObjectType, NationInterface,
+    TileInterface,
+    UnitInterface
+} from "../interfaces/game-interface";
 import {P, Point, R} from "../common/geometry";
-import {Direction, NationType, Terrain} from "../interfaces/game-enum";
+import {NationType, Terrain} from "../interfaces/game-enum";
+import Nation from "../game/nation";
 
 export default class UiEngineText implements UiInterface {
 
@@ -64,16 +71,29 @@ export default class UiEngineText implements UiInterface {
                 break;
             case GameObjectType.Unit:
                 const unit : UnitInterface = object;
-                this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
-                this.#mapCtx.textBaseline = 'top';
-                this.#mapCtx.fillStyle = UiEngineText.nationColor(unit.nation.nationType);
-                this.#mapCtx.fillText('W', pt.x + 6, pt.y + 2);
+                this.writeText('W', pt.x, pt.y, UiEngineText.nationColor(unit.nation.nationType));
                 if (unit.isEqual(this.game.selectedUnit)) {
                     this.#mapCtx.strokeStyle = 'red';
                     this.#mapCtx.strokeRect(pt.x, pt.y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
                 }
                 break;
+            case GameObjectType.City:
+                this.writeText('C', pt.x, pt.y, UiEngineText.nationColor((object as CityInterface).nation.nationType), true);
+                break;
         }
+    }
+
+    private writeText(text: string, x: number, y: number, color: string, invert: boolean = false) {
+        this.#mapCtx.font = `${UiEngineText.TILE_SZ - 2}px monospace`;
+        this.#mapCtx.textBaseline = 'top';
+        if (invert) {
+            this.#mapCtx.fillStyle = color;
+            this.#mapCtx.fillRect(x, y, UiEngineText.TILE_SZ, UiEngineText.TILE_SZ);
+            this.#mapCtx.fillStyle = 'white';
+        } else {
+            this.#mapCtx.fillStyle = color;
+        }
+        this.#mapCtx.fillText(text, x + 6, y + 2);
     }
 
     private static nationColor(nationType: NationType) : string {
