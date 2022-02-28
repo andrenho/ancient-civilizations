@@ -6,15 +6,15 @@
 - [X] Basic terrain
 - [X] Nations
 - [X] Player movement
-- [ ] Step expiration
+- [X] Step expiration
   - [X] Blink selected unit
   - [X] Create unit type
   - [X] Write number of steps
-  - [ ] Expire steps
-  - [ ] Create a second unit, alternate between them
-  - [ ] New round
-  - [ ] Detect end-of-round
-- [ ] Rounds + years
+  - [X] Expire steps
+  - [X] Create a second unit, alternate between them
+  - [X] New round
+  - [X] Detect end-of-round
+- [X] Rounds + years
 
 ### City
 
