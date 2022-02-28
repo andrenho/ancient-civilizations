@@ -30,7 +30,10 @@ export default class UiEngineText implements UiInterface {
         }
         switch (event.key) {
             case 'w':
-                this.game.selectNextUnit();
+                this.game.selectNextUnit(false);
+                break;
+            case ' ':
+                this.game.newRound();
                 break;
         }
         this.redraw();

@@ -40,5 +40,6 @@ export default interface GameInterface {
     get selectedUnitMovesLeft() : number | null;
     get year() : number;
 
-    selectNextUnit(): UnitInterface | null;
+    selectNextUnit(autoEndRound: boolean): UnitInterface | null;
+    newRound() : void;
 }

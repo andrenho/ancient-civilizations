@@ -60,20 +60,23 @@ export default class Game implements GameInterface {
 
     moveSelectedUnit(dir: Direction): void {
         if (this.#selectedUnit) {
-            this.#selectedUnit!.move(dir);
-            this.#selectedUnit!.reduceMovesBy(this.tile(this.#selectedUnit!.position).moveCost);
+            const unit = this.selectedUnit!;
+            unit.move(dir);
+            unit.reduceMovesBy(this.tile(this.#selectedUnit!.position).moveCost);
+            if (!unit.canMove())
+                this.selectNextUnit(true);
         }
     }
 
-    selectNextUnit(): Unit | null {
-        let nextSelected : Unit | undefined
+    selectNextUnit(autoEndRound: boolean): Unit | null {
+        let nextSelected : Unit | null
 
-        const findNextAbleUnit = (i : number) : Unit | undefined => {
+        const findNextAbleUnit = (i : number) : Unit | null => {
             for (let j = i; j < this.#units.length; ++j) {
                 if (this.#units[j]!.canMove())
-                    return this.#units[j];
+                    return this.#units[j]!;
             }
-            return undefined;
+            return null;
         };
 
         if (this.#selectedUnit === null) {
@@ -81,21 +84,25 @@ export default class Game implements GameInterface {
         } else {
             const i = this.#units.findIndex(unit => unit.isEqual(this.#selectedUnit))!;
             nextSelected = findNextAbleUnit(i + 1);
-            if (nextSelected === undefined)
+            if (nextSelected === null)
                 nextSelected = findNextAbleUnit(0);
         }
 
-        if (nextSelected === null)
-            this.newRound();
-        else
+        if (nextSelected === null) {
+            if (autoEndRound)
+                this.newRound();
+        } else {
             this.#selectedUnit = nextSelected!;
+        }
 
         return this.#selectedUnit;
     }
 
     newRound() : void {
         this.#units.forEach(unit => unit.newRound());
-        this.#year -= 0.5;
+        this.#year += 0.5;
+        this.#selectedUnit = null;
+        this.selectNextUnit(false);
     }
 
 }
