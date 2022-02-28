@@ -66,7 +66,12 @@ export default class UiEngineText implements UiInterface {
     }
 
     private onTileClick(x: number, y: number, ev: MouseEvent) {
-        // TODO
+        if (ev.button === 0) {
+            const units = this.game.unitsInTile(x, y);
+            if (units.length > 0)
+                this.game.selectUnit(units[0]!.id);
+            this.redraw();
+        }
     }
 
     //

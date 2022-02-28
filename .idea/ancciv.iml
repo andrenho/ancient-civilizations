@@ -9,5 +9,6 @@
     <orderEntry type="library" name="systemjs" level="application" />
     <orderEntry type="library" name="livereload-js" level="application" />
     <orderEntry type="library" name="live" level="application" />
+    <orderEntry type="library" name="uuid" level="application" />
   </component>
 </module>

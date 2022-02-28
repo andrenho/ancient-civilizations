@@ -112,19 +112,22 @@ export default class Game implements GameInterface {
         return this.#selectedUnit;
     }
 
+    selectUnit(unitId: UnitId): void {
+        const unit = this.#units.find(unit => unit.id === unitId);
+        if (unit && unit.canMove()) {
+            this.#selectedUnit = unit;
+        }
+    }
+
+    unitsInTile(x: number, y: number): UnitObject[] {
+        return this.#units.filter(unit => unit.position.x == x && unit.position.y == y).map(unit => unit.toUnitObject());
+    }
+
     newRound() : void {
         this.#units.forEach(unit => unit.newRound());
         this.#year += 0.5;
         this.#selectedUnit = null;
         this.selectNextUnit(false);
-    }
-
-    selectUnit(unitId: UnitId): void {
-        throw new Error('not implemented');
-    }
-
-    unitsInTile(x: number, y: number): UnitObject[] {
-        throw new Error('not implemented');
     }
 
 }

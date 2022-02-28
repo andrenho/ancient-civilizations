@@ -4,16 +4,16 @@ import {Direction, Directions, UnitType} from "../interfaces/game-enum";
 import {Point} from "../common/geometry";
 import {UnitTypeConfig} from "./config";
 
+declare function uuidv4(): string;
+
 export default class Unit {
 
-    static idCounter : number = 0;
-
-    readonly #id : UnitId;
+    readonly id : UnitId;
     #position: Point;
     #movesLeft: number;
 
     constructor(position: Point, readonly nation: Nation, readonly unitType: UnitType) {
-        this.#id = Unit.idCounter++;
+        this.id = uuidv4();
         this.#position = position;
         this.#movesLeft = 0;
         this.newRound();
@@ -43,12 +43,12 @@ export default class Unit {
     isEqual(object: any) : boolean {
         if (!(object instanceof Unit))
             return false;
-        return (object as Unit).#id === this.#id;
+        return (object as Unit).id === this.id;
     }
 
     toUnitObject(selected?: boolean) {
         const unitObject = <UnitObject> {
-            id: this.#id,
+            id: this.id,
             nation: this.nation.nationType,
             type: this.unitType,
         };

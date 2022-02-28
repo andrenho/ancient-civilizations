@@ -15,6 +15,7 @@ table {
     text-align: center;
     font-size: 18px;
     padding: 2px;
+    cursor: default;
 }
 
 .terrain-grassland {
