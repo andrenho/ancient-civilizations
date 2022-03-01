@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es6",
     "removeComments": true,
     "preserveConstEnums": true,
     "strict": true,
@@ -15,8 +14,19 @@
     "exactOptionalPropertyTypes": true,
     "useUnknownInCatchVariables": true,
     "sourceMap": true,
-    "module": "system",
-    "outFile": "output/js/ancciv.js"
+
+    "experimentalDecorators": true,
+    "jsxImportSource": "preact",
+    "isolatedModules": true,
+
+    "target": "es5",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "rootDir": "src",
+    "lib": ["es6", "dom"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
   },
-  "include": [ "src/**/*" ]
+  "exclude": ["old", "temp"]
 }
