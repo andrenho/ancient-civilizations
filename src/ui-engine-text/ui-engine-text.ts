@@ -1,16 +1,17 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
-import {Goods, UnitType} from "../interfaces/game-enum";
-import GameInterface, {CityDetails, MapTile} from "../interfaces/game-interface";
+import GameInterface, {MapTile} from "../interfaces/game-interface";
+import CityManagement from "./city-management";
+import {charForUnitType} from "./ui-config";
 
 export default class UiEngineText implements UiInterface {
 
     #debugInfo: HTMLPreElement;
-    #cityDiv: HTMLDivElement;
+    #cityManagement: CityManagement;
 
     constructor(private game: GameInterface) {
         this.#debugInfo = document.createElement("pre");
-        this.#cityDiv = document.createElement("div");
+        this.#cityManagement = new CityManagement(game);
         this.buildUserInterface();
 
         game.newGame({});
@@ -46,8 +47,7 @@ export default class UiEngineText implements UiInterface {
         this.#debugInfo.className = "debug-info";
         gameDiv.appendChild(this.#debugInfo);
 
-        this.#cityDiv.className = "city-div";
-        gameDiv.appendChild(this.#cityDiv);
+        gameDiv.appendChild(this.#cityManagement.cityDiv);
     }
 
     //
@@ -55,7 +55,7 @@ export default class UiEngineText implements UiInterface {
     //
 
     onKeyDown(event: KeyboardEvent): void {
-        if (this.cityScreenIsOpen())
+        if (this.#cityManagement.cityScreenIsOpen())
             return;
 
         const dir = KeyDirections[event.code];
@@ -75,8 +75,8 @@ export default class UiEngineText implements UiInterface {
 
     private onTileClick(x: number, y: number, ev: MouseEvent) {
         if (ev.button === 0) {
-            if (this.cityScreenIsOpen()) {
-                this.closeCityScreen();
+            if (this.#cityManagement.cityScreenIsOpen()) {
+                this.#cityManagement.closeCityScreen();
                 return;
             }
 
@@ -86,7 +86,7 @@ export default class UiEngineText implements UiInterface {
 
             const city = this.game.cityInTileDetails(x, y);
             if (city)
-                this.openCityScreen(city!, x, y);
+                this.#cityManagement.openCityScreen(city!, x, y);
 
             this.redraw();
         }
@@ -117,7 +117,7 @@ export default class UiEngineText implements UiInterface {
             this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
         } else if (tile.unit) {
             const t = this.tile(x, y);
-            t.innerText = UiEngineText.charForUnitType(tile.unit.type);
+            t.innerText = charForUnitType(tile.unit.type);
             t.classList.add(`nation-${tile.unit.nation}`);
             if (tile.unit.selected)
                 t.classList.add("unit-selected");
@@ -132,71 +132,4 @@ export default class UiEngineText implements UiInterface {
         return document.getElementById(`tile_${x}_${y}`)! as HTMLTableCellElement;
     }
 
-    private static charForUnitType(unitType: UnitType) {
-        switch (unitType) {
-            case UnitType.Warrior: return "W";
-        }
-        return "";
-    }
-
-    //
-    // CITY
-    //
-
-    private openCityScreen(city: CityDetails, cityX: number, cityY: number) {
-        const three = [0, 1, 2];
-
-        const buildings = city.buildings.map(building => `
-            <table class="building">
-                <tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>
-                <tr>${three.map(n => `<td class="building-unit" id="building_${building.type}_${n}"></td>`).join("")}<td></td></tr>
-            </table>
-        `).join("");
-
-        const outOfGate = this.game.unitsInTile(cityX, cityY).map(unit => `<div class="tile ${`nation-${unit.nation}`}">${UiEngineText.charForUnitType(unit.type)}</div>`).join("");
-
-        const goods = Object.keys(city.goods).map(good => `<tr>
-            <td style="width: 100px;">${good}</td>
-            <td>${city.goods[good as Goods]}</td>
-        </tr>`).join("");
-
-        const cityHTML = `
-            <h1 style="margin-top: 6px; margin-bottom: 6px;">${city.name}</h1>
-            <div style="display: flex; align-content: stretch;">
-                <div style="display: flex; flex-direction: column; flex-grow: 1;">
-                    <div>
-                        <h3>Buildings</h3>
-                        ${buildings}
-                    </div>
-                    <div>
-                        <h3>Tiles</h3>
-                        <table class="tiles">
-                            ${three.map(() => `<tr>${three.map(n => `<td class="tile" id="city-tile_${n}"></td>`).join("")}</tr>`).join("")}
-                        </table>
-                    </div>
-                </div>
-                <div style="flex-grow: 1;">
-                    <div>
-                        <h3>Goods</h3>
-                        <table>${goods}</table>
-                    </div>
-                    <div>
-                        <h3>Out of gates</h3>
-                        <div style="display: flex; flex-direction: row;">${outOfGate}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        this.#cityDiv.innerHTML = cityHTML;
-        this.#cityDiv.style.display = "flex";
-    }
-
-    private closeCityScreen() : void {
-        this.#cityDiv.style.display = "none";
-    }
-
-    private cityScreenIsOpen() : boolean {
-        return this.#cityDiv.style.display !== "none";
-    }
 }
