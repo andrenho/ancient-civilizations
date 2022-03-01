@@ -1,7 +1,7 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
 import {Goods, UnitType} from "../interfaces/game-enum";
-import GameInterface, {CityDetails, CityObject, MapTile} from "../interfaces/game-interface";
+import GameInterface, {CityDetails, MapTile} from "../interfaces/game-interface";
 
 export default class UiEngineText implements UiInterface {
 
@@ -36,7 +36,7 @@ export default class UiEngineText implements UiInterface {
                 const td : HTMLTableCellElement = document.createElement("td");
                 td.id = `tile_${x}_${y}`;
                 td.className = "tile map-tile";
-                td.addEventListener('mousedown', ev => this.onTileClick(x, y, ev));
+                td.addEventListener("mousedown", ev => this.onTileClick(x, y, ev));
                 tr.appendChild(td);
             }
             mapTable.appendChild(tr);
@@ -55,6 +55,9 @@ export default class UiEngineText implements UiInterface {
     //
 
     onKeyDown(event: KeyboardEvent): void {
+        if (this.cityScreenIsOpen())
+            return;
+
         const dir = KeyDirections[event.code];
         if (dir !== undefined && this.game.canMoveSelectedUnit(dir!)) {
             this.game.moveSelectedUnit(dir!);
@@ -72,13 +75,18 @@ export default class UiEngineText implements UiInterface {
 
     private onTileClick(x: number, y: number, ev: MouseEvent) {
         if (ev.button === 0) {
+            if (this.cityScreenIsOpen()) {
+                this.closeCityScreen();
+                return;
+            }
+
             const units = this.game.unitsInTile(x, y);
             if (units.length > 0)
                 this.game.selectUnit(units[0]!.id);
 
             const city = this.game.cityInTileDetails(x, y);
             if (city)
-                this.showCity(city!, x, y);
+                this.openCityScreen(city!, x, y);
 
             this.redraw();
         }
@@ -128,29 +136,29 @@ export default class UiEngineText implements UiInterface {
         switch (unitType) {
             case UnitType.Warrior: return "W";
         }
-        return '';
+        return "";
     }
 
     //
     // CITY
     //
 
-    private showCity(city: CityDetails, x: number, y: number) {
+    private openCityScreen(city: CityDetails, cityX: number, cityY: number) {
         const three = [0, 1, 2];
 
         const buildings = city.buildings.map(building => `
             <table class="building">
                 <tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>
-                <tr>${three.map(n => `<td class="building-unit" id="building_${building.type}_${n}"></td>`).join('')}<td></td></tr>
+                <tr>${three.map(n => `<td class="building-unit" id="building_${building.type}_${n}"></td>`).join("")}<td></td></tr>
             </table>
-        `).join('');
+        `).join("");
 
-        const outOfGate = this.game.unitsInTile(x, y).map(unit => `<div class="tile ${`nation-${unit.nation}`}">${UiEngineText.charForUnitType(unit.type)}</div>`).join('');
+        const outOfGate = this.game.unitsInTile(cityX, cityY).map(unit => `<div class="tile ${`nation-${unit.nation}`}">${UiEngineText.charForUnitType(unit.type)}</div>`).join("");
 
         const goods = Object.keys(city.goods).map(good => `<tr>
             <td style="width: 100px;">${good}</td>
             <td>${city.goods[good as Goods]}</td>
-        </tr>`).join('');
+        </tr>`).join("");
 
         const cityHTML = `
             <h1 style="margin-top: 6px; margin-bottom: 6px;">${city.name}</h1>
@@ -163,7 +171,7 @@ export default class UiEngineText implements UiInterface {
                     <div>
                         <h3>Tiles</h3>
                         <table class="tiles">
-                            ${three.map(() => `<tr>${three.map(n => `<td class="tile" id="city-tile_${n}"></td>`).join('')}</tr>`).join('')}
+                            ${three.map(() => `<tr>${three.map(n => `<td class="tile" id="city-tile_${n}"></td>`).join("")}</tr>`).join("")}
                         </table>
                     </div>
                 </div>
@@ -181,6 +189,14 @@ export default class UiEngineText implements UiInterface {
         `;
 
         this.#cityDiv.innerHTML = cityHTML;
-        this.#cityDiv.style.display = 'flex';
+        this.#cityDiv.style.display = "flex";
+    }
+
+    private closeCityScreen() : void {
+        this.#cityDiv.style.display = "none";
+    }
+
+    private cityScreenIsOpen() : boolean {
+        return this.#cityDiv.style.display !== "none";
     }
 }

@@ -15,17 +15,16 @@
   - [X] New round
   - [X] Detect end-of-round
 - [X] Rounds + years
-- [ ] Select specific unit
+- [X] Select specific unit
 
 ### City
 
 - [ ] City
   - [X] Create city in map
   - [X] Create city object
-  - [ ] Edit city
-- [ ] Improve debug menu
-- [ ] Buildings
-- [ ] Goods, factory tree
+  - [X] Edit city
+  - [X] Click outside of city to close
+  - [ ] Move unit between buildings and tiles
 - [ ] Move units to buildings
 - [ ] Planting/mining
 - [ ] Specialists
