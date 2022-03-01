@@ -1,0 +1,34 @@
+{
+  "name": "ancient-civilizations",
+  "version": "1.0.0",
+  "description": "",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "rimraf dist && parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrenho/ancient-civilizations.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Andre Wagner",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/andrenho/ancient-civilizations/issues"
+  },
+  "homepage": "https://github.com/andrenho/ancient-civilizations#readme",
+  "devDependencies": {
+    "@types/uuid": "^8.3.4",
+    "parcel": "^2.3.2",
+    "process": "^0.11.10",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.2",
+    "util": "^0.12.4"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}

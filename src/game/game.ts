@@ -1,11 +1,4 @@
-import GameInterface, {
-    CityObject,
-    GameConfig,
-    GameState,
-    MapTile,
-    Id,
-    UnitObject, CityDetails
-} from "../interfaces/game-interface";
+import GameInterface, {CityDetails, GameConfig, GameState, Id, MapTile, UnitObject} from "../interfaces/game-interface";
 import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";

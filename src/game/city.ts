@@ -4,8 +4,7 @@ import Nation from "./nation";
 import Unit from "./unit";
 import {Buildings, Goods} from "../interfaces/game-enum";
 import {CityStartingBuildings} from "./config";
-
-declare function uuidv4(): string;
+import {v4 as uuidv4} from 'uuid';
 
 type CityBuilding = {
     available: boolean,

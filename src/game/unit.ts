@@ -3,8 +3,7 @@ import Nation from "./nation";
 import {Direction, Directions, UnitType} from "../interfaces/game-enum";
 import {Point} from "../common/geometry";
 import {UnitTypeConfig} from "./config";
-
-declare function uuidv4(): string;
+import {v4 as uuidv4} from 'uuid';
 
 export default class Unit {
 

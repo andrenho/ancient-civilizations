@@ -3,6 +3,7 @@ import {P, R} from "../common/geometry";
 import GameInterface, {MapTile} from "../interfaces/game-interface";
 import CityManagement from "./city-management";
 import {charForUnitType} from "./ui-config";
+import "../../css/text-engine.css";
 
 export default class UiEngineText implements UiInterface {
 
@@ -24,7 +25,7 @@ export default class UiEngineText implements UiInterface {
     private buildUserInterface() : void {
         const link = document.createElement("link");
         link.setAttribute("rel", "stylesheet");
-        link.setAttribute("href", "css/text-engine.css");
+        // link.setAttribute("href", "css/text-engine.css");
         document.head.appendChild(link);
 
         const gameDiv = document.getElementById("game")!;
@@ -99,7 +100,7 @@ export default class UiEngineText implements UiInterface {
     redraw(): void {
         const state = this.game.gameState(R(P(0, 0), 30, 30));   // TODO - map limits?
 
-        for (const td of document.getElementsByClassName("map-tile")) {
+        for (const td of Array.from(document.getElementsByClassName("map-tile"))) {
             td.innerHTML = "";
             td.className = "tile map-tile";
         }
