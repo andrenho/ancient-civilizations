@@ -5,17 +5,19 @@ import {Buildings, Direction, Goods, NationType, Terrain, UnitType} from "./game
 // CITY INTERFACE
 //
 
+export type CityBuilding = {
+    type: Buildings,
+    units: {
+        id: Id,
+        type: UnitType,
+    }[],
+}
+
 export type CityDetails = {
     id: Id,
     name: string,
     nation: NationType,
-    buildings: {
-        type: Buildings,
-        units: {
-            id: Id,
-            type: UnitType,
-        }[],
-    }[],
+    buildings: CityBuilding[],
     goods: { [key in Goods]: number },
 }
 

@@ -1,6 +1,4 @@
-import GameInterface, {CityDetails} from "../interfaces/game-interface";
-import {Goods} from "../interfaces/game-enum";
-import {charForUnitType} from "./ui-config";
+import GameInterface, {CityBuilding, CityDetails} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
 
@@ -16,6 +14,7 @@ export default class CityManagement {
     get cityDiv() { return this.#cityDiv; }
 
     openCityScreen(city: CityDetails, cityX: number, cityY: number) {
+        /*
         const three = [0, 1, 2];
 
         const buildings = city.buildings.map(building => `
@@ -27,43 +26,16 @@ export default class CityManagement {
 
         const outOfGate = this.game.unitsInTile(cityX, cityY).map(unit => `<div class="tile ${`nation-${unit.nation}`}">${charForUnitType(unit.type)}</div>`).join("");
 
-        const goods = Object.keys(city.goods).map(good => `<tr>
-            <td style="width: 100px;">${good}</td>
-            <td>${city.goods[good as Goods]}</td>
-        </tr>`).join("");
-
-        this.#cityDiv.innerHTML = `
-            <h1 style="margin-top: 6px; margin-bottom: 6px;">${city.name}</h1>
-            <div style="display: flex; align-content: stretch;">
-                <div style="display: flex; flex-direction: column; flex-grow: 1;">
-                    <div>
-                        <h3>Buildings</h3>
-                        ${buildings}
-                    </div>
-                    <div>
-                        <h3>Tiles</h3>
-                        <table class="tiles">
-                            ${three.map(() => `<tr>${three.map(n => `<td class="tile" id="city-tile_${n}"></td>`).join("")}</tr>`).join("")}
-                        </table>
-                    </div>
-                </div>
-                <div style="flex-grow: 1;">
-                    <div>
-                        <h3>Goods</h3>
-                        <table>${goods}</table>
-                    </div>
-                    <div>
-                        <h3>Out of gates</h3>
-                        <div style="display: flex; flex-direction: row;">${outOfGate}</div>
-                    </div>
-                </div>
-            </div>
-        `;
+        ${three.map(() => `<tr>${three.map(n => `<td class="tile" id="city-tile_${n}"></td>`).join("")}</tr>`).join("")}
+         */
         this.#cityDiv.style.display = "flex";
+        this.#cityDiv.innerHTML = fs.readFileSync(path.join(__dirname, "template/city-template.html"), "utf8");
 
-        console.log('hello');
-        const data = fs.readFileSync(path.join(__dirname, "city-management.ts"), "utf8");
-        console.log(data);
+        document.getElementById("city-name")!.innerText = city.name;
+
+        const cityBuildings = document.getElementById("city-buildings")!;
+        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
+
     }
 
     closeCityScreen() : void {
@@ -72,5 +44,9 @@ export default class CityManagement {
 
     cityScreenIsOpen() : boolean {
         return this.#cityDiv.style.display !== "none";
+    }
+
+    private cityBuilding(building: CityBuilding) : HTMLElement {
+        return undefined;
     }
 }
