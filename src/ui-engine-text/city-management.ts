@@ -1,6 +1,8 @@
 import GameInterface, {CityDetails} from "../interfaces/game-interface";
 import {Goods} from "../interfaces/game-enum";
 import {charForUnitType} from "./ui-config";
+import fs from "fs";
+import path from "path";
 
 export default class CityManagement {
 
@@ -58,6 +60,10 @@ export default class CityManagement {
             </div>
         `;
         this.#cityDiv.style.display = "flex";
+
+        console.log('hello');
+        const data = fs.readFileSync(path.join(__dirname, "city-management.ts"), "utf8");
+        console.log(data);
     }
 
     closeCityScreen() : void {
