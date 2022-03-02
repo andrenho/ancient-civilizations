@@ -8,6 +8,10 @@ type TerrainConfigType = {
     moveCost: number,
 };
 
+type BuildingConfigType = {
+    numberOfWorkers: number;
+};
+
 export const UnitTypeConfig : { [key in UnitType]: UnitTypeConfigType } = {
     [UnitType.Warrior]: { moves: 2 },
 }
@@ -15,6 +19,11 @@ export const UnitTypeConfig : { [key in UnitType]: UnitTypeConfigType } = {
 export const TerrainConfig : { [key in Terrain]: TerrainConfigType } = {
     [Terrain.Grassland]: { moveCost: 1 },
 }
+
+export const BuildingConfig : { [key in Buildings]: BuildingConfigType } = {
+    [Buildings.SpinnersHouse]: { numberOfWorkers: 3 },
+    [Buildings.OliveOilPress]: { numberOfWorkers: 3 },
+};
 
 export const CityStartingBuildings : Buildings[] = [
     Buildings.SpinnersHouse, Buildings.OliveOilPress,

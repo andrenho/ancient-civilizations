@@ -47,6 +47,31 @@ export default class CityManagement {
     }
 
     private cityBuilding(building: CityBuilding) : HTMLElement {
-        return undefined;
+        const table = document.createElement('table');
+        const tr = document.createElement('tr');
+
+        table.className = "building";
+        table.innerHTML = `<tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>`;
+
+        for (let i = 0; i < this.game.numberOfWorkersInBuilding(building.type); ++i) {
+            const td = document.createElement('td');
+            td.id = `${building}_${i}`;
+            td.className = "building-unit";
+            tr.appendChild(td);
+        }
+        
+        table.appendChild(tr);
+        return table;
+
+        /*
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <table class="building">
+                <tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>
+                <tr id="${building.type}"></tr>
+            </table>
+        `;
+        return [div];
+        */
     }
 }

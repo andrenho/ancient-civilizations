@@ -80,4 +80,6 @@ export default interface GameInterface {
 
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;
+
+    numberOfWorkersInBuilding(building: Buildings) : number;
 }

@@ -3,8 +3,9 @@ import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
 import Nation from "./nation";
-import {Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
+import {Buildings, Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
 import City from "./city";
+import {BuildingConfig} from "./config";
 
 export default class Game implements GameInterface {
 
@@ -126,6 +127,13 @@ export default class Game implements GameInterface {
     cityInTileDetails(x: number, y: number): CityDetails | null {
         const city = this.#cities.find(city => city.position.x === x && city.position.y === y);
         return city ? city.cityDetails() : null;
+    }
+
+
+    numberOfWorkersInBuilding(building: Buildings) : number {
+        console.log(building);
+        console.log(BuildingConfig);
+        return BuildingConfig[building as Buildings].numberOfWorkers;
     }
 
 }

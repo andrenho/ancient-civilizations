@@ -2,15 +2,15 @@ import {P, Point} from "../common/geometry";
 
 export const enum NationType {
     Phoenicia = "phoenicia",
-    Egypt = "egypt"
+    Egypt = "egypt",
 }
 
 export const enum UnitType {
-    Warrior = "warrior"
+    Warrior = "warrior",
 }
 
 export const enum Terrain {
-    Grassland = "grassland"
+    Grassland = "grassland",
 }
 
 export enum Buildings {
