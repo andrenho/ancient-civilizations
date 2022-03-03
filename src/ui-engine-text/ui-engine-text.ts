@@ -4,6 +4,7 @@ import GameInterface, {MapTile} from "../interfaces/game-interface";
 import CityManagement from "./city-management";
 import {charForUnitType} from "./ui-config";
 import "../../css/text-engine.css";
+import {Terrain} from "../interfaces/game-enum";
 
 export default class UiEngineText implements UiInterface {
 
@@ -115,7 +116,7 @@ export default class UiEngineText implements UiInterface {
     private draw(tile: MapTile) {
         const [x, y] = tile.position;
         if (tile.tile) {
-            this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
+            this.tile(x, y).classList.add(`terrain-${Terrain[tile.tile.terrain]}`);
         } else if (tile.unit) {
             const t = this.tile(x, y);
             t.innerText = charForUnitType(tile.unit.type);

@@ -3,7 +3,6 @@ import {Point} from "../common/geometry";
 import Nation from "./nation";
 import Unit from "./unit";
 import {Buildings, Goods} from "../interfaces/game-enum";
-import {CityStartingBuildings} from "./config";
 import {v4 as uuidv4} from 'uuid';
 
 type CityBuilding = {
@@ -15,17 +14,19 @@ export default class City {
 
     readonly id : Id = uuidv4();
     #name: string;
-    #buildings = new Map<Buildings, CityBuilding>()
-    #goods = new Map<Goods, number>();
+    #buildings : { [key in Buildings]? : CityBuilding } = {};
+    #goods : { [key in Goods]? : number } = {};
 
     constructor(name: string, readonly nation: Nation, readonly position: Point) {
         this.#name = name;
-        for (const building in Buildings) {
-            this.#buildings.set(building as Buildings, { available: building in CityStartingBuildings, units: [] });
+        /*
+        for (const idx in Object.values(Buildings)) {
+            this.#buildings[Buildings[idx]] = { available: BuildingConfig[Buildings[idx]] in CityStartingBuildings, units: [] };
         }
         for (const good in Goods) {
-            this.#goods.set(good as Goods, 0);
+            this.#goods.set(good, 0);
         }
+         */
     }
 
     get name() { return this.#name; }

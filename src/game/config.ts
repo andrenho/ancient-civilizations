@@ -5,10 +5,12 @@ type UnitTypeConfigType = {
 };
 
 type TerrainConfigType = {
+    name: string,
     moveCost: number,
 };
 
 type BuildingConfigType = {
+    name: string,
     numberOfWorkers: number;
 };
 
@@ -17,12 +19,12 @@ export const UnitTypeConfig : { [key in UnitType]: UnitTypeConfigType } = {
 }
 
 export const TerrainConfig : { [key in Terrain]: TerrainConfigType } = {
-    [Terrain.Grassland]: { moveCost: 1 },
+    [Terrain.Grassland]: { name: "Grassland", moveCost: 1 },
 }
 
 export const BuildingConfig : { [key in Buildings]: BuildingConfigType } = {
-    [Buildings.SpinnersHouse]: { numberOfWorkers: 3 },
-    [Buildings.OliveOilPress]: { numberOfWorkers: 3 },
+    [Buildings.SpinnersHouse]: { name: "Spinner's House", numberOfWorkers: 3 },
+    [Buildings.OliveOilPress]: { name: "Olive Oil Press", numberOfWorkers: 3 },
 };
 
 export const CityStartingBuildings : Buildings[] = [
