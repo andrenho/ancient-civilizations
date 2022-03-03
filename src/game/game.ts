@@ -3,7 +3,7 @@ import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
 import Nation from "./nation";
-import {Buildings, Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
+import {Building, Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
 import City from "./city";
 import {BuildingConfig} from "./config";
 
@@ -130,10 +130,10 @@ export default class Game implements GameInterface {
     }
 
 
-    numberOfWorkersInBuilding(building: Buildings) : number {
+    numberOfWorkersInBuilding(building: Building) : number {
         console.log(building);
         console.log(BuildingConfig);
-        return BuildingConfig[building as Buildings].numberOfWorkers;
+        return BuildingConfig[building as Building].numberOfWorkers;
     }
 
 }

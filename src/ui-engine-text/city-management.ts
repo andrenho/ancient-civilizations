@@ -33,9 +33,17 @@ export default class CityManagement {
 
         document.getElementById("city-name")!.innerText = city.name;
 
+        /*
         const cityBuildings = document.getElementById("city-buildings")!;
         city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
+         */
 
+        // document.getElementById('city-goods')!.innerHTML =
+
+        /*
+        const cityGoods = document.getElementById("city-buildings")!;
+        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
+         */
     }
 
     closeCityScreen() : void {
@@ -74,4 +82,5 @@ export default class CityManagement {
         return [div];
         */
     }
+
 }

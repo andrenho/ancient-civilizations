@@ -1,4 +1,4 @@
-import {Direction} from "./game-enum";
+import {Direction, Good} from "./game-enum";
 
 export const KeyDirections : { [key: string]: Direction } = {
     Numpad7: Direction.NW,
@@ -10,6 +10,10 @@ export const KeyDirections : { [key: string]: Direction } = {
     Numpad2: Direction.S,
     Numpad3: Direction.SE,
 }
+
+export const GoodsToShowOnCity: Good[] = [
+    Good.Wool, Good.OliveOil,
+];
 
 export default interface UiInterface {
     redraw(): void;

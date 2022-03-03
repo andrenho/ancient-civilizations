@@ -1,12 +1,17 @@
 import {Rectangle} from "../common/geometry";
-import {Buildings, Direction, Goods, NationType, Terrain, UnitType} from "./game-enum";
+import {Building, Direction, NationType, Terrain, UnitType} from "./game-enum";
 
 //
 // CITY INTERFACE
 //
 
+export type CityGood = {
+    amount: number,
+    production: number
+};
+
 export type CityBuilding = {
-    type: Buildings,
+    type: Building,
     units: {
         id: Id,
         type: UnitType,
@@ -18,7 +23,7 @@ export type CityDetails = {
     name: string,
     nation: NationType,
     buildings: CityBuilding[],
-    goods: { [key in Goods]: number },
+    goods: { [key : number]: CityGood },
 }
 
 //
@@ -81,5 +86,5 @@ export default interface GameInterface {
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;
 
-    numberOfWorkersInBuilding(building: Buildings) : number;
+    numberOfWorkersInBuilding(building: Building) : number;
 }

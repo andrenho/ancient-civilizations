@@ -13,12 +13,12 @@ export enum Terrain {
     Grassland,
 }
 
-export enum Buildings {
+export enum Building {
     SpinnersHouse,
     OliveOilPress,
 }
 
-export enum Goods {
+export enum Good {
     Wool,
     OliveOil,
 }
