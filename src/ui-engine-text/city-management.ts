@@ -1,6 +1,7 @@
-import GameInterface, {CityBuilding, CityDetails} from "../interfaces/game-interface";
+import GameInterface, {CityBuilding, CityDetails, CityGood} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
+import {GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
 
 export default class CityManagement {
 
@@ -38,7 +39,7 @@ export default class CityManagement {
         city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
          */
 
-        // document.getElementById('city-goods')!.innerHTML =
+        document.getElementById('city-goods')!.replaceChildren(this.cityGoodsElement(city.goods));
 
         /*
         const cityGoods = document.getElementById("city-buildings")!;
@@ -70,17 +71,18 @@ export default class CityManagement {
         
         table.appendChild(tr);
         return table;
-
-        /*
-        const div = document.createElement('div');
-        div.innerHTML = `
-            <table class="building">
-                <tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>
-                <tr id="${building.type}"></tr>
-            </table>
-        `;
-        return [div];
-        */
     }
 
+    private cityGoodsElement(goods: { [key: number]: CityGood }) : HTMLTableElement {
+        const table : HTMLTableElement = document.createElement('table');
+        table.innerHTML = `<tr><th></th><th>Amount</th><th>Production</th></tr>`;
+
+        for (const good of GoodsToShowOnCity) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td style="width: 100px;">${GoodName[good]}</td><td>${goods[good]!.amount}</td><td>${goods[good]!.production}</td>`
+            table.tBodies[0]!.appendChild(tr);
+        }
+
+        return table;
+    }
 }

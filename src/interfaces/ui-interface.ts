@@ -15,6 +15,11 @@ export const GoodsToShowOnCity: Good[] = [
     Good.Wool, Good.OliveOil,
 ];
 
+export const GoodName : { [key in Good]: string } = {
+    [Good.Wool] : 'Wool',
+    [Good.OliveOil] : 'Olive Oil',
+}
+
 export default interface UiInterface {
     redraw(): void;
     onKeyDown(event: KeyboardEvent): void;

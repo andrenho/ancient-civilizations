@@ -29,10 +29,6 @@ export default class City {
         for (const good of iterateEnumValues(Good)) {
             this.#goods[good] = { amount: 0, production: 0 };
         }
-        console.log(this.#goods);
-
-        // this.#goods.set(good, 0);
-
     }
 
     get name() { return this.#name; }
