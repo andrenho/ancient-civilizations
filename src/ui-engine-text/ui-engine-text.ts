@@ -85,7 +85,7 @@ export default class UiEngineText implements UiInterface {
             if (units.length > 0)
                 this.game.selectUnit(units[0]!.id);
 
-            const city = this.game.cityInTileDetails(x, y);
+            const city = this.game.cityInTile(x, y);
             if (city)
                 this.#cityManagement.openCityScreen(city!, x, y);
 

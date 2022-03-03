@@ -1,4 +1,4 @@
-import IGame, {GameConfig, ICityDetails, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
+import IGame, {GameConfig, ICity, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
 import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
@@ -124,9 +124,9 @@ export default class Game implements IGame {
         this.selectNextUnit(false);
     }
 
-    cityInTileDetails(x: number, y: number): ICityDetails | null {
+    cityInTile(x: number, y: number): ICity | null {
         const city = this.#cities.find(city => city.position.x === x && city.position.y === y);
-        return city ? city.cityDetails() : null;
+        return city ? city.toCityObject() : null;
     }
 
 

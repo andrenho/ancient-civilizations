@@ -1,7 +1,8 @@
-import IGame, {ICityBuilding, ICityDetails, ICityGood} from "../interfaces/game-interface";
+import IGame, {ICity, ICityBuilding, ICityGood} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
 import {GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
+import {Good} from "../interfaces/game-enum";
 
 export default class CityManagement {
 
@@ -14,7 +15,7 @@ export default class CityManagement {
 
     get cityDiv() { return this.#cityDiv; }
 
-    openCityScreen(city: ICityDetails, cityX: number, cityY: number) {
+    openCityScreen(city: ICity, cityX: number, cityY: number) {
         /*
         const three = [0, 1, 2];
 
@@ -73,10 +74,11 @@ export default class CityManagement {
         return table;
     }
 
-    private cityGoodsElement(goods: { [key: number]: ICityGood }) : HTMLTableElement {
+    private cityGoodsElement(goods: { [key in Good ]: ICityGood }) : HTMLTableElement {
         const table : HTMLTableElement = document.createElement('table');
         table.innerHTML = `<tr><th></th><th>Amount</th><th>Production</th></tr>`;
 
+        console.log(GoodsToShowOnCity);
         for (const good of GoodsToShowOnCity) {
             const tr = document.createElement('tr');
             tr.innerHTML = `<td style="width: 100px;">${GoodName[good]}</td><td>${goods[good]!.amount}</td><td>${goods[good]!.production}</td>`

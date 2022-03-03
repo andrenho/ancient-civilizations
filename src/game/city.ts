@@ -1,4 +1,4 @@
-import {ICity, ICityDetails, ICityGood, Id} from "../interfaces/game-interface";
+import {ICity, ICityGood, Id} from "../interfaces/game-interface";
 import {Point} from "../common/geometry";
 import Nation from "./nation";
 import Unit from "./unit";
@@ -42,19 +42,8 @@ export default class City {
             id: this.id,
             name: this.#name,
             nation: this.nation.nationType,
-        };
-    }
-
-    cityDetails() : ICityDetails {
-        return <ICityDetails> {
-            id: this.id,
-            name: this.name,
-            nation: this.nation.nationType,
-            buildings: [] /* this.buildings.map(building => ({
-                type: building,
-                units: this.#buildings.get(building)!.units.map(unit => ({ id: unit.id, type: unit.unitType }))
-            })) */,
             goods: this.#goods,
         };
     }
+
 }

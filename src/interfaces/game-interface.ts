@@ -1,5 +1,5 @@
 import {Rectangle} from "../common/geometry";
-import {Building, Direction, NationType, Terrain, UnitType} from "./game-enum";
+import {Building, Direction, Good, NationType, Terrain, UnitType} from "./game-enum";
 
 export type Id = string;
 
@@ -18,14 +18,6 @@ export type ICityBuilding = {
         id: Id,
         type: UnitType,
     }[],
-}
-
-export type ICityDetails = {
-    id: Id,
-    name: string,
-    nation: NationType,
-    buildings: ICityBuilding[],
-    goods: { [key : number]: ICityGood },
 }
 
 //
@@ -47,6 +39,8 @@ export type ICity = {
     id: Id,
     name: string,
     nation: NationType,
+    // buildings: ICityBuilding[],
+    goods: { [key in Good]: ICityGood },
 }
 
 export type IMapTile = {
@@ -81,7 +75,7 @@ export default interface IGame {
     unitsInTile(x: number, y: number) : IUnit[];
     selectUnit(unitId: Id) : void;
 
-    cityInTileDetails(x: number, y: number) : ICityDetails | null;
+    cityInTile(x: number, y: number) : ICity | null;
 
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;
