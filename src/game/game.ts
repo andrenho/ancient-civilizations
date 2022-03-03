@@ -1,4 +1,4 @@
-import GameInterface, {CityDetails, GameConfig, GameState, Id, MapTile, UnitObject} from "../interfaces/game-interface";
+import IGame, {GameConfig, ICityDetails, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
 import {P, Rectangle} from "../common/geometry";
 import Tile from "./tile";
 import Unit from "./unit";
@@ -7,7 +7,7 @@ import {Building, Direction, Directions, NationType, Terrain, UnitType} from "..
 import City from "./city";
 import {BuildingConfig} from "./config";
 
-export default class Game implements GameInterface {
+export default class Game implements IGame {
 
     #playerNation?: Nation;
     #selectedUnit : Unit | null = null;
@@ -28,8 +28,8 @@ export default class Game implements GameInterface {
         this.#selectedUnit = this.#units[0]!;
     }
 
-    gameState(bounds: Rectangle): GameState {
-        const state: GameState = {
+    gameState(bounds: Rectangle): IGameState {
+        const state: IGameState = {
             tiles: [],
             year: this.#year,
             selectedUnitMovesLeft: this.#selectedUnit ? this.#selectedUnit.movesLeft : null,
@@ -37,11 +37,11 @@ export default class Game implements GameInterface {
         for (let x = bounds.p.x; x < (bounds.p.x + bounds.w); x++)   // TODO - limit by map size
             for (let y = bounds.p.y; y < (bounds.p.y + bounds.h); y++)
                 state.tiles.push({ position: [x, y], tile: this.tile(x, y).toTileObject() });
-        state.tiles.push(...this.#units.filter(u => bounds.contains(u.position)).map(u => <MapTile> {
+        state.tiles.push(...this.#units.filter(u => bounds.contains(u.position)).map(u => <IMapTile> {
             position: [u.position.x, u.position.y],
             unit: u.toUnitObject(u.isEqual(this.#selectedUnit))
         }));
-        state.tiles.push(...this.#cities.filter(c => bounds.contains(c.position)).map(c => <MapTile> {
+        state.tiles.push(...this.#cities.filter(c => bounds.contains(c.position)).map(c => <IMapTile> {
             position: [c.position.x, c.position.y],
             city: c.toCityObject()
         }));
@@ -113,7 +113,7 @@ export default class Game implements GameInterface {
         }
     }
 
-    unitsInTile(x: number, y: number): UnitObject[] {
+    unitsInTile(x: number, y: number): IUnit[] {
         return this.#units.filter(unit => unit.position.x == x && unit.position.y == y).map(unit => unit.toUnitObject());
     }
 
@@ -124,7 +124,7 @@ export default class Game implements GameInterface {
         this.selectNextUnit(false);
     }
 
-    cityInTileDetails(x: number, y: number): CityDetails | null {
+    cityInTileDetails(x: number, y: number): ICityDetails | null {
         const city = this.#cities.find(city => city.position.x === x && city.position.y === y);
         return city ? city.cityDetails() : null;
     }

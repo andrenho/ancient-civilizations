@@ -1,17 +1,16 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
-import GameInterface, {MapTile} from "../interfaces/game-interface";
+import IGame, {IMapTile} from "../interfaces/game-interface";
 import CityManagement from "./city-management";
 import {charForUnitType} from "./ui-config";
 import "../../css/text-engine.css";
-import {Terrain} from "../interfaces/game-enum";
 
 export default class UiEngineText implements UiInterface {
 
     #debugInfo: HTMLPreElement;
     #cityManagement: CityManagement;
 
-    constructor(private game: GameInterface) {
+    constructor(private game: IGame) {
         this.#debugInfo = document.createElement("pre");
         this.#cityManagement = new CityManagement(game);
         this.buildUserInterface();
@@ -113,10 +112,10 @@ export default class UiEngineText implements UiInterface {
         this.#debugInfo.textContent = text;
     }
 
-    private draw(tile: MapTile) {
+    private draw(tile: IMapTile) {
         const [x, y] = tile.position;
         if (tile.tile) {
-            this.tile(x, y).classList.add(`terrain-${Terrain[tile.tile.terrain]}`);
+            this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
         } else if (tile.unit) {
             const t = this.tile(x, y);
             t.innerText = charForUnitType(tile.unit.type);

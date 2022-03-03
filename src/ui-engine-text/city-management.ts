@@ -1,4 +1,4 @@
-import GameInterface, {CityBuilding, CityDetails, CityGood} from "../interfaces/game-interface";
+import IGame, {ICityBuilding, ICityDetails, ICityGood} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
 import {GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
@@ -7,14 +7,14 @@ export default class CityManagement {
 
     #cityDiv: HTMLDivElement;
 
-    constructor(private game: GameInterface) {
+    constructor(private game: IGame) {
         this.#cityDiv = document.createElement("div");
         this.#cityDiv.className = "city-div";
     }
 
     get cityDiv() { return this.#cityDiv; }
 
-    openCityScreen(city: CityDetails, cityX: number, cityY: number) {
+    openCityScreen(city: ICityDetails, cityX: number, cityY: number) {
         /*
         const three = [0, 1, 2];
 
@@ -55,7 +55,7 @@ export default class CityManagement {
         return this.#cityDiv.style.display !== "none";
     }
 
-    private cityBuilding(building: CityBuilding) : HTMLElement {
+    private cityBuilding(building: ICityBuilding) : HTMLElement {
         const table = document.createElement('table');
         const tr = document.createElement('tr');
 
@@ -73,7 +73,7 @@ export default class CityManagement {
         return table;
     }
 
-    private cityGoodsElement(goods: { [key: number]: CityGood }) : HTMLTableElement {
+    private cityGoodsElement(goods: { [key: number]: ICityGood }) : HTMLTableElement {
         const table : HTMLTableElement = document.createElement('table');
         table.innerHTML = `<tr><th></th><th>Amount</th><th>Production</th></tr>`;
 

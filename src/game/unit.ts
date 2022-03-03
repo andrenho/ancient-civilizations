@@ -1,4 +1,4 @@
-import {Id, UnitObject} from "../interfaces/game-interface";
+import {Id, IUnit} from "../interfaces/game-interface";
 import Nation from "./nation";
 import {Direction, Directions, UnitType} from "../interfaces/game-enum";
 import {Point} from "../common/geometry";
@@ -45,7 +45,7 @@ export default class Unit {
     }
 
     toUnitObject(selected?: boolean) {
-        const unitObject = <UnitObject> {
+        const unitObject = <IUnit> {
             id: this.id,
             nation: this.nation.nationType,
             type: this.unitType,

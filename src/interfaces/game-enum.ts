@@ -1,26 +1,26 @@
 import {P, Point} from "../common/geometry";
 
-export enum NationType {
-    Phoenicia,
-    Egypt,
+export const enum NationType {
+    Phoenicia = "phoenicia",
+    Egypt = "egypt",
 }
 
-export enum UnitType {
-    Warrior,
+export const enum UnitType {
+    Warrior = "warrior",
 }
 
-export enum Terrain {
-    Grassland,
+export const enum Terrain {
+    Grassland= "grassland",
+}
+
+export const enum Good {
+    Wool = 'wool',
+    OliveOil = 'olive-oil',
 }
 
 export enum Building {
     SpinnersHouse,
     OliveOilPress,
-}
-
-export enum Good {
-    Wool,
-    OliveOil,
 }
 
 export const enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }

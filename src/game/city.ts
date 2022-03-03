@@ -1,10 +1,9 @@
-import {CityDetails, CityGood, CityObject, Id} from "../interfaces/game-interface";
+import {ICity, ICityDetails, ICityGood, Id} from "../interfaces/game-interface";
 import {Point} from "../common/geometry";
 import Nation from "./nation";
 import Unit from "./unit";
 import {Good} from "../interfaces/game-enum";
 import {v4 as uuidv4} from 'uuid';
-import {iterateEnumValues} from "../common/enums";
 
 type CityBuilding = {
     available: boolean,
@@ -16,19 +15,13 @@ export default class City {
     readonly id : Id = uuidv4();
     #name: string;
     // #buildings : { [key in Buildings]? : CityBuilding } = {};
-    #goods : { [key: number] : CityGood } = {};
+    #goods : { [key in Good] : ICityGood } = {
+        [Good.Wool]: { amount: 0, production: 0 },
+        [Good.OliveOil]: { amount: 0, production: 0 },
+    };
 
     constructor(name: string, readonly nation: Nation, readonly position: Point) {
         this.#name = name;
-        /*
-        for (const idx in Object.values(Buildings)) {
-            this.#buildings[Buildings[idx]] = { available: BuildingConfig[Buildings[idx]] in CityStartingBuildings, units: [] };
-        }
-         */
-        // for (const good in Good)
-        for (const good of iterateEnumValues(Good)) {
-            this.#goods[good] = { amount: 0, production: 0 };
-        }
     }
 
     get name() { return this.#name; }
@@ -44,7 +37,7 @@ export default class City {
 
      */
 
-    toCityObject() : CityObject {
+    toCityObject() : ICity {
         return {
             id: this.id,
             name: this.#name,
@@ -52,8 +45,8 @@ export default class City {
         };
     }
 
-    cityDetails() : CityDetails {
-        return <CityDetails> {
+    cityDetails() : ICityDetails {
+        return <ICityDetails> {
             id: this.id,
             name: this.name,
             nation: this.nation.nationType,

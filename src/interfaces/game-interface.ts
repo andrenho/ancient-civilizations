@@ -1,16 +1,18 @@
 import {Rectangle} from "../common/geometry";
 import {Building, Direction, NationType, Terrain, UnitType} from "./game-enum";
 
+export type Id = string;
+
 //
 // CITY INTERFACE
 //
 
-export type CityGood = {
+export type ICityGood = {
     amount: number,
     production: number
 };
 
-export type CityBuilding = {
+export type ICityBuilding = {
     type: Building,
     units: {
         id: Id,
@@ -18,46 +20,44 @@ export type CityBuilding = {
     }[],
 }
 
-export type CityDetails = {
+export type ICityDetails = {
     id: Id,
     name: string,
     nation: NationType,
-    buildings: CityBuilding[],
-    goods: { [key : number]: CityGood },
+    buildings: ICityBuilding[],
+    goods: { [key : number]: ICityGood },
 }
 
 //
 // GAME OBJECTS
 //
 
-export type Id = string;
-
-export type TileObject = {
+export type ITile = {
     terrain: Terrain,
 }
 
-export type UnitObject = {
+export type IUnit = {
     id: Id,
     nation: NationType,
     type: UnitType,
     selected?: boolean,
 }
 
-export type CityObject = {
+export type ICity = {
     id: Id,
     name: string,
     nation: NationType,
 }
 
-export type MapTile = {
+export type IMapTile = {
     position: [number, number],
-    tile?: TileObject,
-    unit?: UnitObject,
-    city?: CityObject,
+    tile?: ITile,
+    unit?: IUnit,
+    city?: ICity,
 }
 
-export type GameState = {
-    tiles: MapTile[],
+export type IGameState = {
+    tiles: IMapTile[],
     year: number;
     selectedUnitMovesLeft: number | null;
 }
@@ -69,19 +69,19 @@ export type GameState = {
 export type GameConfig = {
 }
 
-export default interface GameInterface {
+export default interface IGame {
 
     newGame(config: GameConfig) : void;
 
-    gameState(bounds: Rectangle) : GameState;
+    gameState(bounds: Rectangle) : IGameState;
 
     canMoveSelectedUnit(dir: Direction) : boolean;
     moveSelectedUnit(dir: Direction) : void;
 
-    unitsInTile(x: number, y: number) : UnitObject[];
+    unitsInTile(x: number, y: number) : IUnit[];
     selectUnit(unitId: Id) : void;
 
-    cityInTileDetails(x: number, y: number) : CityDetails | null;
+    cityInTileDetails(x: number, y: number) : ICityDetails | null;
 
     selectNextUnit(autoEndRound: boolean): void;
     newRound() : void;

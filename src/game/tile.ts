@@ -1,4 +1,4 @@
-import {TileObject} from "../interfaces/game-interface";
+import {ITile} from "../interfaces/game-interface";
 import {Terrain} from "../interfaces/game-enum";
 import {TerrainConfig} from "./config";
 
@@ -10,7 +10,7 @@ export default class Tile {
         return TerrainConfig[this.terrain].moveCost;
     }
 
-    toTileObject() : TileObject {
+    toTileObject() : ITile {
         return { terrain: this.terrain };
     }
 }
