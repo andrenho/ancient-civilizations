@@ -69,3 +69,10 @@ table.tiles {
     margin: 8px;
 }
 
+h3 {
+    text-decoration: underline;
+}
+
+td.number {
+    text-align: right;
+}

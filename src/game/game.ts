@@ -6,6 +6,7 @@ import Nation from "./nation";
 import {Building, Direction, Directions, NationType, Terrain, UnitType} from "../interfaces/game-enum";
 import City from "./city";
 import {BuildingConfig} from "./config";
+import {mapTile} from "../interfaces/interface-utils";
 
 export default class Game implements IGame {
 
@@ -42,15 +43,18 @@ export default class Game implements IGame {
             state.tileIndex[x] = {};
             for (let y = bounds.p.y; y < (bounds.p.y + bounds.h); y++) {    // TODO - limit by map size
                 state.tileIndex[x]![y] = i++;
-                state.tiles.push({ position: [x, y], tile: this.tile(x, y).toTileObject() });
+                state.tiles.push({ position: { x, y }, tile: this.tile(x, y).toTileObject(), units: [] });
             }
         }
 
         // units
-        for (const unit of this.#units.filter(u => bounds.contains(u.position))) {
-            const tile = state.tiles[state.tileIndex[unit.position.x]![unit.position.y]!]!;
-            tile.unit = unit.toUnitObject(unit.isEqual(this.#selectedUnit))
+        for (const unit of this.#units) {
+            const tile = mapTile(state, unit.position.x, unit.position.y);
+            if (tile)
+                tile.units.push(unit.toUnitObject(unit.isEqual(this.#selectedUnit)));
         }
+        for (let tile of state.tiles)
+            tile.units.sort((unitA, unitB) => unitA.zOrder - unitB.zOrder);
 
         // cities
         for (const city of this.#cities.filter(c => bounds.contains(c.position))) {

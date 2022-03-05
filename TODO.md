@@ -19,26 +19,14 @@
 
 ### City
 
-- [ ] City
+- [X] City
   - [X] Create city in map
   - [X] Create city object
   - [X] Edit city
   - [X] Click outside of city to close
-  - [ ] Move unit between buildings and tiles
-- [ ] Move units to buildings
+- [ ] Move unit between buildings and tiles
 - [ ] Planting/mining
 - [ ] Specialists
-
-### Others
-
-- [ ] Zoom in/out
-- [ ] Wait for font loading
-- [ ] Joystick for mobile
-- [ ] Gamepad support
-- [ ] Menu/dialogs
-- [ ] Save/load
-- [ ] Some basic graphics
-- [ ] Minify, improve production performance
 
 ## version 0.2
 
@@ -60,3 +48,16 @@
 
 ### Diplomacy
 ### Smaller civs
+
+## UI
+
+- [ ] Build UI
+  - [ ] Zoom in/out
+  - [ ] Wait for font loading
+  - [ ] Joystick for mobile
+  - [ ] Gamepad support
+  - [ ] Menu/dialogs
+  - [ ] Save/load
+  - [ ] Some basic graphics
+  - [ ] Minify, improve production performance
+

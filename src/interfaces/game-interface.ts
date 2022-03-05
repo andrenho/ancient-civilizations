@@ -32,6 +32,7 @@ export type IUnit = {
     id: Id,
     nation: NationType,
     type: UnitType,
+    zOrder: number,
     selected?: boolean,
 }
 
@@ -44,9 +45,9 @@ export type ICity = {
 }
 
 export type IMapTile = {
-    position: [number, number],
+    position: { x: number, y: number },
     tile: ITile,
-    unit?: IUnit,
+    units: IUnit[],
     city?: ICity,
 }
 
@@ -61,8 +62,7 @@ export type IGameState = {
 // GAME INTERFACE
 //
 
-export type GameConfig = {
-}
+export interface GameConfig {}
 
 export default interface IGame {
 

@@ -9,7 +9,7 @@ function charForUnitType(unitType: UnitType) : string {
 }
 
 function tileElement(tile: IMapTile, baseElementId: string) : HTMLElement | null {
-    const [x, y] = tile.position;
+    const { x, y } = tile.position;
 
     return document.getElementById(`${baseElementId}_${x}_${y}`);
 }

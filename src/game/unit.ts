@@ -49,6 +49,7 @@ export default class Unit {
             id: this.id,
             nation: this.nation.nationType,
             type: this.unitType,
+            zOrder: selected ? 0 : 1,
         };
         if (selected)
             unitObject.selected = true;

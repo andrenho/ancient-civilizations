@@ -2,9 +2,9 @@ import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
 import IGame, {IGameState, IMapTile} from "../interfaces/game-interface";
 import CityManagement from "./city-management";
-import "../../css/text-engine.css";
 import {mapTile} from "../interfaces/interface-utils";
 import {drawCity, drawTile, drawUnit} from "./ui-tile";
+import "../../css/text-engine.css";
 
 export default class UiEngineText implements UiInterface {
 
@@ -86,8 +86,8 @@ export default class UiEngineText implements UiInterface {
 
             const tile = mapTile(this.#state, x, y);
             if (tile !== undefined) {
-                if (tile.unit)
-                    this.game.selectUnit(tile.unit.id);
+                if (tile.units.length > 0)
+                    this.game.selectUnit(tile.units[0]!.id);
 
                 if (tile.city)
                     this.#cityManagement.openCityScreen(this.#state, x, y);
@@ -124,8 +124,8 @@ export default class UiEngineText implements UiInterface {
 
     private draw(tile: IMapTile) {
         drawTile(tile, "tile");
-        if (tile.unit) {
-            drawUnit(tile.unit, tile.position[0], tile.position[1], "tile", tile.unit.selected ?? false);
+        if (tile.units.length > 0) {
+            drawUnit(tile.units[0]!, tile.position.x, tile.position.y, "tile", tile.units[0]!.selected ?? false);
         }
         drawCity(tile, "tile");
     }
