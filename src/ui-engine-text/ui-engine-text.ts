@@ -1,14 +1,16 @@
 import UiInterface, {KeyDirections} from "../interfaces/ui-interface";
 import {P, R} from "../common/geometry";
-import IGame, {IMapTile} from "../interfaces/game-interface";
+import IGame, {IGameState, IMapTile} from "../interfaces/game-interface";
 import CityManagement from "./city-management";
-import {charForUnitType} from "./ui-config";
 import "../../css/text-engine.css";
+import {mapTile} from "../interfaces/interface-utils";
+import {drawCity, drawTile, drawUnit} from "./ui-tile";
 
 export default class UiEngineText implements UiInterface {
 
     #debugInfo: HTMLPreElement;
     #cityManagement: CityManagement;
+    #state?: IGameState;
 
     constructor(private game: IGame) {
         this.#debugInfo = document.createElement("pre");
@@ -25,7 +27,6 @@ export default class UiEngineText implements UiInterface {
     private buildUserInterface() : void {
         const link = document.createElement("link");
         link.setAttribute("rel", "stylesheet");
-        // link.setAttribute("href", "css/text-engine.css");
         document.head.appendChild(link);
 
         const gameDiv = document.getElementById("game")!;
@@ -71,25 +72,28 @@ export default class UiEngineText implements UiInterface {
                 this.game.newRound();
                 break;
         }
-        this.redraw();
+        this.update();
     }
 
     private onTileClick(x: number, y: number, ev: MouseEvent) {
+        if (!this.#state) return;
+
         if (ev.button === 0) {
             if (this.#cityManagement.cityScreenIsOpen()) {
                 this.#cityManagement.closeCityScreen();
                 return;
             }
 
-            const units = this.game.unitsInTile(x, y);
-            if (units.length > 0)
-                this.game.selectUnit(units[0]!.id);
+            const tile = mapTile(this.#state, x, y);
+            if (tile !== undefined) {
+                if (tile.unit)
+                    this.game.selectUnit(tile.unit.id);
 
-            const city = this.game.cityInTile(x, y);
-            if (city)
-                this.#cityManagement.openCityScreen(city!, x, y);
+                if (tile.city)
+                    this.#cityManagement.openCityScreen(this.#state, x, y);
 
-            this.redraw();
+                this.update();
+            }
         }
     }
 
@@ -97,40 +101,34 @@ export default class UiEngineText implements UiInterface {
     // DRAW
     //
 
+    update() : void {
+        this.#state = this.game.gameState(R(P(0, 0), 30, 30));   // TODO - map limits?
+        this.redraw();
+    }
+
     redraw(): void {
-        const state = this.game.gameState(R(P(0, 0), 30, 30));   // TODO - map limits?
+        if (!this.#state)
+            return;
 
         for (const td of Array.from(document.getElementsByClassName("map-tile"))) {
             td.innerHTML = "";
             td.className = "tile map-tile";
         }
-        state.tiles.forEach(t => this.draw(t));
+        this.#state.tiles.forEach(t => this.draw(t));
 
-        let text = `Year: ${-state.year} B.C.\n`;
-        if (state.selectedUnitMovesLeft)
-            text += `Moves left: ${state.selectedUnitMovesLeft!}`;
+        let text = `Year: ${-this.#state.year} B.C.\n`;
+        if (this.#state.selectedUnitMovesLeft)
+            text += `Moves left: ${this.#state.selectedUnitMovesLeft!}`;
         this.#debugInfo.textContent = text;
     }
 
     private draw(tile: IMapTile) {
-        const [x, y] = tile.position;
-        if (tile.tile) {
-            this.tile(x, y).classList.add(`terrain-${tile.tile.terrain}`);
-        } else if (tile.unit) {
-            const t = this.tile(x, y);
-            t.innerText = charForUnitType(tile.unit.type);
-            t.classList.add(`nation-${tile.unit.nation}`);
-            if (tile.unit.selected)
-                t.classList.add("unit-selected");
-        } else if (tile.city) {
-            const t = this.tile(x, y);
-            t.innerText = "C";
-            t.classList.add("city");
+        drawTile(tile, "tile");
+        if (tile.unit) {
+            drawUnit(tile.unit, tile.position[0], tile.position[1], "tile", tile.unit.selected ?? false);
         }
+        drawCity(tile, "tile");
     }
 
-    private tile(x: number, y: number) : HTMLTableCellElement {
-        return document.getElementById(`tile_${x}_${y}`)! as HTMLTableCellElement;
-    }
 
 }

@@ -1,4 +1,4 @@
-import {Direction, Good} from "./game-enum";
+import {Building, Direction, Good} from "./game-enum";
 
 export const KeyDirections : { [key: string]: Direction } = {
     Numpad7: Direction.NW,
@@ -16,11 +16,16 @@ export const GoodsToShowOnCity: Good[] = [
 ];
 
 export const GoodName : { [key in Good]: string } = {
-    [Good.Wool] : 'Wool',
-    [Good.OliveOil] : 'Olive Oil',
+    [Good.Wool] : "Wool",
+    [Good.OliveOil] : "Olive Oil",
+}
+
+export const BuildingName : { [key in Building] : string } = {
+    [Building.SpinnersHouse]: "Spinner's House",
+    [Building.OliveOilPress]: "Olive Oil Press",
 }
 
 export default interface UiInterface {
-    redraw(): void;
+    update(): void;
     onKeyDown(event: KeyboardEvent): void;
 }

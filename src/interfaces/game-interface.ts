@@ -39,19 +39,20 @@ export type ICity = {
     id: Id,
     name: string,
     nation: NationType,
-    // buildings: ICityBuilding[],
+    buildings: ICityBuilding[],
     goods: { [key in Good]: ICityGood },
 }
 
 export type IMapTile = {
     position: [number, number],
-    tile?: ITile,
+    tile: ITile,
     unit?: IUnit,
     city?: ICity,
 }
 
 export type IGameState = {
     tiles: IMapTile[],
+    tileIndex: { [key: number]: { [ key: number] : number } },
     year: number;
     selectedUnitMovesLeft: number | null;
 }
@@ -71,8 +72,6 @@ export default interface IGame {
 
     canMoveSelectedUnit(dir: Direction) : boolean;
     moveSelectedUnit(dir: Direction) : void;
-
-    unitsInTile(x: number, y: number) : IUnit[];
     selectUnit(unitId: Id) : void;
 
     cityInTile(x: number, y: number) : ICity | null;

@@ -1,8 +1,10 @@
-import IGame, {ICity, ICityBuilding, ICityGood} from "../interfaces/game-interface";
+import IGame, {ICityBuilding, ICityGood, IGameState} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
-import {GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
+import {BuildingName, GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
 import {Good} from "../interfaces/game-enum";
+import {mapTile} from "../interfaces/interface-utils";
+import {drawTile} from "./ui-tile";
 
 export default class CityManagement {
 
@@ -15,7 +17,11 @@ export default class CityManagement {
 
     get cityDiv() { return this.#cityDiv; }
 
-    openCityScreen(city: ICity, cityX: number, cityY: number) {
+    openCityScreen(state: IGameState, x: number, y: number) {
+        const tile = mapTile(state, x, y);
+        if (tile === undefined) return;
+
+        const city = tile.city!;
         /*
         const three = [0, 1, 2];
 
@@ -35,17 +41,21 @@ export default class CityManagement {
 
         document.getElementById("city-name")!.innerText = city.name;
 
-        /*
-        const cityBuildings = document.getElementById("city-buildings")!;
-        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
-         */
+        const cityBuildingsElement = document.getElementById("city-buildings")!;
+        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildingsElement.appendChild(element));
+
+        const cityTilesElement = document.getElementById('city-tiles')!;
+        for (let ry = -1; ry <= 1; ++ry) {
+            cityTilesElement.appendChild(this.cityTileRow(state, y + ry, x));
+            for (let rx = -1; rx <= 1; ++rx) {
+                const mtile = mapTile(state, x + rx, y + ry);
+                if (mtile) {
+                    drawTile(mtile, 'city-tile');
+                }
+            }
+        }
 
         document.getElementById('city-goods')!.replaceChildren(this.cityGoodsElement(city.goods));
-
-        /*
-        const cityGoods = document.getElementById("city-buildings")!;
-        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildings.appendChild(element));
-         */
     }
 
     closeCityScreen() : void {
@@ -61,7 +71,7 @@ export default class CityManagement {
         const tr = document.createElement('tr');
 
         table.className = "building";
-        table.innerHTML = `<tr><td colspan="4" style="width: 150px;">${building.type}</td></tr>`;
+        table.innerHTML = `<tr><td colspan="4" style="width: 150px;">${BuildingName[building.type]}</td></tr>`;
 
         for (let i = 0; i < this.game.numberOfWorkersInBuilding(building.type); ++i) {
             const td = document.createElement('td');
@@ -78,7 +88,6 @@ export default class CityManagement {
         const table : HTMLTableElement = document.createElement('table');
         table.innerHTML = `<tr><th></th><th>Amount</th><th>Production</th></tr>`;
 
-        console.log(GoodsToShowOnCity);
         for (const good of GoodsToShowOnCity) {
             const tr = document.createElement('tr');
             tr.innerHTML = `<td style="width: 100px;">${GoodName[good]}</td><td>${goods[good]!.amount}</td><td>${goods[good]!.production}</td>`
@@ -86,5 +95,18 @@ export default class CityManagement {
         }
 
         return table;
+    }
+
+    private cityTileRow(state: IGameState, y: number, cityX: number) {
+        const tr = document.createElement('tr');
+
+        for (let x = cityX - 1; x <= (cityX + 1); ++x) {
+            const td = document.createElement('td');
+            td.id = `city-tile_${x}_${y}`;
+            td.className = "tile";
+            tr.appendChild(td);
+        }
+
+        return tr;
     }
 }
