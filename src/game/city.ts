@@ -6,6 +6,7 @@ import {Building, Good} from "../interfaces/game-enum";
 import {v4 as uuidv4} from 'uuid';
 import {BuildingConfig, CityStartingBuildings} from "./config";
 import Messges from "../interfaces/messges";
+import Messages from "../interfaces/messges";
 
 type CityBuilding = {
     units: Unit[],
@@ -40,8 +41,10 @@ export default class City {
         this.#buildings[building]!.units.push(unit);
     }
 
-    addUnitToTile(unitId: Id, x: number, y: number) {
-
+    addUnitToTile(unit: Unit, x: number, y: number) {
+        if (this.#tiles.find(t => t.x === x && t.y === y) !== undefined)
+            throw new Error(Messages.tileAlreadyHasUnit);
+        this.#tiles.push({ x, y, unit: unit.toUnitObject(false) });
     }
 
     removeUnit(unit: Unit) {

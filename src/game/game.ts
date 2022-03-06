@@ -168,7 +168,7 @@ export default class Game implements IGame {
 
     moveUnitToCityTile(unitId: Id, cityId: Id, x: number, y: number): void {
         const [unit, city] = this.removeUnitFromCity(unitId, cityId);
-        city.addUnitToTile(unitId, x, y);
+        city.addUnitToTile(unit, x, y);
         unit.workingInCity = true;
     }
 
