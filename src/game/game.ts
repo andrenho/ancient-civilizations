@@ -7,6 +7,7 @@ import {Building, Direction, Directions, NationType, Terrain, UnitType} from "..
 import City from "./city";
 import {BuildingConfig} from "./config";
 import {mapTile} from "../interfaces/interface-utils";
+import Messges from "../interfaces/messges";
 
 export default class Game implements IGame {
 
@@ -150,10 +151,10 @@ export default class Game implements IGame {
     removeUnitFromCity(unitId: Id, cityId: Id): [Unit, City] {
         const unit = this.#units.find(u => u.id === unitId);
         if (unit === undefined)
-            throw new Error("This unit does not exist.");
+            throw new Error(Messges.unitDoesNotExist);
         const city = this.#cities.find(c => c.id === cityId);
         if (city === undefined)
-            throw new Error("This city does not exist.");
+            throw new Error(Messges.cityDoesNotExist);
         unit.workingInCity = false;
         city.removeUnit(unit);
         return [unit, city];
@@ -162,6 +163,12 @@ export default class Game implements IGame {
     moveUnitToBuilding(unitId: string, cityId: string, building: Building): void {
         const [unit, city] = this.removeUnitFromCity(unitId, cityId);
         city.addUnitToBuilding(unit, building);
+        unit.workingInCity = true;
+    }
+
+    moveUnitToCityTile(unitId: Id, cityId: Id, x: number, y: number): void {
+        const [unit, city] = this.removeUnitFromCity(unitId, cityId);
+        city.addUnitToTile(unitId, x, y);
         unit.workingInCity = true;
     }
 

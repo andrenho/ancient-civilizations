@@ -17,6 +17,12 @@ export type ICityBuilding = {
     units: IUnit[],
 }
 
+export type ICityTile = {
+    x: number,
+    y: number,
+    unit: IUnit,
+}
+
 //
 // GAME OBJECTS
 //
@@ -40,6 +46,7 @@ export type ICity = {
     nation: NationType,
     buildings: ICityBuilding[],
     goods: { [key in Good]: ICityGood },
+    tiles: ICityTile[],
 }
 
 export type IMapTile = {
@@ -81,6 +88,7 @@ export default interface IGame {
 
     removeUnitFromCity(unitId: Id, cityId: Id): void;
     moveUnitToBuilding(unitId: Id, cityId: Id, building: Building) : void;
+    moveUnitToCityTile(unitId: Id, cityId: Id, x: number, y: number) : void;
 
     dump() : void;
 }

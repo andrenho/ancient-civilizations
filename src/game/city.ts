@@ -1,10 +1,11 @@
-import {ICity, ICityGood, Id} from "../interfaces/game-interface";
+import {ICity, ICityGood, ICityTile, Id} from "../interfaces/game-interface";
 import {Point} from "../common/geometry";
 import Nation from "./nation";
 import Unit from "./unit";
 import {Building, Good} from "../interfaces/game-enum";
 import {v4 as uuidv4} from 'uuid';
 import {BuildingConfig, CityStartingBuildings} from "./config";
+import Messges from "../interfaces/messges";
 
 type CityBuilding = {
     units: Unit[],
@@ -19,6 +20,7 @@ export default class City {
         [Good.Wool]: { amount: 0, production: 0 },
         [Good.OliveOil]: { amount: 0, production: 0 },
     };
+    #tiles : ICityTile[] = [];
 
     constructor(name: string, readonly nation: Nation, readonly position: Point) {
         this.#name = name;
@@ -30,18 +32,22 @@ export default class City {
 
     addUnitToBuilding(unit: Unit, building: Building) {
         if (!unit.position.isEqual(this.position))
-            throw new Error("Unit is not outside of city gates.");
+            throw new Error(Messges.unitNotOutOfGates);
         if (!this.#buildings[building])
-            throw new Error("This building does not exist in this city.");
+            throw new Error(Messges.buildingDoesNotExist);
         if (this.#buildings[building]!.units.length === BuildingConfig[building].numberOfWorkers)
-            throw new Error("This building has too many workers already.");
+            throw new Error(Messges.buildingTooManyWorkers);
         this.#buildings[building]!.units.push(unit);
+    }
+
+    addUnitToTile(unitId: Id, x: number, y: number) {
+
     }
 
     removeUnit(unit: Unit) {
         for (const [, cityBuilding] of Object.entries(this.#buildings))
             cityBuilding.units = cityBuilding.units.filter(u => u.id !== unit.id);
-        // TODO - remove from tiles as well
+        this.#tiles = this.#tiles.filter(tile => tile.unit.id !== unit.id);
     }
 
     toCityObject() : ICity {
@@ -54,6 +60,7 @@ export default class City {
                 units: info.units.map(unit => unit.toUnitObject(false))
             })),
             goods: this.#goods,
+            tiles: this.#tiles,
         };
     }
 }

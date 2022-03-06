@@ -195,7 +195,7 @@ export default class CityManagement {
 
     private select(selected: Selected) {
         console.log(selected);
-        if (this.#selection === undefined || this.#selection.type === selected.type) {
+        if (this.#selection === undefined) {
             if (selected.unitId)
                 this.#selection = selected;
         } else {
