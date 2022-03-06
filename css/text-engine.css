@@ -76,3 +76,13 @@ h3 {
 td.number {
     text-align: right;
 }
+
+.out-of-gate {
+    padding: 6px;
+    border: 1px solid black;
+    cursor: default;
+}
+
+.selected {
+    border: red solid 2px !important;
+}

@@ -1,4 +1,4 @@
-import IGame, {ICityBuilding, ICityGood, IGameState, IMapTile} from "../interfaces/game-interface";
+import IGame, {ICityBuilding, ICityGood, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
 import {BuildingName, GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
@@ -6,9 +6,18 @@ import {Good} from "../interfaces/game-enum";
 import {mapTile} from "../interfaces/interface-utils";
 import {drawCity, drawTile, drawUnit} from "./ui-tile";
 
+type Selected = {
+    type: 'unit',
+    unitId?: Id
+}
+
 export default class CityManagement {
 
     #cityDiv: HTMLDivElement;
+    #selection: Selected | undefined;
+    #state?: IGameState;
+    #x? : number;
+    #y? : number;
 
     constructor(private game: IGame) {
         this.#cityDiv = document.createElement("div");
@@ -18,9 +27,17 @@ export default class CityManagement {
     get cityDiv() { return this.#cityDiv; }
 
     openCityScreen(state: IGameState, x: number, y: number) {
+        this.#selection = undefined;
+        this.#state = state;
+        this.#x = x;
+        this.#y = y;
+        this.redraw();
+    }
+
+    private redraw() {
         this.#cityDiv.innerHTML = "";
 
-        const tile = mapTile(state, x, y);
+        const tile = mapTile(this.#state!, this.#x!, this.#y!);
         if (tile === undefined) return;
 
         const city = tile.city!;
@@ -33,14 +50,14 @@ export default class CityManagement {
         const cityBuildingsElement = document.getElementById("city-buildings")!;
         city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildingsElement.appendChild(element));
 
-        this.drawCityTiles(state, tile, x, y);
+        this.drawCityTiles(this.#state!, tile, this.#x!, this.#y!);
 
         document.getElementById("city-goods")!.replaceChildren(this.cityGoodsElement(city.goods));
 
         const cityUnitsOutsideOfGate = document.getElementById("city-out-of-gate")!;
         let i = 0;
         for (const unit of tile.units) {
-            cityUnitsOutsideOfGate.appendChild(this.cityUnitOutOfGate(i));
+            cityUnitsOutsideOfGate.appendChild(this.cityUnitOutOfGate(unit, i));
             drawUnit(unit, i++, 0, "city-out-of-gate", false);
         }
     }
@@ -80,6 +97,7 @@ export default class CityManagement {
             td.className = "building-unit";
             tr.appendChild(td);
         }
+        tr.appendChild(document.createElement('td'));
         
         table.appendChild(tr);
         return table;
@@ -111,10 +129,21 @@ export default class CityManagement {
         return tr;
     }
 
-    private cityUnitOutOfGate(i: number) : HTMLElement {
+    private cityUnitOutOfGate(unit: IUnit, i: number) : HTMLElement {
         const div = document.createElement('div');
         div.id = `city-out-of-gate_${i}_0`;
-        div.style.marginRight = "8px";
+        div.className = "out-of-gate";
+        div.addEventListener("click", ev => {
+            if (ev.button === 0)
+                this.select({ type: "unit", unitId: unit.id });
+        });
+        if (this.#selection && this.#selection.type === 'unit' && this.#selection.unitId === unit.id)
+            div.classList.add("selected");
         return div;
+    }
+
+    private select(selected: Selected) {
+        this.#selection = selected;
+        this.redraw();
     }
 }

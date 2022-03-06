@@ -23,8 +23,8 @@ export default class Game implements IGame {
     newGame(config: GameConfig): void {
         this.#nations = [new Nation(NationType.Phoenicia)];
         this.#playerNation = this.#nations[0]!;
-        this.#units.push(new Unit(P(1, 1), this.#playerNation, UnitType.Warrior));
-        this.#units.push(new Unit(P(3, 3), this.#playerNation, UnitType.Warrior));
+        this.#units.push(new Unit(P(3, 2), this.#playerNation, UnitType.Warrior));
+        this.#units.push(new Unit(P(3, 2), this.#playerNation, UnitType.Warrior));
         this.#cities.push(new City("My city", this.#playerNation, P(3, 2)));
         this.#selectedUnit = this.#units[0]!;
     }
