@@ -170,7 +170,7 @@ export default class CityManagement {
             td.className = "tile";
             td.addEventListener("click", ev => {
                 if (ev.button === 0)
-                    this.select({ type: SelectionType.Tile, tile: { x, y } });
+                    this.select({ type: SelectionType.Tile, tile: { x: this.#x! - x, y: this.#y! - y } });
                 ev.stopPropagation();
             });
             tr.appendChild(td);
