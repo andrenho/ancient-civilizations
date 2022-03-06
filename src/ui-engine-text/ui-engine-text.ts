@@ -65,6 +65,9 @@ export default class UiEngineText implements UiInterface {
             this.game.moveSelectedUnit(dir!);
         }
         switch (event.key) {
+            case "d":
+                this.game.dump();
+                break;
             case "w":
                 this.game.selectNextUnit(false);
                 break;
@@ -90,7 +93,7 @@ export default class UiEngineText implements UiInterface {
                     this.game.selectUnit(tile.units[0]!.id);
 
                 if (tile.city)
-                    this.#cityManagement.openCityScreen(this.#state, x, y);
+                    this.#cityManagement.openCityScreen(x, y);
 
                 this.update();
             }

@@ -31,7 +31,7 @@ table.map {
 }
 
 .unit-selected {
-    border: red solid 2px;
+    border: red solid 2px !important;
     padding: 0;
 }
 
@@ -85,4 +85,14 @@ td.number {
 
 .selected {
     border: red solid 2px !important;
+}
+
+.div-out-of-gate {
+    display: flex;
+    flex-direction: row;
+    border: 1px black solid;
+    padding: 8px;
+    height: 144px;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }

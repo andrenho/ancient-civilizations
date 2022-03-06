@@ -26,6 +26,7 @@ export default class Game implements IGame {
         this.#units.push(new Unit(P(3, 2), this.#playerNation, UnitType.Warrior));
         this.#units.push(new Unit(P(3, 2), this.#playerNation, UnitType.Warrior));
         this.#cities.push(new City("My city", this.#playerNation, P(3, 2)));
+        this.moveUnitToBuilding(this.#units[1]!.id, this.#cities[0]!.id, Building.SpinnersHouse);
         this.#selectedUnit = this.#units[0]!;
     }
 
@@ -48,7 +49,7 @@ export default class Game implements IGame {
         }
 
         // units
-        for (const unit of this.#units) {
+        for (const unit of this.#units.filter(u => !u.workingInCity)) {
             const tile = mapTile(state, unit.position.x, unit.position.y);
             if (tile)
                 tile.units.push(unit.toUnitObject(unit.isEqual(this.#selectedUnit)));
@@ -146,15 +147,29 @@ export default class Game implements IGame {
         return BuildingConfig[building as Building].numberOfWorkers;
     }
 
-    moveUnitToBuilding(unitId: string, cityId: string, building: Building): void {
+    removeUnitFromCity(unitId: Id, cityId: Id): [Unit, City] {
         const unit = this.#units.find(u => u.id === unitId);
         if (unit === undefined)
             throw new Error("This unit does not exist.");
         const city = this.#cities.find(c => c.id === cityId);
         if (city === undefined)
             throw new Error("This city does not exist.");
+        unit.workingInCity = false;
+        city.removeUnit(unit);
+        return [unit, city];
+    }
+
+    moveUnitToBuilding(unitId: string, cityId: string, building: Building): void {
+        const [unit, city] = this.removeUnitFromCity(unitId, cityId);
         city.addUnitToBuilding(unit, building);
         unit.workingInCity = true;
+    }
+
+    dump(): void {
+        console.log({
+            units: this.#units,
+            cities: this.#cities,
+        });
     }
 
 }

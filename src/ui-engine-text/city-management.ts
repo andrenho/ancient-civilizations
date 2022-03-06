@@ -5,8 +5,9 @@ import {BuildingName, GoodName, GoodsToShowOnCity} from "../interfaces/ui-interf
 import {Building, Good} from "../interfaces/game-enum";
 import {mapTile} from "../interfaces/interface-utils";
 import {drawCity, drawTile, drawUnit} from "./ui-tile";
+import {P, R} from "../common/geometry";
 
-enum SelectionType { OutOfGate, Building, Tile }
+enum SelectionType { OutOfGate = "out-of-gate", Building = "building", Tile = "tile" }
 
 type Selected = {
     type: SelectionType,
@@ -38,21 +39,21 @@ export default class CityManagement {
 
     get cityDiv() { return this.#cityDiv; }
 
-    openCityScreen(state: IGameState, x: number, y: number) {
+    openCityScreen(x: number, y: number) {
         this.#selection = undefined;
-        this.#state = state;
         this.#x = x;
         this.#y = y;
+        this.redraw();
+    }
+
+    private redraw() {
+        this.#state = this.game.gameState(R(P(this.#x!-1, this.#y!-1), 3, 3));
 
         const tile = mapTile(this.#state!, this.#x!, this.#y!);
         if (tile === undefined) return;
         this.#city = tile.city!;
         this.#tile = tile;
 
-        this.redraw();
-    }
-
-    private redraw() {
         this.#cityDiv.innerHTML = "";
 
         this.#cityDiv.style.display = "flex";
@@ -62,6 +63,7 @@ export default class CityManagement {
 
         const cityBuildingsElement = document.getElementById("city-buildings")!;
         this.#city!.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildingsElement.appendChild(element));
+        this.#city!.buildings.map(building => this.addUnitsToBuilding(building));
 
         this.drawCityTiles(this.#state!, this.#tile!, this.#x!, this.#y!);
 
@@ -73,6 +75,11 @@ export default class CityManagement {
             cityUnitsOutsideOfGate.appendChild(this.cityUnitOutOfGate(unit, i));
             drawUnit(unit, i++, 0, "city-out-of-gate", false);
         }
+        cityUnitsOutsideOfGate.addEventListener("click", ev => {
+            if (ev.button === 0)
+                this.select({ type: SelectionType.OutOfGate });
+            ev.stopPropagation();
+        });
     }
 
     private drawCityTiles(state: IGameState, tile: IMapTile, x: number, y: number, ) {
@@ -99,26 +106,46 @@ export default class CityManagement {
 
     private cityBuilding(building: ICityBuilding) : HTMLElement {
         const table = document.createElement("table");
-        const tr = document.createElement("tr");
-        tr.addEventListener("click", ev => {
+        table.addEventListener("click", ev => {
             if (ev.button === 0)
                 this.select({ type: SelectionType.Building, building: building.type });
             ev.stopPropagation();
         });
+
+        const tr = document.createElement("tr");
 
         table.className = "building";
         table.innerHTML = `<tr><td colspan="4" style="width: 150px;">${BuildingName[building.type]}</td></tr>`;
 
         for (let i = 0; i < this.game.numberOfWorkersInBuilding(building.type); ++i) {
             const td = document.createElement("td");
-            td.id = `${building}_${i}`;
+            td.id = `${building.type}_${i}_0`;
             td.className = "building-unit";
+            td.addEventListener("click", ev => {
+                const unit = building.units[i];
+                if (ev.button === 0) {
+                    if (unit)
+                        this.select({ type: SelectionType.Building, building: building.type, unitId: unit.id });
+                    else
+                        this.select({ type: SelectionType.Building, building: building.type });
+                }
+                ev.stopPropagation();
+            });
             tr.appendChild(td);
         }
         tr.appendChild(document.createElement("td"));
-        
+
         table.appendChild(tr);
+
         return table;
+    }
+
+    private addUnitsToBuilding(building: ICityBuilding) : void {
+        let i = 0;
+        for (const unit of building.units) {
+            const selected = this.#selection !== undefined && (this.#selection.unitId === unit.id);
+            drawUnit(unit, i++, 0, `${building.type}`, selected);
+        }
     }
 
     private cityGoodsElement(goods: { [key in Good ]: ICityGood }) : HTMLTableElement {
@@ -175,7 +202,12 @@ export default class CityManagement {
             try {
                 switch (selected.type) {
                     case SelectionType.Building:
-                        this.game.moveUnitToBuilding(selected.unitId!, this.#city!.id, selected.building!);
+                        this.game.moveUnitToBuilding(this.#selection.unitId!, this.#city!.id, selected.building!);
+                        break;
+                    case SelectionType.OutOfGate:
+                        if (!selected.unitId && this.#selection.unitId) {
+                            this.game.removeUnitFromCity(this.#selection.unitId!, this.#city!.id);
+                        }
                         break;
                 }
                 this.#selection = undefined;

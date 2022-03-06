@@ -19,8 +19,8 @@ export const enum Good {
 }
 
 export enum Building {
-    SpinnersHouse,
-    OliveOilPress,
+    SpinnersHouse = "spinners-house",
+    OliveOilPress = "olive-oil-press",
 }
 
 export const enum Direction { NW = "nw", N = "n", NE = "ne", E = "e", W = "w", SW = "sw", S = "s", SE = "se" }

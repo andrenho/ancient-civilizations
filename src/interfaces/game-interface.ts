@@ -14,10 +14,7 @@ export type ICityGood = {
 
 export type ICityBuilding = {
     type: Building,
-    units: {
-        id: Id,
-        type: UnitType,
-    }[],
+    units: IUnit[],
 }
 
 //
@@ -82,5 +79,8 @@ export default interface IGame {
 
     numberOfWorkersInBuilding(building: Building) : number;
 
+    removeUnitFromCity(unitId: Id, cityId: Id): void;
     moveUnitToBuilding(unitId: Id, cityId: Id, building: Building) : void;
+
+    dump() : void;
 }

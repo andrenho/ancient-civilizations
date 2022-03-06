@@ -38,17 +38,22 @@ export default class City {
         this.#buildings[building]!.units.push(unit);
     }
 
+    removeUnit(unit: Unit) {
+        for (const [, cityBuilding] of Object.entries(this.#buildings))
+            cityBuilding.units = cityBuilding.units.filter(u => u.id !== unit.id);
+        // TODO - remove from tiles as well
+    }
+
     toCityObject() : ICity {
         return {
             id: this.id,
             name: this.#name,
             nation: this.nation.nationType,
             buildings: Object.entries(this.#buildings).map(([building, info]) => ({
-                type: Number(building) as Building,
-                units: info.units.map(unit => ({ id: unit.id, type: unit.unitType })),
+                type: building as Building,
+                units: info.units.map(unit => unit.toUnitObject(false))
             })),
             goods: this.#goods,
         };
     }
-
 }
