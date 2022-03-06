@@ -4,7 +4,7 @@ import Nation from "./nation";
 import Unit from "./unit";
 import {Building, Good} from "../interfaces/game-enum";
 import {v4 as uuidv4} from 'uuid';
-import {CityStartingBuildings} from "./config";
+import {BuildingConfig, CityStartingBuildings} from "./config";
 
 type CityBuilding = {
     units: Unit[],
@@ -27,6 +27,16 @@ export default class City {
     }
 
     get name() { return this.#name; }
+
+    addUnitToBuilding(unit: Unit, building: Building) {
+        if (!unit.position.isEqual(this.position))
+            throw new Error("Unit is not outside of city gates.");
+        if (!this.#buildings[building])
+            throw new Error("This building does not exist in this city.");
+        if (this.#buildings[building]!.units.length === BuildingConfig[building].numberOfWorkers)
+            throw new Error("This building has too many workers already.");
+        this.#buildings[building]!.units.push(unit);
+    }
 
     toCityObject() : ICity {
         return {

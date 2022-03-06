@@ -11,6 +11,8 @@ export default class Unit {
     #position: Point;
     #movesLeft: number;
 
+    public workingInCity: boolean = false;
+
     constructor(position: Point, readonly nation: Nation, readonly unitType: UnitType) {
         this.#position = position;
         this.#movesLeft = 0;
@@ -49,6 +51,7 @@ export default class Unit {
             id: this.id,
             nation: this.nation.nationType,
             type: this.unitType,
+            workingInCity: this.workingInCity,
             zOrder: selected ? 0 : 1,
         };
         if (selected)

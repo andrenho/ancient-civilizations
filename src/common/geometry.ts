@@ -5,6 +5,10 @@ export class Point {
     plus(diff: Point) {
         return new Point(this.x + diff.x, this.y + diff.y);
     }
+
+    isEqual(other: Point) {
+        return this.x === other.x && this.y === other.y;
+    }
 }
 
 export class Rectangle {

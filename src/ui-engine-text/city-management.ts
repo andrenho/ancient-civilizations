@@ -1,14 +1,18 @@
-import IGame, {ICityBuilding, ICityGood, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
+import IGame, {ICity, ICityBuilding, ICityGood, Id, IGameState, IMapTile, IUnit} from "../interfaces/game-interface";
 import fs from "fs";
 import path from "path";
 import {BuildingName, GoodName, GoodsToShowOnCity} from "../interfaces/ui-interface";
-import {Good} from "../interfaces/game-enum";
+import {Building, Good} from "../interfaces/game-enum";
 import {mapTile} from "../interfaces/interface-utils";
 import {drawCity, drawTile, drawUnit} from "./ui-tile";
 
+enum SelectionType { OutOfGate, Building, Tile }
+
 type Selected = {
-    type: 'unit',
-    unitId?: Id
+    type: SelectionType,
+    unitId?: Id,
+    building?: Building,
+    tile?: { x: number, y: number }
 }
 
 export default class CityManagement {
@@ -18,10 +22,18 @@ export default class CityManagement {
     #state?: IGameState;
     #x? : number;
     #y? : number;
+    #tile?: IMapTile;
+    #city?: ICity;
 
     constructor(private game: IGame) {
         this.#cityDiv = document.createElement("div");
         this.#cityDiv.className = "city-div";
+        this.#cityDiv.addEventListener("click", ev => {
+            if (ev.button === 0) {
+                this.#selection = undefined;
+                this.redraw();
+            }
+        });
     }
 
     get cityDiv() { return this.#cityDiv; }
@@ -31,32 +43,33 @@ export default class CityManagement {
         this.#state = state;
         this.#x = x;
         this.#y = y;
+
+        const tile = mapTile(this.#state!, this.#x!, this.#y!);
+        if (tile === undefined) return;
+        this.#city = tile.city!;
+        this.#tile = tile;
+
         this.redraw();
     }
 
     private redraw() {
         this.#cityDiv.innerHTML = "";
 
-        const tile = mapTile(this.#state!, this.#x!, this.#y!);
-        if (tile === undefined) return;
-
-        const city = tile.city!;
-
         this.#cityDiv.style.display = "flex";
         this.#cityDiv.innerHTML = fs.readFileSync(path.join(__dirname, "template/city-template.html"), "utf8");
 
-        document.getElementById("city-name")!.innerText = city.name;
+        document.getElementById("city-name")!.innerText = this.#city!.name;
 
         const cityBuildingsElement = document.getElementById("city-buildings")!;
-        city.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildingsElement.appendChild(element));
+        this.#city!.buildings.map(building => this.cityBuilding(building)).forEach(element => cityBuildingsElement.appendChild(element));
 
-        this.drawCityTiles(this.#state!, tile, this.#x!, this.#y!);
+        this.drawCityTiles(this.#state!, this.#tile!, this.#x!, this.#y!);
 
-        document.getElementById("city-goods")!.replaceChildren(this.cityGoodsElement(city.goods));
+        document.getElementById("city-goods")!.replaceChildren(this.cityGoodsElement(this.#city!.goods));
 
         const cityUnitsOutsideOfGate = document.getElementById("city-out-of-gate")!;
         let i = 0;
-        for (const unit of tile.units) {
+        for (const unit of this.#tile!.units) {
             cityUnitsOutsideOfGate.appendChild(this.cityUnitOutOfGate(unit, i));
             drawUnit(unit, i++, 0, "city-out-of-gate", false);
         }
@@ -87,6 +100,11 @@ export default class CityManagement {
     private cityBuilding(building: ICityBuilding) : HTMLElement {
         const table = document.createElement("table");
         const tr = document.createElement("tr");
+        tr.addEventListener("click", ev => {
+            if (ev.button === 0)
+                this.select({ type: SelectionType.Building, building: building.type });
+            ev.stopPropagation();
+        });
 
         table.className = "building";
         table.innerHTML = `<tr><td colspan="4" style="width: 150px;">${BuildingName[building.type]}</td></tr>`;
@@ -97,7 +115,7 @@ export default class CityManagement {
             td.className = "building-unit";
             tr.appendChild(td);
         }
-        tr.appendChild(document.createElement('td'));
+        tr.appendChild(document.createElement("td"));
         
         table.appendChild(tr);
         return table;
@@ -123,6 +141,11 @@ export default class CityManagement {
             const td = document.createElement("td");
             td.id = `city-tile_${x}_${y}`;
             td.className = "tile";
+            td.addEventListener("click", ev => {
+                if (ev.button === 0)
+                    this.select({ type: SelectionType.Tile, tile: { x, y } });
+                ev.stopPropagation();
+            });
             tr.appendChild(td);
         }
 
@@ -130,20 +153,36 @@ export default class CityManagement {
     }
 
     private cityUnitOutOfGate(unit: IUnit, i: number) : HTMLElement {
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.id = `city-out-of-gate_${i}_0`;
         div.className = "out-of-gate";
         div.addEventListener("click", ev => {
             if (ev.button === 0)
-                this.select({ type: "unit", unitId: unit.id });
+                this.select({ type: SelectionType.OutOfGate, unitId: unit.id });
+            ev.stopPropagation();
         });
-        if (this.#selection && this.#selection.type === 'unit' && this.#selection.unitId === unit.id)
+        if (this.#selection && this.#selection.type === SelectionType.OutOfGate && this.#selection.unitId === unit.id)
             div.classList.add("selected");
         return div;
     }
 
     private select(selected: Selected) {
-        this.#selection = selected;
+        console.log(selected);
+        if (this.#selection === undefined || this.#selection.type === selected.type) {
+            if (selected.unitId)
+                this.#selection = selected;
+        } else {
+            try {
+                switch (selected.type) {
+                    case SelectionType.Building:
+                        this.game.moveUnitToBuilding(selected.unitId!, this.#city!.id, selected.building!);
+                        break;
+                }
+                this.#selection = undefined;
+            } catch (e) {
+                alert(e);
+            }
+        }
         this.redraw();
     }
 }

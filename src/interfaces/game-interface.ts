@@ -32,6 +32,7 @@ export type IUnit = {
     id: Id,
     nation: NationType,
     type: UnitType,
+    workingInCity: boolean,
     zOrder: number,
     selected?: boolean,
 }
@@ -80,4 +81,6 @@ export default interface IGame {
     newRound() : void;
 
     numberOfWorkersInBuilding(building: Building) : number;
+
+    moveUnitToBuilding(unitId: Id, cityId: Id, building: Building) : void;
 }

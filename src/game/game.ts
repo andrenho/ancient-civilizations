@@ -142,9 +142,19 @@ export default class Game implements IGame {
         return city ? city.toCityObject() : null;
     }
 
-
     numberOfWorkersInBuilding(building: Building) : number {
         return BuildingConfig[building as Building].numberOfWorkers;
+    }
+
+    moveUnitToBuilding(unitId: string, cityId: string, building: Building): void {
+        const unit = this.#units.find(u => u.id === unitId);
+        if (unit === undefined)
+            throw new Error("This unit does not exist.");
+        const city = this.#cities.find(c => c.id === cityId);
+        if (city === undefined)
+            throw new Error("This city does not exist.");
+        city.addUnitToBuilding(unit, building);
+        unit.workingInCity = true;
     }
 
 }
