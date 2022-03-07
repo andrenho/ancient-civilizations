@@ -66,6 +66,8 @@ export default class CityManagement {
         this.#city!.buildings.map(building => this.addUnitsToBuilding(building));
 
         this.drawCityTiles(this.#state!, this.#tile!, this.#x!, this.#y!);
+        for (const tile of this.#city!.tiles)
+            drawUnit(tile.unit, tile.x + this.#x!, tile.y + this.#y!, "city-tile", false);
 
         document.getElementById("city-goods")!.replaceChildren(this.cityGoodsElement(this.#city!.goods));
 
@@ -170,7 +172,7 @@ export default class CityManagement {
             td.className = "tile";
             td.addEventListener("click", ev => {
                 if (ev.button === 0)
-                    this.select({ type: SelectionType.Tile, tile: { x: this.#x! - x, y: this.#y! - y } });
+                    this.select({ type: SelectionType.Tile, tile: { x: x - this.#x!, y: y - this.#y! } });
                 ev.stopPropagation();
             });
             tr.appendChild(td);
@@ -208,6 +210,9 @@ export default class CityManagement {
                         if (!selected.unitId && this.#selection.unitId) {
                             this.game.removeUnitFromCity(this.#selection.unitId!, this.#city!.id);
                         }
+                        break;
+                    case SelectionType.Tile:
+                        this.game.moveUnitToCityTile(this.#selection.unitId!, this.#city!.id, selected.tile!.x, selected.tile!.y);
                         break;
                 }
                 this.#selection = undefined;
